@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  ArrowDown, ArrowUpRight, CalendarDays, Check, ChevronDown, Clock3,
+  ArrowDown, ArrowUpRight, Check, ChevronDown, Clock3,
   Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor, Phone, Users, X
 } from 'lucide-react'
 

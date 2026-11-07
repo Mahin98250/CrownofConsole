@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, CalendarDays,
+  ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
   Phone, Users, X, Zap, Clock3, Instagram
 } from 'lucide-react'
@@ -50,7 +50,7 @@ function Header({ route }) {
     </div>
     <header className="site-header">
       <a className="brand-mark" href="#/home" aria-label="The Crown Of Console home">
-        <span className="brand-emblem">C<span>✦</span></span>
+        <span className="logo-placeholder">YOUR LOGO</span>
         <span className="brand-name">THE CROWN<br /><b>OF CONSOLE</b></span>
       </a>
       <button className="nav-toggle" type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
@@ -284,6 +284,16 @@ function Footer() {
   </footer>
 }
 
+function ScrollTools() {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const update = () => setVisible(window.scrollY > 520)
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+  return <button className={visible ? 'back-to-top back-to-top-visible' : 'back-to-top'} type="button" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><ArrowUp size={17} /></button>
+}
 function App() {
   const [route, setRoute] = useState(() => typeof window === 'undefined' ? 'home' : routeFromHash())
   useEffect(() => {
@@ -300,6 +310,7 @@ function App() {
   return <>
     <Header route={route} />
     {pages[route] || <NotFound />}
+    <ScrollTools />
     <Footer />
     <a className="mobile-enquiry" href={WA('Hello! I would like to check current rates and availability at The Crown Of Console.')} target="_blank" rel="noreferrer"><MessageCircle size={17} /> Enquire on WhatsApp <ArrowUpRight size={16} /></a>
   </>

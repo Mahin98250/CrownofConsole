@@ -16,19 +16,19 @@ const gallery = [
   {
     src: 'https://images.unsplash.com/photo-1715279240000-9a50953e327d?auto=format&fit=crop&w=1500&q=85',
     alt: 'Illustrative console gaming room with a large screen and ambient lighting',
-    caption: 'A place to settle in',
+    caption: 'Gaming space reference',
     credit: 'Branden Skeli / Unsplash'
   },
   {
     src: 'https://images.unsplash.com/photo-1792635926439-4f19b4d311e0?auto=format&fit=crop&w=1100&q=82',
     alt: 'Illustrative gaming room with screen and collectibles',
-    caption: 'Details make the space',
+    caption: 'Setup reference',
     credit: 'Branden Skeli / Unsplash'
   },
   {
     src: 'https://images.unsplash.com/photo-1632603093711-0d93a0bcc6cc?auto=format&fit=crop&w=1100&q=82',
     alt: 'Illustrative dual monitor gaming desk setup',
-    caption: 'Ready for another round',
+    caption: 'Gaming desk reference',
     credit: 'amjed omaf / Unsplash'
   }
 ]
@@ -121,13 +121,13 @@ function Hero() {
     <section className="hero" id="home">
       <div className="hero-copy">
         <span className="eyebrow"><i /> THE CROWN OF CONSOLE <b>·</b> AHMEDABAD</span>
-        <h1>Good games.<br /><em>Better together.</em></h1>
-        <p className="hero-intro">A gaming café on Science City Road. Bring your people, find your next game and make a plan before you head over.</p>
+        <h1>A gaming café<br /><em>in Ahmedabad.</em></h1>
+        <p className="hero-intro">Find The Crown Of Console on Science City Road. Check the details that matter before you visit — current games, session rates and availability, all confirmed directly by the team.</p>
         <div className="hero-actions">
           <a className="button button-dark" href="#experience">Explore the experience <ArrowDownRight size={16} /></a>
           <a className="quiet-link" href={whatsappUrl('Hello! Could you share the current rates and availability at The Crown Of Console?')} target="_blank" rel="noreferrer">Ask us a question <ArrowUpRight size={15} /></a>
         </div>
-        <div className="hero-footnote"><span>01 / 05</span><span>SCIENCE CITY ROAD, AHMEDABAD</span></div>
+        <div className="hero-footnote"><span>THE CROWN OF CONSOLE</span><span>SCIENCE CITY ROAD · AHMEDABAD</span></div>
       </div>
       <div className="hero-visual">
         <img
@@ -135,9 +135,9 @@ function Hero() {
           alt="Illustrative gaming room photograph; actual venue photography will replace this image"
           fetchPriority="high"
         />
-        <div className="hero-image-tag">VISUAL REFERENCE · NOT THE ACTUAL VENUE</div>
+        <div className="hero-image-tag">REFERENCE PHOTO · NOT THE ACTUAL VENUE</div>
         <div className="hero-image-caption">
-          <span>THE NEXT ROUND STARTS HERE</span>
+          <span>THE CROWN OF CONSOLE · AHMEDABAD</span>
           <span>PHOTO: BRANDEN SKELI / UNSPLASH</span>
         </div>
       </div>
@@ -180,10 +180,10 @@ function Gallery() {
     <section className="space-section section-shell" id="space">
       <div className="section-topline"><span>01 — THE SPACE</span><span>LOOK AROUND</span></div>
       <div className="space-heading">
-        <h2>A little room<br /><em>for a lot of fun.</em></h2>
-        <p>Good gaming is about more than the screen. It is the people you bring and the time you make for it.</p>
+        <h2>Take a look<br /><em>around.</em></h2>
+        <p>A first look at the kind of setup and atmosphere to expect. These are reference images for now; venue photographs will replace them.</p>
       </div>
-      <div className="gallery-disclaimer">PHOTO REFERENCES FOR DESIGN ONLY · ACTUAL CAFE PHOTOS TO BE ADDED</div>
+      <div className="gallery-disclaimer">TEMPORARY REFERENCE PHOTOGRAPHY · REPLACE WITH ACTUAL VENUE PHOTOS</div>
       <div className="gallery-grid">
         {gallery.map((image, index) => (
           <button className={'gallery-item gallery-item-' + (index + 1)} type="button" key={image.src} onClick={() => setActiveImage(index)} aria-label={'View image: ' + image.caption}>
@@ -227,8 +227,8 @@ function ExperienceExplorer() {
       <div className="section-shell experience-inner">
         <div className="section-topline"><span>02 — THE EXPERIENCE</span><span>CHOOSE YOUR PLAN</span></div>
         <div className="experience-heading">
-          <h2>How are you<br /><em>playing today?</em></h2>
-          <p>Choose what brings you here. We will help you with the right details.</p>
+          <h2>What brings<br /><em>you in?</em></h2>
+          <p>Choose the kind of visit you have in mind. Ask the team for confirmed details before travelling.</p>
         </div>
         <div className="experience-browser">
           <div className="experience-tabs" role="tablist" aria-label="Choose your gaming visit">
@@ -299,12 +299,12 @@ function VisitPlanner() {
     <section className="visit-section section-shell" id="visit">
       <div className="visit-copy">
         <div className="section-topline"><span>03 — PLAN A VISIT</span><span>NO PAYMENT REQUIRED</span></div>
-        <h2>Make a plan.<br /><em>Then make a day of it.</em></h2>
-        <p>Share a few details and we will prepare a message for the team. They can confirm the current rates and availability with you directly.</p>
+        <h2>Planning a visit?<br /><em>Start here.</em></h2>
+        <p>Send your preferred date, time and group size to the team. They will reply with current rates and availability.</p>
         <div className="visit-assurance">
           <div><Check size={16} /><span>Enquiry goes straight to WhatsApp</span></div>
           <div><Check size={16} /><span>No online payment or account needed</span></div>
-          <div><Check size={16} /><span>Your visit is confirmed by the team</span></div>
+          <div><Check size={16} /><span>Wait for confirmation before travelling</span></div>
         </div>
       </div>
       <form className="visit-form" onSubmit={submit}>
@@ -339,7 +339,7 @@ function VisitPlanner() {
           <textarea value={note} onChange={(event) => setNote(event.target.value)} placeholder="A game, group detail or question..." rows="3" />
         </label>
         <button className="button button-dark form-submit" type="submit">Continue on WhatsApp <ArrowUpRight size={17} /></button>
-        <p className="form-note">This is an enquiry, not an instant booking. The team will confirm your visit.</p>
+        <p className="form-note">Enquiry only — your visit is not booked until the team confirms it.</p>
       </form>
     </section>
   )
@@ -350,7 +350,7 @@ function FAQSection() {
     <section className="faq-section section-shell" id="faqs">
       <div className="faq-intro">
         <div className="section-topline"><span>04 — BEFORE YOU COME</span></div>
-        <h2>A few things<br /><em>worth knowing.</em></h2>
+        <h2>Before you<br /><em>head over.</em></h2>
         <p>Still have a question? The team is one message away.</p>
         <a className="text-link" href={whatsappUrl('Hello! I have a question about The Crown Of Console.')} target="_blank" rel="noreferrer">Ask the team <ArrowUpRight size={16} /></a>
       </div>
@@ -383,8 +383,8 @@ function LocationSection() {
       <div className="location-content section-shell">
         <div className="location-copy">
           <div className="section-topline"><span>05 — FIND THE CAFE</span><span>AHMEDABAD, INDIA</span></div>
-          <h2>We'll see you<br /><em>there.</em></h2>
-          <p>Find us on Science City Road. Open directions or save the address before you set off.</p>
+          <h2>Find us on<br /><em>Science City Road.</em></h2>
+          <p>We are at Shakti Arcade, near ICICI Bank. Use directions below or call if you need help finding the entrance.</p>
           <div className="address-details">
             <MapPin size={20} />
             <div><b>The Crown Of Console</b><span>FF/1, Shakti Arcade,<br />Above Kutchi King, Near ICICI Bank,<br />Science City Road, Ahmedabad</span></div>

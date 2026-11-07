@@ -375,3 +375,32 @@ button:disabled{cursor:not-allowed;opacity:.5}
 }
 .logo-placeholder{width:116px;height:37px;display:inline-flex;align-items:center;justify-content:center;border:1px dashed rgba(201,239,112,.58);color:#c9ef70;font-family:var(--display);font-size:8px;font-weight:800;letter-spacing:1.7px;white-space:nowrap}
 .footer-brand .logo-placeholder{width:104px;height:37px}
+
+
+/* Final interaction and brand polish */
+.logo-placeholder{
+  width:116px;height:37px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px dashed rgba(201,239,112,.58);color:var(--lime);
+  font-family:var(--display);font-size:8px;font-weight:800;letter-spacing:1.7px;white-space:nowrap
+}
+.footer-brand .logo-placeholder{width:104px;height:37px}
+.back-to-top{
+  position:fixed;right:25px;bottom:25px;z-index:44;width:46px;height:46px;
+  display:grid;place-items:center;border:1px solid rgba(201,239,112,.4);
+  background:rgba(18,27,21,.92);color:var(--lime);opacity:0;pointer-events:none;
+  transform:translateY(12px);transition:opacity .22s,transform .22s,background .22s;
+  backdrop-filter:blur(12px)
+}
+.back-to-top-visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+.back-to-top:hover{background:var(--lime);color:#172016;transform:translateY(-3px)}
+.inner-page{animation:page-enter .38s var(--ease) both}
+@keyframes page-enter{from{opacity:.65;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.site-header{box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.nav-cta{letter-spacing:.15px}
+.button:focus-visible,.round-link:focus-visible,.gallery-tile:focus-visible{outline:2px solid #7e9e45;outline-offset:4px}
+@media(max-width:520px){
+  .back-to-top{right:15px;bottom:72px;width:40px;height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+  .inner-page{animation:none}
+}

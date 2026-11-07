@@ -280,3 +280,48 @@ button:disabled{cursor:not-allowed;opacity:.42}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* Editorial refinement: clearer hierarchy, calmer details, deliberate interaction */
+.hero{min-height:610px;padding-top:62px;padding-bottom:48px}
+.hero h1{font-size:clamp(60px,6.8vw,94px);line-height:.94;letter-spacing:-5.8px}
+.hero h1 em{color:#7b8669}
+.hero-visual{min-height:500px}
+.hero-visual>img{filter:saturate(.72) contrast(1.06)}
+.hero-image-caption{font-size:7px;letter-spacing:.9px}
+.hero-footnote{font-size:7px;letter-spacing:1.35px}
+.quick-facts{background:#e6e5dd}
+.quick-facts>div{min-height:42px}
+.quick-facts b{font-size:12px}
+.quick-facts small{font-size:10px}
+.section-topline{font-size:9px;letter-spacing:1.45px}
+.space-heading h2,.experience-heading h2,.visit-copy h2,.faq-intro h2,.location-copy h2{font-size:clamp(50px,5.7vw,78px);line-height:.99}
+.space-heading p,.experience-heading p,.visit-copy>p,.location-copy>p{font-size:13px;line-height:1.85}
+.gallery-grid{gap:14px;height:550px}
+.gallery-item img{filter:saturate(.78)}
+.gallery-caption b{font-size:14px}
+.gallery-caption small{font-size:9px}
+.experience-tab{min-height:108px}
+.experience-tab b{font-size:14px}
+.experience-panel{padding:44px 8%}
+.experience-panel h3{font-size:clamp(32px,3.4vw,46px)}
+.experience-panel>p{font-size:12px;line-height:1.85}
+.visit-form{padding:35px}
+.form-field>span{font-size:11px}
+.form-field input,.form-field select,.form-field textarea{font-size:12px}
+.faq-item summary{font-size:13px}
+.faq-item p{font-size:11px}
+.map-frame{height:420px}
+.navigation>a:not(.header-cta){position:relative}
+.navigation>a:not(.header-cta):after{content:"";position:absolute;left:0;right:100%;bottom:-5px;height:1px;background:#71834f;transition:right .22s}
+.navigation>a:not(.header-cta):hover:after{right:0}
+@media(max-width:700px){
+  .hero{padding-top:36px}
+  .hero h1{font-size:clamp(54px,13vw,76px);letter-spacing:-3.9px}
+  .hero-visual{min-height:310px}
+  .section-topline{font-size:7px}
+  .gallery-grid{height:auto;grid-template-rows:270px 155px;gap:8px}
+  .experience-tab{min-height:76px}
+  .experience-panel{padding:28px 21px}
+  .visit-form{padding:25px 18px}
+  .map-frame{height:300px}
+}

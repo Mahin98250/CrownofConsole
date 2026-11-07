@@ -29,7 +29,7 @@ const NAV = [
 
 function routeFromHash() {
   const route = window.location.hash.replace(/^#\/?/, '').split('/')[0]
-  return NAV.some(([path]) => path === route) ? route || 'home' : 'not-found'
+  return !route ? 'home' : NAV.some(([path]) => path === route) ? route : 'not-found'
 }
 
 function Eyebrow({ children, light = false }) {
@@ -288,7 +288,7 @@ function App() {
   const [route, setRoute] = useState(() => typeof window === 'undefined' ? 'home' : routeFromHash())
   useEffect(() => {
     if (!window.location.hash) window.history.replaceState(null, '', window.location.pathname + window.location.search + '#/home')
-    const onChange = () => { setRoute(routeFromHash()); window.scrollTo({ top: 0, behavior: 'instant' }) }
+    const onChange = () => { setRoute(routeFromHash()); window.scrollTo({ top: 0, behavior: 'auto' }) }
     window.addEventListener('hashchange', onChange)
     return () => window.removeEventListener('hashchange', onChange)
   }, [])

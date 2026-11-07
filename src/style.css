@@ -372,4 +372,6 @@ button:disabled{cursor:not-allowed;opacity:.5}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-}\n.logo-placeholder{width:116px;height:37px;display:inline-flex;align-items:center;justify-content:center;border:1px dashed rgba(201,239,112,.58);color:#c9ef70;font-family:var(--display);font-size:8px;font-weight:800;letter-spacing:1.7px;white-space:nowrap}\n.footer-brand .logo-placeholder{width:104px;height:37px}\n
+}
+.logo-placeholder{width:116px;height:37px;display:inline-flex;align-items:center;justify-content:center;border:1px dashed rgba(201,239,112,.58);color:#c9ef70;font-family:var(--display);font-size:8px;font-weight:800;letter-spacing:1.7px;white-space:nowrap}
+.footer-brand .logo-placeholder{width:104px;height:37px}\n

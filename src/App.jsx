@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import {
   ArrowDown, ArrowUpRight, Check, ChevronDown, Clock3,
-  Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor, Phone, Users, X
+  Gamepad2, MapPin, Menu, MessageCircle, Monitor, Phone, Users, X
 } from 'lucide-react'
 
 const PHONE = '918799508567'
-const ADDRESS = 'FF/1, Shakti Arcade, Science City Road, Ahmedabad, Gujarat 380060'
+const ADDRESS = 'FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad'
 const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`
 const whatsappUrl = (message) => `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`
 
@@ -28,6 +28,20 @@ const questions = [
   }
 ]
 
+function BrandMark() {
+  return (
+    <span className="wordmark-icon" aria-hidden="true">
+      <svg viewBox="0 0 48 48">
+        <defs><linearGradient id="crownGold" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#fff0a2"/><stop offset=".48" stopColor="#f4b83e"/><stop offset="1" stopColor="#b85a1e"/></linearGradient></defs>
+        <path d="M7 16 14 23 19 10 24 20 30 8 34 23 42 15 38 31H11L7 16Z" fill="url(#crownGold)" stroke="#e45b42" strokeWidth="1.6" strokeLinejoin="round"/>
+        <path d="M12 34Q24 29 36 34L40 40Q24 45 8 40L12 34Z" fill="#101a35" stroke="#f5c35d" strokeWidth="1.5"/>
+        <path d="M15 35h18q3 0 4 3l-2 3H13l-2-3q1-3 4-3Z" fill="#11131b" stroke="#e45b42" strokeWidth="1.1"/>
+        <circle cx="17" cy="38" r="1.5" fill="#e45b42"/><circle cx="21" cy="36.5" r="1.2" fill="#e45b42"/><circle cx="28" cy="36.5" r="1.2" fill="#e45b42"/><circle cx="32" cy="38" r="1.5" fill="#e45b42"/>
+      </svg>
+    </span>
+  )
+}
+
 function SectionLabel({ number, children }) {
   return <div className="section-label"><span>{number}</span><i />{children}</div>
 }
@@ -42,7 +56,7 @@ function Header() {
       <div className="topline"><span className="topline-mark" /> SCIENCE CITY ROAD <span className="topline-separator">/</span> AHMEDABAD, INDIA</div>
       <header className="header">
         <a className="wordmark" href="#home" aria-label="The Crown Of Console, home">
-          <span className="wordmark-icon"><Crown size={20} strokeWidth={1.65} /></span>
+          <BrandMark />
           <span>THE CROWN <small>OF</small> CONSOLE</span>
         </a>
         <button className="mobile-menu" type="button" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -198,7 +212,7 @@ function App() {
         </section>
       </main>
       <footer className="footer">
-        <a className="wordmark footer-mark" href="#home"><span className="wordmark-icon"><Crown size={19} /></span><span>THE CROWN <small>OF</small> CONSOLE</span></a>
+        <a className="wordmark footer-mark" href="#home"><BrandMark /><span>THE CROWN <small>OF</small> CONSOLE</span></a>
         <p>Good games are better shared.</p>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} THE CROWN OF CONSOLE</span><span>SCIENCE CITY ROAD, AHMEDABAD</span><a href="#home">BACK TO TOP ↑</a></div>
       </footer>

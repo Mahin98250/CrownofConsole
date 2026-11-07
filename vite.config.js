@@ -3,5 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  // GitHub Pages project-site path for this repository.
+  base: '/CrownofConsole/',
 })

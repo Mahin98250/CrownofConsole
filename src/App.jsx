@@ -133,8 +133,24 @@ function App() {
       <Header />
       <main id="main">
         <section className="hero" id="home">
-          <div className="hero-image" role="img" aria-label="Gaming room lit by the glow of monitors" />
-          <div className="hero-shade" />
+          <div className="hero-art-scene" aria-hidden="true">
+            <div className="hero-art-grid" />
+            <div className="hero-art-ring ring-one" /><div className="hero-art-ring ring-two" />
+            <div className="hero-art-crown"><Crown size={58} strokeWidth={1.1}/></div>
+            <div className="hero-art-console">THE CROWN <span>PLAYER ONE</span></div>
+            <svg className="hero-controller" viewBox="0 0 640 360">
+              <defs><linearGradient id="controllerShell" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#59627d"/><stop offset=".35" stopColor="#171f36"/><stop offset="1" stopColor="#080c18"/></linearGradient><linearGradient id="controllerTrim"><stop stopColor="#fff0ad"/><stop offset=".5" stopColor="#e8ad49"/><stop offset="1" stopColor="#d34b3d"/></linearGradient><filter id="controllerShadow"><feGaussianBlur stdDeviation="15"/></filter></defs>
+              <ellipse cx="320" cy="300" rx="210" ry="25" fill="#000" opacity=".8" filter="url(#controllerShadow)"/>
+              <path d="M155 117C178 88 211 83 257 98L320 118 383 98C429 83 462 88 485 117L535 231C548 264 523 292 488 281L414 245H226L152 281C117 292 92 264 105 231Z" fill="url(#controllerShell)" stroke="url(#controllerTrim)" strokeWidth="7"/>
+              <path d="M158 122C184 103 215 103 253 115L320 135 387 115C425 103 456 103 482 122" fill="none" stroke="#c9d5f2" strokeOpacity=".35" strokeWidth="3"/>
+              <path d="M196 162h63v17h-23v23h-17v-23h-23Z" fill="#080d19" stroke="#8a96b4" strokeWidth="3"/>
+              <circle cx="220" cy="170" r="6" fill="#f1dca4"/><circle cx="244" cy="170" r="6" fill="#f1dca4"/>
+              <circle cx="431" cy="158" r="13" fill="#151a29" stroke="#f2c15b" strokeWidth="4"/><circle cx="466" cy="181" r="13" fill="#151a29" stroke="#e34d3e" strokeWidth="4"/><circle cx="396" cy="181" r="13" fill="#151a29" stroke="#5bbbe9" strokeWidth="4"/><circle cx="431" cy="205" r="13" fill="#151a29" stroke="#c18df0" strokeWidth="4"/>
+              <path d="M284 145h72q9 0 9 9v33q0 9-9 9h-72q-9 0-9-9v-33q0-9 9-9Z" fill="#090d18" stroke="#68718b" strokeWidth="3"/><path d="M303 162h34" stroke="#f4c15a" strokeWidth="3" strokeLinecap="round"/>
+              <circle cx="235" cy="235" r="28" fill="#080c16" stroke="#68718a" strokeWidth="5"/><circle cx="235" cy="235" r="16" fill="#20283c" stroke="#e34d3e" strokeWidth="3"/><circle cx="405" cy="235" r="28" fill="#080c16" stroke="#68718a" strokeWidth="5"/><circle cx="405" cy="235" r="16" fill="#20283c" stroke="#5bbbe9" strokeWidth="3"/>
+            </svg>
+            <div className="hero-art-bottom"><span>CONSOLE CULTURE</span><span>AHMEDABAD / INDIA</span></div>
+          </div>
           <div className="hero-copy">
             <p className="hero-overline"><span /> A GAMING SPOT IN AHMEDABAD</p>
             <h1>Make room<br />for <em>one more</em><br />round.</h1>
@@ -166,7 +182,16 @@ function App() {
         </section>
 
         <section className="details-band" id="details">
-          <div className="details-photo" role="img" aria-label="Atmospheric gaming setup with illuminated monitors" />
+          <div className="details-photo">
+            <div className="campaign-poster">
+              <span className="campaign-topline">THE CROWN OF CONSOLE <i> / CC-02</i></span>
+              <div className="campaign-crown"><Crown size={54}/></div>
+              <div className="campaign-headline">SATURDAY<br/><em>NIGHT</em></div>
+              <div className="campaign-subline">GAMING KINGDOM AWAITS.</div>
+              <div className="campaign-controller"><Gamepad2 size={68} strokeWidth={1}/></div>
+              <span className="campaign-bottomline">MAKE IT A NIGHT TO REMEMBER</span>
+            </div>
+          </div>
           <div className="details-copy">
             <SectionLabel number="02">A QUICK NOTE BEFORE YOU COME</SectionLabel>
             <h2>Know before<br /><em>you go.</em></h2>
@@ -202,7 +227,7 @@ function App() {
             <SectionLabel number="05">COME SAY HELLO</SectionLabel>
             <h2>See you<br /><em>at the cafe.</em></h2>
             <p>We’re at Shakti Arcade, on Science City Road. Save the address or open directions before you set off.</p>
-            <div className="address-block"><MapPin size={19} /><div><b>The Crown Of Console</b><span>FF/1, Shakti Arcade,<br />Science City Road, Ahmedabad – 380060</span></div></div>
+            <div className="address-block"><MapPin size={19} /><div><b>The Crown Of Console</b><span>FF/1, Shakti Arcade,<br />Above Kutchi King, Near ICICI Bank,<br />Science City Road, Ahmedabad</span></div></div>
             <div className="visit-actions"><button className="copy-button" onClick={copyAddress}>{copied ? <Check size={15} /> : <MapPin size={15} />}{copied ? 'Copied' : 'Copy address'}</button><a className="inline-link" href={MAP_URL} target="_blank" rel="noreferrer">Open directions <ArrowUpRight size={15} /></a></div>
             <a className="phone-link" href="tel:+918799508567"><Phone size={17} /> +91 87995 08567</a>
           </div>

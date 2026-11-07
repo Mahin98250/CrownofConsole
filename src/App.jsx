@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   ArrowDown, ArrowUpRight, Check, ChevronDown, Clock3,
-  Gamepad2, MapPin, Menu, MessageCircle, Monitor, Phone, Users, X
+  Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor, Phone, Users, X
 } from 'lucide-react'
 
 const PHONE = '918799508567'

@@ -1,155 +1,272 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  ArrowDownRight, ArrowRight, ArrowUpRight, CalendarDays, Check,
-  ChevronDown, Clock3, Gamepad2, MapPin, Menu, MessageCircle,
-  Monitor, Phone, Search, Users, X
+  ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, CalendarDays,
+  Check, ChevronDown, Clock3, Gamepad2, MapPin, Menu, MessageCircle,
+  Monitor, Phone, Users, X
 } from 'lucide-react'
 
 const PHONE = '918799508567'
 const ADDRESS = 'FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad'
 const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ADDRESS)
+const MAP_EMBED_URL = 'https://www.google.com/maps?q=' + encodeURIComponent(ADDRESS) + '&output=embed'
 const whatsappUrl = (message) => 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(message)
+const localToday = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)
 
-const faqs = [
+const gallery = [
   {
-    question: 'What are the session rates?',
-    answer: 'Rates can change, so we do not show an unverified price list. Send the team a message and ask for the latest rates before you visit.'
+    src: 'https://images.unsplash.com/photo-1715279240000-9a50953e327d?auto=format&fit=crop&w=1500&q=85',
+    alt: 'Illustrative console gaming room with a large screen and ambient lighting',
+    caption: 'A place to settle in',
+    credit: 'Branden Skeli / Unsplash'
   },
   {
-    question: 'Which games or consoles are available?',
-    answer: 'The current game and platform list has not been published here. Tell the team which title or console you have in mind and they can confirm availability.'
+    src: 'https://images.unsplash.com/photo-1792635926439-4f19b4d311e0?auto=format&fit=crop&w=1100&q=82',
+    alt: 'Illustrative gaming room with screen and collectibles',
+    caption: 'Details make the space',
+    credit: 'Branden Skeli / Unsplash'
   },
   {
-    question: 'Can we visit as a group?',
-    answer: 'You can enquire about a group visit. Share how many people are coming and your preferred time so the team can guide you.'
-  },
-  {
-    question: 'Where is The Crown Of Console?',
-    answer: 'You can find us at FF/1, Shakti Arcade, above Kutchi King, near ICICI Bank, Science City Road, Ahmedabad. Use the directions link on this page to open Google Maps.'
-  },
-  {
-    question: 'Do I need to contact you before coming?',
-    answer: 'It is a good idea to check current timings, rates and availability before travelling. The WhatsApp enquiry on this page goes directly to the team.'
+    src: 'https://images.unsplash.com/photo-1632603093711-0d93a0bcc6cc?auto=format&fit=crop&w=1100&q=82',
+    alt: 'Illustrative dual monitor gaming desk setup',
+    caption: 'Ready for another round',
+    credit: 'amjed omaf / Unsplash'
   }
 ]
 
-const experiences = {
-  solo: {
-    eyebrow: 'YOUR OWN PACE',
-    title: 'A session for one.',
-    description: 'Have a game in mind? Ask what is available and plan a focused visit around your preferred time.',
+const experiences = [
+  {
+    id: 'solo',
+    number: '01',
+    label: 'A solo visit',
+    icon: Monitor,
+    title: 'Your time. Your game.',
+    description: 'Have a title in mind? Ask the team what is currently available, what it costs and when you can drop in.',
+    action: 'Ask about a solo session',
     message: 'Hello! I am interested in a solo gaming session. Could you share the current rates, timings and availability?'
   },
-  squad: {
-    eyebrow: 'BRING YOUR PEOPLE',
-    title: 'Make it a group plan.',
-    description: 'Coming with friends? Share your group size first so the team can confirm what can be arranged.',
-    message: 'Hello! I am planning a group gaming visit. Could you confirm availability and current rates?'
+  {
+    id: 'group',
+    number: '02',
+    label: 'A group visit',
+    icon: Users,
+    title: 'Bring the whole crew.',
+    description: 'Planning a visit with friends? Share your group size and preferred time so the team can confirm what can be arranged.',
+    action: 'Plan a group visit',
+    message: 'Hello! I am planning a group gaming visit. Could you confirm the available options, current rates and timings?'
   },
-  discover: {
-    eyebrow: 'FIND YOUR NEXT GAME',
+  {
+    id: 'game',
+    number: '03',
+    label: 'A game in mind',
+    icon: Gamepad2,
     title: 'Ask before you arrive.',
-    description: 'Looking for a particular game, console or setup? Send the name to the team and check what is currently available.',
-    message: 'Hello! I would like to ask about the games and platforms currently available.'
+    description: 'Tell the team which game or platform you are looking for. They can confirm the current availability before you make the trip.',
+    action: 'Ask about a game',
+    message: ''
   }
-}
+]
+
+const faqs = [
+  {
+    question: 'What are the current session rates?',
+    answer: 'Rates and packages can change. Message the team for the latest pricing before you visit. We prefer to confirm the actual rate rather than publish an outdated one.'
+  },
+  {
+    question: 'Which games and platforms are available?',
+    answer: 'The current game and equipment list has not been confirmed for this website yet. Tell the team the game or platform you have in mind and they can check it for you.'
+  },
+  {
+    question: 'Can I visit with a group?',
+    answer: 'You can enquire about a group visit. Share how many people are coming and your preferred time so the team can guide you.'
+  },
+  {
+    question: 'What are the opening hours?',
+    answer: 'Opening hours can change and have not been verified for this page. Please contact the team before travelling to confirm the current timings.'
+  },
+  {
+    question: 'Do I need to book before arriving?',
+    answer: 'A message before you leave is a good way to check availability. The website sends an enquiry to WhatsApp; your visit is not confirmed until the team replies.'
+  }
+]
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const closeMenu = () => setMenuOpen(false)
+  const close = () => setMenuOpen(false)
 
   return (
     <>
-      <div className="utility-bar">
-        <span><i /> SCIENCE CITY ROAD, AHMEDABAD</span>
-        <a href="tel:+918799508567">Need help? <b>+91 87995 08567</b></a>
+      <div className="topline">
+        <span>SCIENCE CITY ROAD, AHMEDABAD</span>
+        <a href="tel:+918799508567">+91 87995 08567</a>
       </div>
-      <header className="site-header">
+      <header className="header">
         <a className="logo-placeholder" href="#home" aria-label="Your logo placeholder, home">YOUR LOGO</a>
-        <button className="menu-toggle" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
+        <button className="menu-toggle" type="button" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <X size={21} /> : <Menu size={21} />}
         </button>
-        <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Main navigation">
-          <a href="#experience" onClick={closeMenu}>Experience</a>
-          <a href="#explore" onClick={closeMenu}>Explore</a>
-          <a href="#faqs" onClick={closeMenu}>FAQs</a>
-          <a href="#location" onClick={closeMenu}>Location</a>
-          <a className="nav-cta" href={whatsappUrl('Hello! I would like to check current availability and rates at The Crown Of Console.')} target="_blank" rel="noreferrer" onClick={closeMenu}>
-            Check availability <ArrowUpRight size={16} />
-          </a>
+        <nav className={menuOpen ? 'navigation navigation-open' : 'navigation'} aria-label="Main navigation">
+          <a href="#space" onClick={close}>The space</a>
+          <a href="#experience" onClick={close}>Experiences</a>
+          <a href="#visit" onClick={close}>Plan a visit</a>
+          <a href="#location" onClick={close}>Find us</a>
+          <a className="header-cta" href={whatsappUrl('Hello! I would like to check current availability and rates at The Crown Of Console.')} target="_blank" rel="noreferrer" onClick={close}>Make an enquiry <ArrowUpRight size={15} /></a>
         </nav>
       </header>
     </>
   )
 }
 
-function ExperienceExplorer() {
-  const [active, setActive] = useState('solo')
-  const [game, setGame] = useState('')
-  const current = experiences[active]
+function Hero() {
+  return (
+    <section className="hero" id="home">
+      <div className="hero-copy">
+        <span className="eyebrow"><i /> THE CROWN OF CONSOLE <b>·</b> AHMEDABAD</span>
+        <h1>Good games.<br /><em>Better together.</em></h1>
+        <p className="hero-intro">A gaming café on Science City Road. Bring your people, find your next game and make a plan before you head over.</p>
+        <div className="hero-actions">
+          <a className="button button-dark" href="#experience">Explore the experience <ArrowDownRight size={16} /></a>
+          <a className="quiet-link" href={whatsappUrl('Hello! Could you share the current rates and availability at The Crown Of Console?')} target="_blank" rel="noreferrer">Ask us a question <ArrowUpRight size={15} /></a>
+        </div>
+        <div className="hero-footnote"><span>01 / 05</span><span>SCIENCE CITY ROAD, AHMEDABAD</span></div>
+      </div>
+      <div className="hero-visual">
+        <img
+          src="https://images.unsplash.com/photo-1715279240000-9a50953e327d?auto=format&fit=crop&w=1800&q=88"
+          alt="Illustrative gaming room photograph; actual venue photography will replace this image"
+          fetchPriority="high"
+        />
+        <div className="hero-image-tag">VISUAL REFERENCE · NOT THE ACTUAL VENUE</div>
+        <div className="hero-image-caption">
+          <span>THE NEXT ROUND STARTS HERE</span>
+          <span>PHOTO: BRANDEN SKELI / UNSPLASH</span>
+        </div>
+      </div>
+    </section>
+  )
+}
 
-  const sendGameQuestion = () => {
-    const title = game.trim()
-    if (!title) return
-    window.open(whatsappUrl('Hello! I would like to check whether ' + title + ' is currently available at The Crown Of Console. Please also share the rates and timings.'), '_blank', 'noopener,noreferrer')
+function QuickFacts() {
+  return (
+    <div className="quick-facts" aria-label="Business details">
+      <div><MapPin size={17} /><span><b>Find the café</b><small>Science City Road, Ahmedabad</small></span></div>
+      <div><MessageCircle size={17} /><span><b>Talk to the team</b><small>Direct WhatsApp enquiries</small></span></div>
+      <div><Clock3 size={17} /><span><b>Before you visit</b><small>Confirm current hours and rates</small></span></div>
+    </div>
+  )
+}
+
+function Gallery() {
+  const [activeImage, setActiveImage] = useState(null)
+  const close = () => setActiveImage(null)
+  const previous = () => setActiveImage((value) => (value + gallery.length - 1) % gallery.length)
+  const next = () => setActiveImage((value) => (value + 1) % gallery.length)
+
+  useEffect(() => {
+    if (activeImage === null) return undefined
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') close()
+      if (event.key === 'ArrowLeft') previous()
+      if (event.key === 'ArrowRight') next()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    document.body.classList.add('lightbox-open')
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.classList.remove('lightbox-open')
+    }
+  }, [activeImage])
+
+  return (
+    <section className="space-section section-shell" id="space">
+      <div className="section-topline"><span>01 — THE SPACE</span><span>LOOK AROUND</span></div>
+      <div className="space-heading">
+        <h2>A little room<br /><em>for a lot of fun.</em></h2>
+        <p>Good gaming is about more than the screen. It is the people you bring and the time you make for it.</p>
+      </div>
+      <div className="gallery-disclaimer">PHOTO REFERENCES FOR DESIGN ONLY · ACTUAL CAFE PHOTOS TO BE ADDED</div>
+      <div className="gallery-grid">
+        {gallery.map((image, index) => (
+          <button className={'gallery-item gallery-item-' + (index + 1)} type="button" key={image.src} onClick={() => setActiveImage(index)} aria-label={'View image: ' + image.caption}>
+            <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+            <span className="gallery-caption"><b>{image.caption}</b><small>{image.credit}</small></span>
+            <span className="gallery-open"><ArrowUpRight size={17} /></span>
+          </button>
+        ))}
+      </div>
+      {activeImage !== null && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" onMouseDown={(event) => { if (event.target === event.currentTarget) close() }}>
+          <button className="lightbox-close" type="button" onClick={close} aria-label="Close photo viewer"><X size={22} /></button>
+          <button className="lightbox-arrow lightbox-prev" type="button" onClick={previous} aria-label="Previous photo"><ArrowLeft size={22} /></button>
+          <figure>
+            <img src={gallery[activeImage].src} alt={gallery[activeImage].alt} />
+            <figcaption><b>{gallery[activeImage].caption}</b><span>{gallery[activeImage].credit} · Reference image</span></figcaption>
+          </figure>
+          <button className="lightbox-arrow lightbox-next" type="button" onClick={next} aria-label="Next photo"><ArrowRight size={22} /></button>
+        </div>
+      )}
+    </section>
+  )
+}
+
+function ExperienceExplorer() {
+  const [selected, setSelected] = useState('solo')
+  const [game, setGame] = useState('')
+  const current = experiences.find((item) => item.id === selected) || experiences[0]
+  const ActiveIcon = current.icon
+
+  const sendEnquiry = () => {
+    const message = selected === 'game'
+      ? 'Hello! I would like to check whether ' + game.trim() + ' is currently available. Could you also share the current rates and timings?'
+      : current.message
+    if (!message) return
+    window.open(whatsappUrl(message), '_blank', 'noopener,noreferrer')
   }
 
   return (
-    <section className="experience-section section-shell" id="experience">
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">START WITH WHAT YOU NEED</span>
-          <h2>Every visit starts<br /><em>with a good plan.</em></h2>
+    <section className="experience-section" id="experience">
+      <div className="section-shell experience-inner">
+        <div className="section-topline"><span>02 — THE EXPERIENCE</span><span>CHOOSE YOUR PLAN</span></div>
+        <div className="experience-heading">
+          <h2>How are you<br /><em>playing today?</em></h2>
+          <p>Choose what brings you here. We will help you with the right details.</p>
         </div>
-        <p>Choose what describes your visit. We’ll point you to the right next step.</p>
-      </div>
-
-      <div className="experience-layout">
-        <div className="experience-options" role="tablist" aria-label="Choose your visit type">
-          <button className={active === 'solo' ? 'experience-option active' : 'experience-option'} type="button" role="tab" aria-selected={active === 'solo'} onClick={() => setActive('solo')}>
-            <span className="option-icon"><Monitor size={20} /></span>
-            <span><small>01 / PLAY YOUR WAY</small><b>Solo session</b></span>
-            <ArrowUpRight size={17} />
-          </button>
-          <button className={active === 'squad' ? 'experience-option active' : 'experience-option'} type="button" role="tab" aria-selected={active === 'squad'} onClick={() => setActive('squad')}>
-            <span className="option-icon"><Users size={20} /></span>
-            <span><small>02 / BRING THE CREW</small><b>Group visit</b></span>
-            <ArrowUpRight size={17} />
-          </button>
-          <button className={active === 'discover' ? 'experience-option active' : 'experience-option'} type="button" role="tab" aria-selected={active === 'discover'} onClick={() => setActive('discover')}>
-            <span className="option-icon"><Gamepad2 size={20} /></span>
-            <span><small>03 / FIND A GAME</small><b>Game enquiry</b></span>
-            <ArrowUpRight size={17} />
-          </button>
-        </div>
-
-        <div className="experience-detail" role="tabpanel">
-          <span className="detail-kicker">{current.eyebrow}</span>
-          <h3>{current.title}</h3>
-          <p>{current.description}</p>
-          <a className="button button-primary" href={whatsappUrl(current.message)} target="_blank" rel="noreferrer">
-            Ask the team <ArrowUpRight size={17} />
-          </a>
-          <span className="detail-index">CROWN OF CONSOLE <i /> AHMEDABAD</span>
-        </div>
-      </div>
-
-      <div className="game-finder" id="explore">
-        <div className="finder-copy">
-          <span className="eyebrow">LOOKING FOR SOMETHING SPECIFIC?</span>
-          <h3>Search a game or platform.</h3>
-          <p>Enter a title, console or platform. We’ll send your question straight to the team.</p>
-        </div>
-        <div className="finder-action">
-          <label className="search-field">
-            <Search size={19} />
-            <input value={game} onChange={(event) => setGame(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') sendGameQuestion() }} placeholder="e.g. a game or console name" aria-label="Game or platform name" />
-            {game && <button type="button" onClick={() => setGame('')} aria-label="Clear search"><X size={16} /></button>}
-          </label>
-          <button className="button button-primary finder-button" type="button" onClick={sendGameQuestion} disabled={!game.trim()}>
-            Check availability <ArrowRight size={17} />
-          </button>
-          <span className="finder-note">Availability is confirmed by the team, not automatically.</span>
+        <div className="experience-browser">
+          <div className="experience-tabs" role="tablist" aria-label="Choose your gaming visit">
+            {experiences.map((item) => {
+              const Icon = item.icon
+              return (
+                <button
+                  className={selected === item.id ? 'experience-tab is-active' : 'experience-tab'}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected === item.id}
+                  key={item.id}
+                  onClick={() => setSelected(item.id)}
+                >
+                  <span>{item.number}</span>
+                  <Icon size={20} />
+                  <b>{item.label}</b>
+                  <ArrowUpRight className="tab-arrow" size={16} />
+                </button>
+              )
+            })}
+          </div>
+          <div className="experience-panel" role="tabpanel">
+            <div className="panel-icon"><ActiveIcon size={25} /></div>
+            <span className="eyebrow">{current.number} / YOUR VISIT</span>
+            <h3>{current.title}</h3>
+            <p>{current.description}</p>
+            {selected === 'game' && (
+              <label className="game-question">
+                <span>WHAT DO YOU WANT TO PLAY?</span>
+                <input value={game} onChange={(event) => setGame(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') sendEnquiry() }} placeholder="Enter a game or platform" />
+              </label>
+            )}
+            <button className="button button-lime" type="button" onClick={sendEnquiry} disabled={selected === 'game' && !game.trim()}>
+              {current.action} <ArrowUpRight size={16} />
+            </button>
+            <span className="panel-footnote">A MESSAGE GOES DIRECTLY TO THE CAFE TEAM</span>
+          </div>
         </div>
       </div>
     </section>
@@ -161,61 +278,96 @@ function VisitPlanner() {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('Evening')
   const [players, setPlayers] = useState('2')
+  const [note, setNote] = useState('')
 
   const submit = (event) => {
     event.preventDefault()
-    const lines = [
+    const message = [
       'Hello, The Crown Of Console!',
-      'I would like to check availability for a gaming visit.',
+      'I would like to enquire about a gaming visit.',
       name.trim() ? 'Name: ' + name.trim() : '',
       date ? 'Preferred date: ' + date : '',
       'Preferred time: ' + time,
       'Number of players: ' + players,
-      'Please share the current rates and confirm availability. Thank you.'
-    ].filter(Boolean)
-    window.open(whatsappUrl(lines.join('\n')), '_blank', 'noopener,noreferrer')
+      note.trim() ? 'Additional details: ' + note.trim() : '',
+      'Please share current rates and confirm availability. Thank you.'
+    ].filter(Boolean).join('\n')
+    window.open(whatsappUrl(message), '_blank', 'noopener,noreferrer')
   }
 
   return (
-    <form className="planner-card" onSubmit={submit}>
-      <div className="planner-heading">
-        <div>
-          <span className="eyebrow">PLAN YOUR VISIT</span>
-          <h3>Let's make a plan.</h3>
+    <section className="visit-section section-shell" id="visit">
+      <div className="visit-copy">
+        <div className="section-topline"><span>03 — PLAN A VISIT</span><span>NO PAYMENT REQUIRED</span></div>
+        <h2>Make a plan.<br /><em>Then make a day of it.</em></h2>
+        <p>Share a few details and we will prepare a message for the team. They can confirm the current rates and availability with you directly.</p>
+        <div className="visit-assurance">
+          <div><Check size={16} /><span>Enquiry goes straight to WhatsApp</span></div>
+          <div><Check size={16} /><span>No online payment or account needed</span></div>
+          <div><Check size={16} /><span>Your visit is confirmed by the team</span></div>
         </div>
-        <span className="planner-icon"><CalendarDays size={21} /></span>
       </div>
-      <label className="form-field">
-        <span>Your name <small>OPTIONAL</small></span>
-        <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Enter your name" autoComplete="name" />
-      </label>
-      <div className="form-grid">
+      <form className="visit-form" onSubmit={submit}>
+        <div className="form-heading">
+          <div><span className="eyebrow">VISIT ENQUIRY</span><h3>When should we expect you?</h3></div>
+          <CalendarDays size={23} />
+        </div>
         <label className="form-field">
-          <span>Preferred date</span>
-          <input type="date" min={new Date().toISOString().slice(0, 10)} value={date} onChange={(event) => setDate(event.target.value)} />
+          <span>Your name <small>OPTIONAL</small></span>
+          <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Enter your name" autoComplete="name" />
         </label>
+        <div className="form-row">
+          <label className="form-field">
+            <span>Preferred date</span>
+            <input type="date" min={localToday()} value={date} onChange={(event) => setDate(event.target.value)} />
+          </label>
+          <label className="form-field">
+            <span>Preferred time</span>
+            <select value={time} onChange={(event) => setTime(event.target.value)}>
+              <option>Morning</option><option>Afternoon</option><option>Evening</option><option>Late evening</option>
+            </select>
+          </label>
+        </div>
         <label className="form-field">
-          <span>Preferred time</span>
-          <select value={time} onChange={(event) => setTime(event.target.value)}>
-            <option>Morning</option><option>Afternoon</option><option>Evening</option><option>Late evening</option>
+          <span>Number of players</span>
+          <select value={players} onChange={(event) => setPlayers(event.target.value)}>
+            {['1','2','3','4','5','6','7','8','9','10','10+'].map((value) => <option key={value} value={value}>{value}</option>)}
           </select>
         </label>
-      </div>
-      <label className="form-field">
-        <span>Number of players</span>
-        <select value={players} onChange={(event) => setPlayers(event.target.value)}>
-          {['1','2','3','4','5','6','7','8','9','10','10+'].map((value) => <option key={value} value={value}>{value}</option>)}
-        </select>
-      </label>
-      <button className="button button-primary planner-submit" type="submit">Continue on WhatsApp <ArrowUpRight size={17} /></button>
-      <p className="form-disclaimer">This sends an enquiry only. Your visit is not booked until the team confirms it.</p>
-    </form>
+        <label className="form-field">
+          <span>Anything else? <small>OPTIONAL</small></span>
+          <textarea value={note} onChange={(event) => setNote(event.target.value)} placeholder="A game, group detail or question..." rows="3" />
+        </label>
+        <button className="button button-dark form-submit" type="submit">Continue on WhatsApp <ArrowUpRight size={17} /></button>
+        <p className="form-note">This is an enquiry, not an instant booking. The team will confirm your visit.</p>
+      </form>
+    </section>
   )
 }
 
-function App() {
-  const [copied, setCopied] = useState(false)
+function FAQSection() {
+  return (
+    <section className="faq-section section-shell" id="faqs">
+      <div className="faq-intro">
+        <div className="section-topline"><span>04 — BEFORE YOU COME</span></div>
+        <h2>A few things<br /><em>worth knowing.</em></h2>
+        <p>Still have a question? The team is one message away.</p>
+        <a className="text-link" href={whatsappUrl('Hello! I have a question about The Crown Of Console.')} target="_blank" rel="noreferrer">Ask the team <ArrowUpRight size={16} /></a>
+      </div>
+      <div className="faq-list">
+        {faqs.map((item, index) => (
+          <details className="faq-item" key={item.question} open={index === 0}>
+            <summary><span>{item.question}</span><ChevronDown size={18} /></summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  )
+}
 
+function LocationSection() {
+  const [copied, setCopied] = useState(false)
   const copyAddress = async () => {
     try {
       await navigator.clipboard.writeText(ADDRESS)
@@ -227,107 +379,66 @@ function App() {
   }
 
   return (
+    <section className="location-section" id="location">
+      <div className="location-content section-shell">
+        <div className="location-copy">
+          <div className="section-topline"><span>05 — FIND THE CAFE</span><span>AHMEDABAD, INDIA</span></div>
+          <h2>We'll see you<br /><em>there.</em></h2>
+          <p>Find us on Science City Road. Open directions or save the address before you set off.</p>
+          <div className="address-details">
+            <MapPin size={20} />
+            <div><b>The Crown Of Console</b><span>FF/1, Shakti Arcade,<br />Above Kutchi King, Near ICICI Bank,<br />Science City Road, Ahmedabad</span></div>
+          </div>
+          <div className="location-actions">
+            <button className="copy-address" type="button" onClick={copyAddress}>{copied ? <Check size={15} /> : <MapPin size={15} />}{copied ? 'Address copied' : 'Copy address'}</button>
+            <a className="text-link" href={MAP_URL} target="_blank" rel="noreferrer">Get directions <ArrowUpRight size={16} /></a>
+          </div>
+          <a className="location-phone" href="tel:+918799508567"><Phone size={17} /> +91 87995 08567</a>
+        </div>
+        <div className="map-frame">
+          <iframe title="Map showing The Crown Of Console on Science City Road, Ahmedabad" src={MAP_EMBED_URL} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+          <a href={MAP_URL} target="_blank" rel="noreferrer">OPEN IN GOOGLE MAPS <ArrowUpRight size={14} /></a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-main">
+        <div>
+          <a className="logo-placeholder footer-logo" href="#home">YOUR LOGO</a>
+          <p>THE CROWN OF CONSOLE · AHMEDABAD</p>
+        </div>
+        <a href={whatsappUrl('Hello! I would like to know more about The Crown Of Console.')} target="_blank" rel="noreferrer">GET IN TOUCH <ArrowUpRight size={16} /></a>
+      </div>
+      <div className="footer-bottom">
+        <span>© {new Date().getFullYear()} THE CROWN OF CONSOLE</span>
+        <span>SCIENCE CITY ROAD, AHMEDABAD</span>
+        <a href="#home">BACK TO TOP ↑</a>
+      </div>
+    </footer>
+  )
+}
+
+function App() {
+  return (
     <>
       <Header />
       <main id="main">
-        <section className="hero" id="home">
-          <img className="hero-image" src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1800&q=88" alt="Illustrative gaming setup" fetchPriority="high" />
-          <div className="hero-image-shade" />
-          <div className="hero-content">
-            <span className="hero-location"><i /> GAMING CAFE <b>/</b> AHMEDABAD</span>
-            <h1>Make time<br />for <em>game time.</em></h1>
-            <p>Bring your people, choose what you want to play and make a plan. Find The Crown Of Console on Science City Road.</p>
-            <div className="hero-actions">
-              <a className="button button-primary" href="#experience">Explore the experience <ArrowUpRight size={17} /></a>
-              <a className="button button-ghost" href={whatsappUrl('Hello! I would like to check current availability and rates.')} target="_blank" rel="noreferrer">Talk to the team <MessageCircle size={16} /></a>
-            </div>
-          </div>
-          <div className="hero-bottom">
-            <span>THE CROWN OF CONSOLE</span>
-            <span>SCIENCE CITY ROAD, AHMEDABAD</span>
-            <a href="#experience">SCROLL TO EXPLORE <ArrowDownRight size={15} /></a>
-          </div>
-          <div className="hero-image-note">ILLUSTRATIVE GAMING IMAGE</div>
-        </section>
-
-        <section className="trust-strip" aria-label="Quick information">
-          <div><MapPin size={17} /><span><b>Find us</b><small>Science City Road, Ahmedabad</small></span></div>
-          <div><MessageCircle size={17} /><span><b>Ask directly</b><small>Speak with the team on WhatsApp</small></span></div>
-          <div><Clock3 size={17} /><span><b>Check before you visit</b><small>Confirm current timings and rates</small></span></div>
-        </section>
-
+        <Hero />
+        <QuickFacts />
+        <Gallery />
         <ExperienceExplorer />
-
-        <section className="visit-section section-shell" id="plan">
-          <div className="visit-intro">
-            <span className="eyebrow">A FEW DETAILS, THEN YOU'RE SET</span>
-            <h2>Get your next<br /><em>session started.</em></h2>
-            <p>Tell us when you would like to visit. Your details will be added to a WhatsApp message so the team can confirm rates and availability with you.</p>
-            <div className="visit-points">
-              <div><Check size={16} /><span>No online payment required here</span></div>
-              <div><Check size={16} /><span>Confirm details directly with the team</span></div>
-              <div><Check size={16} /><span>Ask about a specific game or group visit</span></div>
-            </div>
-          </div>
-          <VisitPlanner />
-        </section>
-
-        <section className="faq-section section-shell" id="faqs">
-          <div className="faq-intro">
-            <span className="eyebrow">GOOD TO KNOW</span>
-            <h2>Before you<br /><em>head over.</em></h2>
-            <p>Can't find what you're looking for? Send us a message and ask directly.</p>
-            <a className="text-link" href={whatsappUrl('Hello! I have a question about The Crown Of Console.')} target="_blank" rel="noreferrer">Ask a question <ArrowUpRight size={16} /></a>
-          </div>
-          <div className="faq-list">
-            {faqs.map((item, index) => (
-              <details className="faq-item" key={item.question} open={index === 0}>
-                <summary><span>{item.question}</span><ChevronDown size={18} /></summary>
-                <p>{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section className="location-section section-shell" id="location">
-          <div className="location-copy">
-            <span className="eyebrow">COME FIND US</span>
-            <h2>See you<br /><em>at the cafe.</em></h2>
-            <p>We're at Shakti Arcade on Science City Road. Open directions before you set off, or copy the address for later.</p>
-            <div className="address-card">
-              <MapPin size={20} />
-              <div><b>The Crown Of Console</b><span>FF/1, Shakti Arcade,<br />Above Kutchi King, Near ICICI Bank,<br />Science City Road, Ahmedabad</span></div>
-            </div>
-            <div className="location-actions">
-              <button className="copy-address" type="button" onClick={copyAddress}>{copied ? <Check size={16} /> : <MapPin size={16} />}{copied ? 'Address copied' : 'Copy address'}</button>
-              <a className="text-link" href={MAP_URL} target="_blank" rel="noreferrer">Get directions <ArrowUpRight size={16} /></a>
-            </div>
-            <a className="phone-link" href="tel:+918799508567"><Phone size={17} /> +91 87995 08567</a>
-          </div>
-          <a className="map-card" href={MAP_URL} target="_blank" rel="noreferrer" aria-label="Open the location in Google Maps">
-            <div className="map-road road-one" /><div className="map-road road-two" /><div className="map-road road-three" />
-            <div className="map-marker"><MapPin size={24} /></div>
-            <span className="map-label">SCIENCE CITY ROAD <b>·</b> AHMEDABAD</span>
-            <span className="map-open">OPEN IN MAPS <ArrowUpRight size={16} /></span>
-          </a>
-        </section>
+        <VisitPlanner />
+        <FAQSection />
+        <LocationSection />
       </main>
-
-      <footer className="site-footer">
-        <div className="footer-main">
-          <a className="logo-placeholder footer-logo" href="#home">YOUR LOGO</a>
-          <p>Make time for game time.</p>
-          <a className="footer-contact" href={whatsappUrl('Hello! I would like to know more about The Crown Of Console.')} target="_blank" rel="noreferrer">CONTACT THE TEAM <ArrowUpRight size={16} /></a>
-        </div>
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} THE CROWN OF CONSOLE</span>
-          <span>SCIENCE CITY ROAD, AHMEDABAD</span>
-          <a href="#home">BACK TO TOP ↑</a>
-        </div>
-      </footer>
-
-      <a className="mobile-contact-bar" href={whatsappUrl('Hello! I would like to check current availability and rates at The Crown Of Console.')} target="_blank" rel="noreferrer">
-        <MessageCircle size={17} /> Check availability <ArrowUpRight size={16} />
+      <Footer />
+      <a className="mobile-whatsapp" href={whatsappUrl('Hello! I would like to check current availability and rates at The Crown Of Console.')} target="_blank" rel="noreferrer">
+        <MessageCircle size={17} /> Make an enquiry <ArrowUpRight size={16} />
       </a>
     </>
   )

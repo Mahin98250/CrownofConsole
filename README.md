@@ -44,7 +44,7 @@ The enquiry form is a WhatsApp hand-off, not an online reservation system. There
 
 ## Business details currently published
 
-- Address: FF/1, Shakti Arcade, Science City Road, Ahmedabad, Gujarat 380060
+- Address: FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad
 - Phone: +91 8799508567
 
 ## Content that still needs confirmation from the business

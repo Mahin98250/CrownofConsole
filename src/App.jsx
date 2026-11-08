@@ -452,16 +452,53 @@ function StartupIntro() {
     <div className="startup-topline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD · INDIA</span></div>
     <div className="startup-center">
       <span className="startup-kicker">POWERING UP YOUR PLAY SPACE</span>
-      <svg className="startup-controller" viewBox="0 0 520 300" role="img" aria-label="Illustration of a modern wireless gaming controller">
-        <defs><linearGradient id="padShell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset="1" stopColor="#d9d7cf"/></linearGradient></defs>
-        <path className="controller-shell" d="M150 76c-34 0-58 23-72 61L38 224c-12 32 8 54 35 44l78-42h218l78 42c27 10 47-12 35-44l-40-87c-14-38-38-61-72-61-34 0-61 15-110 15S184 76 150 76Z" fill="url(#padShell)" stroke="#aaa99f" strokeWidth="3"/>
-        <path d="M177 83c18 14 43 21 83 21s65-7 83-21" fill="none" stroke="#c4c2b9" strokeWidth="3"/>
-        <rect x="220" y="100" width="80" height="48" rx="17" fill="#171717"/>
-        <circle cx="260" cy="124" r="9" fill="#D8FF3E"/>
-        <path d="M119 143h76M157 105v76" stroke="#171717" strokeWidth="13" strokeLinecap="round"/>
-        <circle cx="359" cy="122" r="13" fill="#171717"/><circle cx="389" cy="151" r="13" fill="#171717"/><circle cx="329" cy="151" r="13" fill="#171717"/><circle cx="359" cy="180" r="13" fill="#171717"/>
-        <circle cx="199" cy="205" r="22" fill="#bdbbb2" stroke="#88877f" strokeWidth="3"/><circle cx="321" cy="205" r="22" fill="#bdbbb2" stroke="#88877f" strokeWidth="3"/>
-        <path d="M238 169h44" stroke="#aaa99f" strokeWidth="4" strokeLinecap="round"/>
+      <svg className="startup-controller" viewBox="0 0 900 520" role="img" aria-label="Detailed photorealistic-style white wireless console controller">
+        <defs>
+          <linearGradient id="dsShell" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".28" stopColor="#f5f5f3"/><stop offset=".66" stopColor="#d9d9d6"/><stop offset="1" stopColor="#a9aaa8"/></linearGradient>
+          <linearGradient id="dsTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".5" stopColor="#f0f0ed"/><stop offset="1" stopColor="#c7c8c5"/></linearGradient>
+          <linearGradient id="dsGrip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e9e9e6"/><stop offset="1" stopColor="#aeb0ad"/></linearGradient>
+          <linearGradient id="dsBlack" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#383a3b"/><stop offset="1" stopColor="#090a0b"/></linearGradient>
+          <radialGradient id="dsStick"><stop offset="0" stopColor="#55585a"/><stop offset=".65" stopColor="#242628"/><stop offset="1" stopColor="#08090a"/></radialGradient>
+          <filter id="dsShadow" x="-30%" y="-40%" width="160%" height="190%"><feGaussianBlur stdDeviation="15"/></filter>
+          <filter id="dsGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5"/></filter>
+        </defs>
+        <ellipse cx="450" cy="420" rx="310" ry="34" fill="#000" opacity=".42" filter="url(#dsShadow)"/>
+        <path d="M260 116c-76-6-124 35-151 113L49 363c-18 48 14 83 57 66l151-67h386l151 67c43 17 75-18 57-66l-60-134c-27-78-75-119-151-113-61 5-117 30-190 30s-129-25-190-30Z" fill="url(#dsShell)" stroke="#858987" strokeWidth="3"/>
+        <path d="M258 124c-60-3-101 33-126 98l-58 146c-8 22 2 39 22 31l157-69h394l157 69c20 8 30-9 22-31l-58-146c-25-65-66-101-126-98-60 3-108 27-192 27s-132-24-192-27Z" fill="url(#dsTop)" stroke="#fff" strokeWidth="2"/>
+        <path d="M266 132c-51 1-83 30-106 84M634 132c51 1 83 30 106 84" fill="none" stroke="#fff" strokeWidth="5" opacity=".8"/>
+        <path d="M190 168c-24 34-39 77-53 112M710 168c24 34 39 77 53 112" fill="none" stroke="#bfc1be" strokeWidth="2" opacity=".8"/>
+        <path d="M347 111c23 18 57 29 103 29s80-11 103-29" fill="none" stroke="#b7b9b6" strokeWidth="3"/>
+        <rect x="375" y="145" width="150" height="91" rx="32" fill="url(#dsBlack)" stroke="#737675" strokeWidth="2"/>
+        <rect x="384" y="151" width="132" height="76" rx="27" fill="#141617"/>
+        <path d="M414 157h72" stroke="#55595a" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
+        <path d="M427 192c8-10 18-15 23-15s15 5 23 15" fill="none" stroke="#343839" strokeWidth="2"/>
+        <path d="M428 192h44" stroke="#D8FF3E" strokeWidth="3" strokeLinecap="round" filter="url(#dsGlow)"/>
+        <path d="M428 192h44" stroke="#D8FF3E" strokeWidth="2" strokeLinecap="round"/>
+        <rect x="419" y="239" width="62" height="7" rx="3.5" fill="#9da09d"/>
+        <path d="M140 220h112M196 164v112" stroke="#777b79" strokeWidth="30" strokeLinecap="round" opacity=".25"/>
+        <path d="M140 220h112M196 164v112" stroke="url(#dsBlack)" strokeWidth="25" strokeLinecap="round"/>
+        <path d="M145 220h102M196 169v102" stroke="#484c4d" strokeWidth="2" strokeLinecap="round"/>
+        <g fill="url(#dsBlack)" stroke="#666a69" strokeWidth="2">
+          <circle cx="690" cy="177" r="22"/><circle cx="738" cy="220" r="22"/><circle cx="642" cy="220" r="22"/><circle cx="690" cy="263" r="22"/>
+        </g>
+        <g fill="#c9cbc8" fontSize="19" fontWeight="700" textAnchor="middle" dominantBaseline="central">
+          <text x="690" y="177">△</text><text x="738" y="220">○</text><text x="642" y="220">×</text><text x="690" y="263">□</text>
+        </g>
+        <g>
+          <circle cx="287" cy="310" r="53" fill="#969a98" opacity=".45"/><circle cx="287" cy="304" r="48" fill="#b8bbb8" stroke="#777c79" strokeWidth="3"/>
+          <circle cx="287" cy="299" r="39" fill="url(#dsStick)" stroke="#555a58" strokeWidth="3"/>
+          <circle cx="287" cy="299" r="30" fill="none" stroke="#666b69" strokeWidth="2" strokeDasharray="2 3"/>
+          <circle cx="613" cy="310" r="53" fill="#969a98" opacity=".45"/><circle cx="613" cy="304" r="48" fill="#b8bbb8" stroke="#777c79" strokeWidth="3"/>
+          <circle cx="613" cy="299" r="39" fill="url(#dsStick)" stroke="#555a58" strokeWidth="3"/>
+          <circle cx="613" cy="299" r="30" fill="none" stroke="#666b69" strokeWidth="2" strokeDasharray="2 3"/>
+        </g>
+        <g fill="#d0d2cf" stroke="#9b9f9c" strokeWidth="2">
+          <rect x="300" y="170" width="43" height="12" rx="6" transform="rotate(-12 321 176)"/>
+          <rect x="557" y="170" width="43" height="12" rx="6" transform="rotate(12 578 176)"/>
+        </g>
+        <g fill="#b8bbb8" opacity=".9"><circle cx="366" cy="268" r="3"/><circle cx="534" cy="268" r="3"/></g>
+        <path d="M108 360c-4 16 5 28 20 22l103-45M792 360c4 16-5 28-20 22l-103-45" fill="none" stroke="#fff" strokeWidth="4" opacity=".6"/>
+        <path d="M180 384c30 12 65 9 96-4M720 384c-30 12-65 9-96-4" fill="none" stroke="#8e9390" strokeWidth="2" opacity=".5"/>
       </svg>
       <div className="startup-wordmark"><b>READY</b><em> PLAYER ONE.</em></div>
       <div className="startup-loading"><span /></div>

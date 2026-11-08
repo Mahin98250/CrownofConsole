@@ -1298,3 +1298,26 @@ body{background:var(--art-paper);color:var(--art-ink)}
 .game-showcase-foot>a{display:flex;align-items:center;gap:9px;font-size:8px;font-weight:900;letter-spacing:1px;border-bottom:1px solid currentColor;padding-bottom:8px}
 @media(max-width:760px){.game-showcase{padding-top:58px;padding-bottom:62px}.game-showcase-heading{align-items:flex-start;flex-direction:column;gap:12px}.gameplay-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.gameplay-frame,.gameplay-frame-1,.gameplay-frame-5{grid-column:span 1;aspect-ratio:4/3}.gameplay-frame-1,.gameplay-frame-5{grid-column:span 2;aspect-ratio:16/8}.gameplay-frame h3{font-size:clamp(13px,3.4vw,19px)}.gameplay-frame-1 h3,.gameplay-frame-5 h3{font-size:clamp(21px,5vw,30px)}.game-showcase-foot{align-items:flex-start;flex-direction:column}}
 @media(max-width:420px){.gameplay-gallery{gap:7px}.gameplay-frame-index{top:10px;left:11px;font-size:6px}.gameplay-frame h3{left:11px;bottom:11px;font-size:13px}}
+
+
+/* Gameplay image reliability + cinematic first-entry sequence */
+.gameplay-frame{background:radial-gradient(ellipse at 72% 18%,rgba(216,255,62,.24),transparent 38%),linear-gradient(135deg,#272a2a,#101313 72%);min-height:170px}
+.gameplay-frame img{display:block;z-index:0;min-width:100%;min-height:100%;object-position:center}
+.gameplay-frame-fallback:before{content:"GAMEPLAY PREVIEW";position:absolute;top:17px;left:17px;z-index:1;font-size:8px;font-weight:900;letter-spacing:2px;color:rgba(255,255,255,.62)}
+.gameplay-frame-fallback:after{content:"✳";position:absolute;right:7%;top:8%;font-size:clamp(76px,13vw,180px);line-height:1;color:rgba(216,255,62,.14);transform:rotate(-15deg)}
+.gameplay-frame-fallback .gameplay-frame-shade{background:linear-gradient(135deg,rgba(216,255,62,.1),transparent 42%,rgba(0,0,0,.75))}
+.startup-intro{background:#090c12}
+.startup-intro:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,8,13,.92),rgba(5,8,13,.48) 48%,rgba(5,8,13,.78)),linear-gradient(0deg,rgba(5,8,13,.78),transparent 58%);z-index:0}
+.startup-intro:after{content:"";position:absolute;inset:-20%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,rgba(72,150,255,.22),transparent 38%),radial-gradient(ellipse at 82% 15%,rgba(216,255,62,.12),transparent 28%);animation:intro-ambient 8s ease-in-out infinite alternate}
+.startup-controller-wrap{width:min(76vw,900px);margin:14px auto 2px;filter:drop-shadow(0 30px 45px rgba(0,0,0,.45))}
+.startup-controller-photo{width:100%;height:clamp(190px,37vw,420px);aspect-ratio:16/9;object-fit:cover;object-position:center 48%;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 0 8px rgba(255,255,255,.025),0 28px 90px rgba(0,0,0,.38);filter:saturate(1.08) contrast(1.06);animation:controller-photo-arrive 1.05s cubic-bezier(.17,.75,.22,1) both,controller-photo-float 7.2s 1.1s ease-in-out infinite}
+.startup-controller-wrap:before{content:"PS5 GAMEPLAY / LIVE THE MOMENT";position:absolute;z-index:3;left:16px;top:15px;padding:8px 10px;background:rgba(7,10,15,.72);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:7px;font-weight:900;letter-spacing:1.6px;backdrop-filter:blur(10px)}
+.startup-controller-wrap:after{inset:0;border:1px solid rgba(255,255,255,.16);background:linear-gradient(112deg,transparent 34%,rgba(255,255,255,.2) 48%,transparent 61%);mask-image:none}
+.startup-wordmark{margin-top:18px;text-shadow:0 8px 36px rgba(0,0,0,.35)}
+.startup-kicker{color:#d8ff3e}
+.startup-status{color:rgba(255,255,255,.78)}
+.startup-loading{height:3px;margin:23px 0 12px}
+.startup-loading span{box-shadow:0 0 18px rgba(216,255,62,.65)}
+@keyframes intro-ambient{from{transform:translate3d(-1.5%,1%,0) scale(.96)}to{transform:translate3d(1.5%,-1%,0) scale(1.04)}}
+@media(max-width:520px){.startup-controller-wrap{width:calc(100vw - 40px);margin:18px auto 8px}.startup-controller-photo{height:clamp(210px,56vw,330px)}.startup-wordmark{font-size:clamp(42px,12vw,66px)}}
+@media(prefers-reduced-motion:reduce){.startup-intro:after{animation:none}}

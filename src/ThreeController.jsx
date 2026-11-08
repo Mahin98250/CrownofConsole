@@ -8,13 +8,13 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 const MODEL_URL = 'https://raw.githubusercontent.com/SafaElmali/dualsense-studio/main/controller/dualsense.glb'
 const CONTROL_ALIASES = { l3: 'left-stick', r3: 'right-stick' }
 
-export default function ThreeController({ active, pressed, stickOffsets, triggerPressure, onReady, onError }) {
+export default function ThreeController({ active, pressed, stickOffsets, triggerPressure, onReady, onError, onLayout }) {
   const canvasRef = useRef(null)
   const interactionRef = useRef({ active, pressed, stickOffsets, triggerPressure })
-  const callbacksRef = useRef({ onReady, onError })
+  const callbacksRef = useRef({ onReady, onError, onLayout })
 
   useEffect(() => {
-    callbacksRef.current = { onReady, onError }
+    callbacksRef.current = { onReady, onError, onLayout }
   }, [])
 
   useEffect(() => {
@@ -47,6 +47,18 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       renderer.setSize(bounds.width, bounds.height, false)
       camera.aspect = bounds.width / bounds.height
       camera.updateProjectionMatrix()
+      if (controls.size && camera.position.z > 0) {
+        const layout = {}
+        for (const [id, group] of controls) {
+          const point = model.localToWorld(group.position.clone()).project(camera)
+          const key = id === 'left-stick' ? 'l3' : id === 'right-stick' ? 'r3' : id
+          layout[key] = {
+            left: ((point.x + 1) / 2) * 100,
+            top: ((1 - point.y) / 2) * 100,
+          }
+        }
+        callbacksRef.current.onLayout?.(layout)
+      }
     }
 
     try {

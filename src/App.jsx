@@ -83,7 +83,7 @@ function PlayerSelector() {
   </section>
 }
 function HomePage() {
- return <main className="home-page art-playground">
+ return <main id="main-content" tabIndex="-1" className="home-page art-playground">
   <section className="art-hero">
    <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>INDEPENDENT PLAY CLUB / EST. AHMEDABAD</span></div>
    <div className="art-hero-stage"><div className="hero-shape hero-shape-orange"/><div className="hero-shape hero-shape-blue"/>
@@ -133,7 +133,7 @@ function SpacePage() {
     { src: PHOTO.room, alt: 'Illustrative gaming room', caption: 'A place to settle in' },
     { src: PHOTO.desk, alt: 'Illustrative gaming desk setup', caption: 'The setup' }
   ]
-  return <main className="inner-page">
+  return <main id="main-content" tabIndex="-1" className="inner-page">
     <PageTop number="01" kicker="THE SPACE" title="A place to" italic="plug in." intro="A first look at the kind of gaming atmosphere we're aiming to share. The photographs on this page are temporary references, not pictures of the actual café." />
     <section className="space-story section-pad">
       <div className="story-number">01 <span>— THE IDEA</span></div>
@@ -159,13 +159,15 @@ function GamesPage() {
     window.open(WA(message), '_blank', 'noopener,noreferrer')
     setSent(true)
   }
-  return <main className="inner-page">
+  return <main id="main-content" tabIndex="-1" className="inner-page">
     <PageTop number="02" kicker="GAME DISCOVERY" title="What's on" italic="your list?" intro="Have a title in mind? Tell us what you're looking for and the café team can confirm whether it's currently available. We don't publish an unverified game catalogue." dark />
     <section className="games-intro section-pad">
       <div className="games-aside"><span>YOUR NEXT<br />PICK</span><Gamepad2 size={46} /><small>ENQUIRE DIRECTLY</small></div>
       <div className="games-form-wrap"><Eyebrow>LET'S CHECK AVAILABILITY</Eyebrow><h2>What do you<br /><em>want to play?</em></h2>
         <form className="enquiry-form" onSubmit={submit}>
-          <label className="field"><span>What are you looking for?</span><select value={kind} onChange={(event) => setKind(event.target.value)}><option>A specific game</option><option>A multiplayer game</option><option>A particular console or platform</option><option>What's currently available</option></select></label>
+          <fieldset className="game-intent-field"><legend>What are you in the mood for?</legend><div className="game-intents">
+            {['A specific game','A multiplayer game','A particular console or platform',"What's currently available"].map((option, index) => <button type="button" key={option} className={kind === option ? 'game-intent game-intent-active' : 'game-intent'} aria-pressed={kind === option} onClick={() => { setKind(option); setSent(false) }}><span>0{index + 1}</span><b>{option}</b><i>{kind === option ? '✳' : '+'}</i></button>)}
+          </div></fieldset>
           <label className="field"><span>Game title or details <small>OPTIONAL</small></span><input value={game} onChange={(event) => { setGame(event.target.value); setSent(false) }} placeholder="Type a game or describe what you're after" /></label>
           <button className="button button-dark" type="submit">Check with the team <MessageCircle size={16} /></button>
           <p className="form-hint">{sent ? 'WhatsApp has been opened with your enquiry. Send the message there to contact the team.' : 'This sends an enquiry only. Availability is confirmed by the café team.'}</p>
@@ -182,7 +184,7 @@ function ExperiencesPage() {
     { no: '02', icon: Zap, title: 'A little competition', text: 'Have a friendly match in mind? Ask the team which games and arrangements are currently possible.', prompt: 'Hello! I would like to ask about options for a competitive or head-to-head gaming visit. What is currently available?' },
     { no: '03', icon: Users, title: 'Bring your people', text: 'Planning with friends? Share your group size and preferred time so the team can confirm what can be arranged.', prompt: 'Hello! I am planning a group gaming visit. Could you confirm current options, rates and timings?' }
   ]
-  return <main className="inner-page">
+  return <main id="main-content" tabIndex="-1" className="inner-page">
     <PageTop number="03" kicker="WAYS TO PLAY" title="Pick your" italic="kind of play." intro="Every visit starts with a different plan. Choose the one closest to yours and ask the team for the latest details before heading out." />
     <section className="experience-list section-pad">{experiences.map(({ no, icon: Icon, title, text, prompt }) => <article className="experience-card" key={no}><span className="experience-no">{no}</span><div className="experience-icon"><Icon size={26} /></div><div className="experience-copy"><h2>{title}</h2><p>{text}</p></div><a href={WA(prompt)} target="_blank" rel="noreferrer" className="round-link" aria-label={'Enquire about ' + title}><ArrowUpRight /></a></article>)}</section>
     <section className="experience-bottom"><h2>Not sure yet?<br /><em>That's alright.</em></h2><p>Tell us what you're thinking and we'll help you figure out the details.</p><ActionLink href="#/contact" light>Talk to the team</ActionLink></section>
@@ -202,7 +204,7 @@ function VisitPage() {
     window.open(WA(message), '_blank', 'noopener,noreferrer')
     setSent(true)
   }
-  return <main className="inner-page">
+  return <main id="main-content" tabIndex="-1" className="inner-page">
     <PageTop number="04" kicker="VISIT ENQUIRY" title="Let's plan" italic="your visit." intro="Share a few details with the team. This is a WhatsApp enquiry, not an instant booking or confirmed reservation." dark />
     <section className="visit-page-layout section-pad">
       <div className="visit-sidebar"><Eyebrow>BEFORE YOU SET OFF</Eyebrow><h2>One message<br /><em>before the game.</em></h2><p>Send your preferred date, time and group size. The team can reply with current rates and let you know what is available.</p>
@@ -233,7 +235,7 @@ function ContactPage() {
     try { await navigator.clipboard.writeText(ADDRESS); setCopied(true); window.setTimeout(() => setCopied(false), 1800) }
     catch { window.open(MAP_URL, '_blank', 'noopener,noreferrer') }
   }
-  return <main className="inner-page">
+  return <main id="main-content" tabIndex="-1" className="inner-page">
     <PageTop number="05" kicker="CONTACT & LOCATION" title="Find your" italic="way here." intro="We're on Science City Road, Ahmedabad. Check the map, copy the address or get in touch before you set off." />
     <section className="contact-layout section-pad">
       <div className="contact-details"><Eyebrow>THE CROWN OF CONSOLE</Eyebrow><h2>Come find<br /><em>the place.</em></h2>
@@ -250,7 +252,7 @@ function ContactPage() {
 }
 
 function NotFound() {
-  return <main className="not-found"><span>404 / PAGE NOT FOUND</span><h1>This page<br /><em>isn't in the game.</em></h1><a className="button button-dark" href="#/home">Back to home <ArrowUpRight size={16} /></a></main>
+  return <main id="main-content" tabIndex="-1" className="not-found"><span>404 / PAGE NOT FOUND</span><h1>This page<br /><em>isn't in the game.</em></h1><a className="button button-dark" href="#/home">Back to home <ArrowUpRight size={16} /></a></main>
 }
 
 function Footer() {
@@ -295,7 +297,27 @@ function App() {
   }, [])
   useEffect(() => {
     const labels = Object.fromEntries(NAV)
-    document.title = (labels[route] || 'Page not found') + ' — The Crown Of Console'
+    const descriptions = {
+      home: 'A different kind of game night. Explore The Crown Of Console on Science City Road, Ahmedabad.',
+      space: 'Explore the space and visual references for The Crown Of Console in Ahmedabad. Contact the team for confirmed venue details.',
+      games: 'Ask about current games, consoles and availability at The Crown Of Console, Ahmedabad.',
+      experiences: 'Explore solo, competitive and group gaming visit ideas at The Crown Of Console, Ahmedabad.',
+      visit: 'Send a visit enquiry to The Crown Of Console in Ahmedabad. Your visit is confirmed only after the team replies.',
+      contact: 'Find The Crown Of Console on Science City Road, Ahmedabad, and contact the team before your visit.'
+    }
+    const title = (labels[route] || 'Page not found') + ' — The Crown Of Console'
+    document.title = title
+    const description = descriptions[route] || 'Find your way to The Crown Of Console, Ahmedabad.'
+    const meta = document.querySelector('meta[name="description"]')
+    const socialTitle = document.querySelector('meta[property="og:title"]')
+    const socialDescription = document.querySelector('meta[property="og:description"]')
+    if (meta) meta.setAttribute('content', description)
+    if (socialTitle) socialTitle.setAttribute('content', title)
+    if (socialDescription) socialDescription.setAttribute('content', description)
+  }, [route])
+  useEffect(() => {
+    const main = document.getElementById('main-content')
+    if (main) main.focus({ preventScroll: true })
   }, [route])
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll('[data-reveal]'))
@@ -310,6 +332,7 @@ function App() {
   }, [route])
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
+    <a className="skip-link" href="#main-content">Skip to content</a>
     <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}

@@ -297,6 +297,99 @@ function AnalyticsConsent() {
   </aside>
 }
 
+
+function ControllerIntro() {
+  const [visible, setVisible] = useState(() => {
+    try {
+      return !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+        window.sessionStorage.getItem('coc-intro-seen') !== 'yes'
+    } catch {
+      return false
+    }
+  })
+  const [leaving, setLeaving] = useState(false)
+
+  const dismiss = () => {
+    if (leaving) return
+    try { window.sessionStorage.setItem('coc-intro-seen', 'yes') } catch {}
+    setLeaving(true)
+    window.setTimeout(() => {
+      setVisible(false)
+      document.getElementById('main-content')?.focus({ preventScroll: true })
+    }, 520)
+  }
+
+  useEffect(() => {
+    if (!visible) return
+    document.body.classList.add('controller-intro-active')
+    const onKeyDown = (event) => {
+      if (['x', 'X', 'Enter', 'Escape'].includes(event.key)) {
+        event.preventDefault()
+        dismiss()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.classList.remove('controller-intro-active')
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [visible, leaving])
+
+  if (!visible) return null
+
+  return <div className={leaving ? 'controller-intro controller-intro-leaving' : 'controller-intro'} role="dialog" aria-modal="true" aria-label="The Crown Of Console welcome screen">
+    <div className="intro-grain" aria-hidden="true" />
+    <div className="intro-topline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD · PLAYER 01</span></div>
+    <div className="intro-main">
+      <span className="intro-kicker"><i /> SYSTEM READY · WELCOME PLAYER</span>
+      <h1>YOUR NEXT<br /><em>GAME NIGHT.</em></h1>
+      <div className="controller-stage" aria-hidden="true">
+        <span className="controller-orbit controller-orbit-one" />
+        <span className="controller-orbit controller-orbit-two" />
+        <svg className="intro-controller" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="controller-shadow" x="-30%" y="-30%" width="160%" height="180%">
+              <feDropShadow dx="0" dy="22" stdDeviation="18" floodColor="#000000" floodOpacity=".38" />
+            </filter>
+            <linearGradient id="controller-shell" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#fffef9" />
+              <stop offset="1" stopColor="#c9c8c1" />
+            </linearGradient>
+          </defs>
+          <g filter="url(#controller-shadow)">
+            <path d="M171 92 C137 91 113 111 98 145 L53 249 C39 282 62 307 94 296 L184 264 C210 254 236 252 263 260 L377 260 C404 252 430 254 456 264 L546 296 C578 307 601 282 587 249 L542 145 C527 111 503 91 469 92 C428 94 391 109 360 125 L280 125 C249 109 212 94 171 92Z" fill="url(#controller-shell)" stroke="#a9aaa4" strokeWidth="3"/>
+            <path d="M247 115 Q320 91 393 115 L379 155 Q320 144 261 155Z" fill="#c8c9c4" opacity=".75"/>
+            <rect x="279" y="104" width="82" height="48" rx="16" fill="#b9bab5" stroke="#a2a39e" strokeWidth="2"/>
+            <rect x="292" y="114" width="56" height="28" rx="8" fill="#242724" opacity=".82"/>
+            <path d="M155 154 H211 V172 H155Z M174 135 H192 V191 H174Z" fill="#3c403c" />
+            <circle cx="225" cy="215" r="34" fill="#989b95" stroke="#777a74" strokeWidth="5"/>
+            <circle cx="225" cy="215" r="24" fill="#d8d9d3" />
+            <circle cx="415" cy="215" r="34" fill="#989b95" stroke="#777a74" strokeWidth="5"/>
+            <circle cx="415" cy="215" r="24" fill="#d8d9d3" />
+            <g fontFamily="Arial, sans-serif" fontWeight="700" fontSize="19" textAnchor="middle">
+              <circle cx="484" cy="154" r="16" fill="#d8d9d3" stroke="#9b9d96" strokeWidth="2"/><text x="484" y="161" fill="#525650">△</text>
+              <circle cx="516" cy="190" r="16" fill="#d8d9d3" stroke="#9b9d96" strokeWidth="2"/><text x="516" y="197" fill="#525650">○</text>
+              <circle cx="452" cy="190" r="16" fill="#D8FF3E" stroke="#9ebd31" strokeWidth="2"/><text x="452" y="197" fill="#171717">×</text>
+              <circle cx="484" cy="226" r="16" fill="#d8d9d3" stroke="#9b9d96" strokeWidth="2"/><text x="484" y="233" fill="#525650">□</text>
+            </g>
+            <circle cx="284" cy="181" r="6" fill="#747871"/>
+            <circle cx="356" cy="181" r="6" fill="#747871"/>
+            <path d="M284 181 H356" stroke="#969992" strokeWidth="2" strokeLinecap="round"/>
+            <rect x="302" y="73" width="36" height="6" rx="3" fill="#D8FF3E" className="controller-lightbar"/>
+            <path d="M119 139 Q141 104 177 105 M463 105 Q499 104 521 139" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" opacity=".75"/>
+          </g>
+        </svg>
+      </div>
+      <p className="intro-subline">A DIFFERENT KIND OF GAME NIGHT STARTS HERE.</p>
+      <button className="intro-enter" type="button" onClick={dismiss} autoFocus>
+        <span className="intro-x-key">×</span> PRESS X TO ENTER <ArrowUpRight size={17} />
+      </button>
+      <span className="intro-key-hint">OR PRESS ENTER</span>
+    </div>
+    <div className="intro-bottomline"><span>POWER · PLAY · REPEAT</span><button type="button" onClick={dismiss}>SKIP INTRO <ArrowUpRight size={13} /></button></div>
+  </div>
+}
+
 function ScrollProgress() {
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -368,6 +461,7 @@ function App() {
   }, [route])
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
+    <ControllerIntro />
     <a className="skip-link" href="#main-content">Skip to content</a>
     <ScrollProgress />
     <Header route={route} />

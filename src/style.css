@@ -2069,3 +2069,42 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(prefers-reduced-motion:reduce){
   .controller-3d-canvas{transition:none}
 }
+
+
+/* Home hero headline fit: keep all four poster lines readable without collisions. */
+.art-hero-stage{
+  min-height:clamp(560px,52vw,710px);
+  padding-top:42px;
+  padding-bottom:38px;
+}
+.hero-type-art{
+  min-width:0;
+  max-width:100%;
+}
+.hero-type-art h1{
+  max-width:100%;
+  font-size:clamp(76px,9.2vw,142px);
+  line-height:.86;
+  letter-spacing:-.092em;
+  overflow:visible;
+}
+.hero-type-art h1 em{
+  font-size:.84em;
+  letter-spacing:-.085em;
+}
+.hero-type-art h1>span{
+  padding:0 .035em;
+}
+.hero-type-art>p{margin-top:25px}
+@media(max-width:1050px){
+  .art-hero-stage{min-height:570px}
+  .hero-type-art h1{font-size:clamp(70px,9.6vw,112px);line-height:.87}
+}
+@media(max-width:800px){
+  .art-hero-stage{min-height:0;padding-top:38px;padding-bottom:32px}
+  .hero-type-art h1{font-size:clamp(76px,13.5vw,112px);line-height:.88}
+}
+@media(max-width:520px){
+  .hero-type-art h1{font-size:clamp(64px,14.5vw,82px);line-height:.9;letter-spacing:-.09em}
+  .hero-type-art h1 em{font-size:.82em}
+}

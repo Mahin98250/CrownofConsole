@@ -26,6 +26,11 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     let disposed = false
     let frame = 0
     let previousTime = 0
+    let lastRenderTime = 0
+    let renderInterval = 1000 / 30
+    let pixelRatioCap = 1.25
+    let lastWidth = 0
+    let lastHeight = 0
     let readyAfterFirstRender = false
     let lastReportedLayout = null
     let renderer
@@ -69,19 +74,37 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       if (!renderer || disposed) return
       const bounds = canvas.getBoundingClientRect()
       if (!bounds.width || !bounds.height) return
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
-      renderer.setSize(bounds.width, bounds.height, false)
-      camera.aspect = bounds.width / bounds.height
-      camera.updateProjectionMatrix()
-      reportLayout()
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, pixelRatioCap)
+      if (Math.abs(renderer.getPixelRatio() - pixelRatio) > 0.01) renderer.setPixelRatio(pixelRatio)
+      if (Math.abs(lastWidth - bounds.width) > 0.5 || Math.abs(lastHeight - bounds.height) > 0.5) {
+        lastWidth = bounds.width
+        lastHeight = bounds.height
+        renderer.setSize(bounds.width, bounds.height, false)
+        camera.aspect = bounds.width / bounds.height
+        camera.updateProjectionMatrix()
+        reportLayout()
+      }
     }
 
     try {
+      // Choose a conservative rendering profile from real device capabilities.
+      // This keeps the controller usable on integrated graphics and phones rather
+      // than forcing a desktop-quality render target on every device.
+      const memory = navigator.deviceMemory || 4
+      const cores = navigator.hardwareConcurrency || 4
+      const compactScreen = window.matchMedia('(max-width: 760px)').matches
+      const lowPower = memory <= 4 || cores <= 4 || compactScreen
+      pixelRatioCap = lowPower ? 1.15 : 1.6
+      renderInterval = 1000 / (lowPower ? 30 : 45)
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
-        powerPreference: 'high-performance',
+        antialias: !lowPower,
+        powerPreference: 'low-power',
+        precision: lowPower ? 'mediump' : 'highp',
+        stencil: false,
+        depth: true,
+        preserveDrawingBuffer: false,
       })
       renderer.setClearColor(0x000000, 0)
       renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -162,7 +185,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
             : source.clone()
           if (material.map) {
             material.map.colorSpace = THREE.SRGBColorSpace
-            material.map.anisotropy = Math.min(12, renderer.capabilities.getMaxAnisotropy())
+            material.map.anisotropy = Math.min(lowPower ? 4 : 8, renderer.capabilities.getMaxAnisotropy())
           }
           if (material.normalMap) material.normalScale.set(0.85, 0.85)
           if ('roughness' in material) material.roughness = Math.max(0.26, Math.min(0.88, material.roughness))
@@ -301,6 +324,8 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
           }
         }
       }
+      if (time - lastRenderTime < renderInterval) return
+      lastRenderTime = time
       renderer.render(scene, camera)
       if (readyAfterFirstRender) {
         readyAfterFirstRender = false
@@ -312,14 +337,23 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const handleContextLost = (event) => {
       event.preventDefault()
       canvas.dataset.ready = 'false'
+      callbacksRef.current.onError?.(new Error('Graphics context was interrupted; showing the accessible controller fallback.'))
+    }
+    const handleContextRestored = () => {
+      if (disposed) return
+      canvas.dataset.ready = 'true'
+      readyAfterFirstRender = true
+      lastRenderTime = 0
     }
     canvas.addEventListener('webglcontextlost', handleContextLost)
+    canvas.addEventListener('webglcontextrestored', handleContextRestored)
 
     return () => {
       disposed = true
       window.cancelAnimationFrame(frame)
       resizeObserver?.disconnect()
       canvas.removeEventListener('webglcontextlost', handleContextLost)
+      canvas.removeEventListener('webglcontextrestored', handleContextRestored)
       container?.removeEventListener('pointerdown', handlePointerDown)
       container?.removeEventListener('pointermove', handlePointerMove)
       container?.removeEventListener('pointerup', handlePointerUp)

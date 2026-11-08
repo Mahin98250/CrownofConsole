@@ -1273,3 +1273,9 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(prefers-reduced-motion:reduce){
   .startup-controller-photo,.startup-light-pool,.startup-controller-wrap:after{animation:none!important}
 }
+
+/* Clear gaming-cafe identity in the first screen */
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:22px;margin-top:4px}
+.hero-actions .art-text-link{margin:0;color:var(--art-ink)}
+.hero-actions .art-pill-link{flex-shrink:0}
+@media(max-width:640px){.hero-actions{align-items:flex-start;flex-direction:column;gap:16px}.hero-actions .art-text-link{font-size:7px}}

@@ -105,19 +105,19 @@ function PlayerSelector() {
 function HomePage() {
  return <main id="main-content" tabIndex="-1" className="home-page art-playground">
   <section className="art-hero">
-   <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>INDEPENDENT PLAY CLUB / EST. AHMEDABAD</span></div>
+   <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>PLAYSTATION GAMING CAFÉ / AHMEDABAD</span></div>
    <div className="art-hero-stage"><div className="hero-shape hero-shape-orange"/><div className="hero-shape hero-shape-blue"/>
-    <div className="hero-type-art"><span className="hero-eyebrow-art">A DIFFERENT KIND OF GAME NIGHT</span><h1>PLAY<br/><em>OUTSIDE</em><br/>THE <span>LINES.</span></h1><p>Good games are only the beginning. Make a little noise, find your people and turn an ordinary day into a story worth replaying.</p><a className="art-pill-link" href="#player-lab">FIND YOUR PLAY STYLE <ArrowDownRight size={17}/></a></div>
+    <div className="hero-type-art"><span className="hero-eyebrow-art">PLAYSTATION GAMING CAFÉ · AHMEDABAD</span><h1>PLAY<br/><em>STATION</em><br/><span>GAMING.</span></h1><p>A gaming café in Science City Road, Ahmedabad. Come to play PlayStation games, challenge your friends and enjoy time together. Ask our team about current games, session rates and availability.</p><div className="hero-actions"><a className="art-pill-link" href="#/games">EXPLORE GAMES <ArrowDownRight size={17}/></a><a className="art-text-link" href="#/visit">ASK ABOUT A GAMING SESSION <ArrowUpRight size={17}/></a></div></div>
     <div className="hero-art-collage"><div className="collage-photo"><img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high"/><span>VISUAL REFERENCE · NOT THE ACTUAL VENUE</span></div><div className="collage-sticker collage-sticker-yellow">NO<br/>PAUSE<br/>BUTTON</div><div className="collage-sticker collage-sticker-blue">LET'S<br/>PLAY!</div><div className="collage-caption"><b>01</b><span>THE GOOD STUFF<br/>HAPPENS TOGETHER</span></div></div>
     <div className="hero-side-index">SCROLL TO GET IN <span>↓</span></div>
    </div>
-   <div className="hero-bottom-art"><span>NOT JUST A PLACE TO PLAY.</span><span>A PLACE TO MAKE A MOMENT.</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
+   <div className="hero-bottom-art"><span>PLAYSTATION GAMING CAFÉ</span><span>SOLO & GROUP GAMING ENQUIRIES</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
   </section>
   <section className="manifesto-art" data-reveal><div className="art-section-meta"><span>01 / THE HOUSE RULES</span><span>GOOD ENERGY ONLY (THE REST IS UP TO YOU)</span></div><div className="manifesto-art-grid"><h2>LESS<br/>SCROLL.<br/><em>MORE</em><br/>SCORE.</h2><div className="manifesto-art-note"><span className="asterisk-doodle">✳</span><p>Some nights are made for getting out, catching up and finding out who really has the better game. That's the feeling behind The Crown Of Console.</p><span className="handwritten-note">bring your people ↗</span></div></div><div className="manifesto-art-bottom"><span>GOOD GAMES</span><b>+</b><span>GREAT COMPANY</span><b>=</b><span>ONE MORE ROUND</span></div></section>
   <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
   <PlayerSelector/>
   <section className="art-directory" data-reveal><div className="art-section-meta"><span>05 / OPEN THE DOORS</span><span>TAKE YOUR PICK</span></div><div className="directory-heading"><h2>WHERE TO<br/><em>FROM HERE?</em></h2><span>THERE'S MORE THAN ONE WAY TO PLAY.</span></div><div className="directory-grid">
-   <a href="#/games" className="directory-tile directory-games"><span>01 — THE LINEUP</span><b>GOT A<br/><em>GAME?</em></b><i>↗</i><small>ASK WHAT'S AVAILABLE</small></a>
+   <a href="#/games" className="directory-tile directory-games"><span>01 — GAMES</span><b>WHAT DO<br/><em>YOU PLAY?</em></b><i>↗</i><small>ASK WHICH GAMES ARE AVAILABLE</small></a>
    <a href="#/experiences" className="directory-tile directory-experiences"><span>02 — YOUR PEOPLE</span><b>MAKE IT<br/><em>A MATCH.</em></b><i>↗</i><small>EXPLORE EXPERIENCES</small></a>
    <a href="#/visit" className="directory-tile directory-visit"><span>03 — MAKE A PLAN</span><b>SEE YOU<br/><em>THERE.</em></b><i>↗</i><small>PLAN A VISIT</small></a>
   </div></section>
@@ -372,7 +372,7 @@ function App() {
     trackEvent('page_view', { page_title: route, page_path: '#/' + route })
     const labels = Object.fromEntries(NAV)
     const descriptions = {
-      home: 'A different kind of game night. Explore The Crown Of Console on Science City Road, Ahmedabad.',
+      home: 'The Crown Of Console is a PlayStation gaming café on Science City Road, Ahmedabad. Explore games and enquire about a gaming session.',
       space: 'Explore the space and visual references for The Crown Of Console in Ahmedabad. Contact the team for confirmed venue details.',
       games: 'Ask about current games, consoles and availability at The Crown Of Console, Ahmedabad.',
       experiences: 'Explore solo, competitive and group gaming visit ideas at The Crown Of Console, Ahmedabad.',
@@ -407,7 +407,7 @@ function App() {
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <StartupIntro />
+    
     <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}

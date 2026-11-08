@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import ThreeController from './ThreeController.jsx'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+const ThreeController = lazy(() => import('./ThreeController.jsx'))
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
@@ -64,8 +64,11 @@ const NAV = [
 ]
 
 function routeFromHash() {
-  const route = window.location.hash.replace(/^#\/?/, '').split('/')[0]
-  return !route ? 'home' : NAV.some(([path]) => path === route) ? route : 'not-found'
+  const hash = window.location.hash
+  if (!hash || hash === '#') return 'home'
+  if (!hash.startsWith('#/')) return window.__cocCurrentRoute || 'home'
+  const route = hash.replace(/^#\/?/, '').split('/')[0]
+  return NAV.some(([path]) => path === route) ? route : 'not-found'
 }
 
 function Eyebrow({ children, light = false }) {
@@ -147,6 +150,19 @@ function DualSenseMotion() {
   </div>
 }
 
+
+function DeferredController({ children }) {
+ const host = useRef(null)
+ const [visible, setVisible] = useState(false)
+ useEffect(() => {
+  if (!host.current || visible) return
+  if (!('IntersectionObserver' in window)) { setVisible(true); return }
+  const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } }, { rootMargin: '320px 0px' })
+  observer.observe(host.current)
+  return () => observer.disconnect()
+ }, [visible])
+ return <div ref={host} className="controller-deferred">{visible ? children : <div className="controller-loading" aria-label="Interactive controller loading"><span>INTERACTIVE CONTROLLER</span><b>Scroll to explore</b></div>}</div>
+}
 
 function InteractiveController() {
   const controls = [
@@ -231,7 +247,7 @@ function InteractiveController() {
         </div>
       </div>
       <div className={'controller-visual' + (modelReady ? ' controller-3d-ready' : '')}>
-        <ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} triggerPressure={triggerPressure} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} onLayout={setControlLayout} />
+        <DeferredController><Suspense fallback={<div className="controller-loading">Preparing the 3D controller…</div>}><ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} triggerPressure={triggerPressure} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} onLayout={setControlLayout} /></Suspense></DeferredController>
         <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1">
@@ -463,27 +479,31 @@ function InteractiveController() {
   </section>
 }
 function HomePage() {
- return <main id="main-content" tabIndex="-1" className="home-page art-playground">
-  <section className="art-hero">
-   <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>INDEPENDENT PLAY CLUB / EST. AHMEDABAD</span></div>
-   <div className="art-hero-stage"><div className="hero-shape hero-shape-orange"/><div className="hero-shape hero-shape-blue"/>
-    <div className="hero-type-art"><span className="hero-eyebrow-art">PLAYSTATION GAMING CAFÉ · AHMEDABAD</span><h1>PLAY<br/><em>OUTSIDE</em><br/>THE <span>LINES.</span></h1><p>The Crown Of Console is a PlayStation gaming café in Ahmedabad — bring your friends for head-to-head matches, co-op adventures and multiplayer gaming.</p><a className="art-pill-link" href="#player-lab">FIND YOUR PLAY STYLE <ArrowDownRight size={17}/></a></div>
-    <div className="hero-art-collage"><div className="collage-photo"><img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high"/><span>VISUAL REFERENCE · NOT THE ACTUAL VENUE</span></div><div className="collage-sticker collage-sticker-yellow">NO<br/>PAUSE<br/>BUTTON</div><div className="collage-sticker collage-sticker-blue">LET'S<br/>PLAY!</div><div className="collage-caption"><b>01</b><span>THE GOOD STUFF<br/>HAPPENS TOGETHER</span></div><DualSenseMotion /></div>
-    <div className="hero-side-index">SCROLL TO GET IN <span>↓</span></div>
+ return <main id="main-content" tabIndex="-1" className="home-page crown-home">
+  <section className="crown-hero">
+   <div className="crown-hero-copy">
+    <span className="crown-kicker"><i/> PLAYSTATION GAMING CAFÉ · AHMEDABAD</span>
+    <h1>PLAY MORE.<br/><em>LIVE THE</em><br/>MOMENT.</h1>
+    <p>The Crown Of Console is a PlayStation gaming café in Ahmedabad. Bring your friends, pick your game and make the next round count.</p>
+    <div className="crown-hero-actions"><a className="crown-primary-action" href="#/visit">PLAN YOUR VISIT <ArrowUpRight size={17}/></a><a className="crown-secondary-action" href="#/space">EXPLORE THE SPACE <ArrowDownRight size={17}/></a></div>
+    <div className="crown-hero-proof"><span><b>01</b> SOLO SESSIONS</span><span><b>02</b> HEAD-TO-HEAD</span><span><b>03</b> GROUP PLAY</span></div>
    </div>
-   <div className="hero-bottom-art"><span>NOT JUST A PLACE TO PLAY.</span><span>A PLACE TO MAKE A MOMENT.</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
+   <div className="crown-hero-visual" aria-label="PlayStation gaming visual">
+    <div className="crown-visual-glow"/>
+    <div className="crown-visual-frame"><span className="crown-visual-label">THE NEXT ROUND STARTS HERE</span><div className="crown-visual-mark"><span>PLAY</span><b>TOGETHER.</b></div><div className="crown-visual-bottom"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD / INDIA</span></div></div>
+    <div className="crown-visual-index">PRESS START <span>↗</span></div>
+   </div>
   </section>
-  <section className="manifesto-art" data-reveal><div className="art-section-meta"><span>01 / THE HOUSE RULES</span><span>GOOD ENERGY ONLY (THE REST IS UP TO YOU)</span></div><div className="manifesto-art-grid"><h2>LESS<br/>SCROLL.<br/><em>MORE</em><br/>SCORE.</h2><div className="manifesto-art-note"><span className="asterisk-doodle">✳</span><p>Some nights are made for getting out, catching up and finding out who really has the better game. That's the feeling behind The Crown Of Console.</p><span className="handwritten-note">bring your people ↗</span></div></div><div className="manifesto-art-bottom"><span>GOOD GAMES</span><b>+</b><span>GREAT COMPANY</span><b>=</b><span>ONE MORE ROUND</span></div></section>
-  <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
-  <InteractiveController />
-  <PlayerSelector/>
-  <ShareTheCrown/>
-  <section className="art-directory" data-reveal><div className="art-section-meta"><span>05 / OPEN THE DOORS</span><span>TAKE YOUR PICK</span></div><div className="directory-heading"><h2>WHERE TO<br/><em>FROM HERE?</em></h2><span>THERE'S MORE THAN ONE WAY TO PLAY.</span></div><div className="directory-grid">
-   <a href="#/games" className="directory-tile directory-games"><span>01 — THE LINEUP</span><b>GOT A<br/><em>GAME?</em></b><i>↗</i><small>ASK WHAT'S AVAILABLE</small></a>
-   <a href="#/experiences" className="directory-tile directory-experiences"><span>02 — YOUR PEOPLE</span><b>MAKE IT<br/><em>A MATCH.</em></b><i>↗</i><small>EXPLORE EXPERIENCES</small></a>
-   <a href="#/visit" className="directory-tile directory-visit"><span>03 — MAKE A PLAN</span><b>SEE YOU<br/><em>THERE.</em></b><i>↗</i><small>PLAN A VISIT</small></a>
+  <section className="crown-intro section-pad" data-reveal><div className="crown-section-label"><span>THE PLACE</span><span>GOOD GAMES. BETTER COMPANY.</span></div><div className="crown-intro-grid"><h2>YOUR PEOPLE.<br/><em>YOUR NEXT</em><br/>GAME NIGHT.</h2><div><p>Come by yourself or bring your crew. Explore the gaming options, ask about current rates and check availability before you set off.</p><a href="#/experiences" className="crown-inline-link">EXPLORE WAYS TO PLAY <ArrowUpRight size={17}/></a></div></div></section>
+  <section className="crown-experience" data-reveal><div className="crown-experience-heading"><span>MADE FOR EVERY PLAYER</span><h2>HOW DO YOU<br/><em>WANT TO PLAY?</em></h2></div><div className="crown-experience-grid">
+   <a href="#/experiences" className="crown-experience-card"><span>01 / SOLO</span><b>YOUR<br/>OWN PACE.</b><small>EXPLORE SOLO PLAY <ArrowUpRight size={15}/></small></a>
+   <a href="#/experiences" className="crown-experience-card crown-experience-card-accent"><span>02 / VERSUS</span><b>BRING ON<br/>THE RIVALRY.</b><small>FIND YOUR MATCH <ArrowUpRight size={15}/></small></a>
+   <a href="#/experiences" className="crown-experience-card"><span>03 / GROUP</span><b>BETTER<br/>TOGETHER.</b><small>PLAN WITH FRIENDS <ArrowUpRight size={15}/></small></a>
   </div></section>
-  <section className="art-location" data-reveal><div className="location-sunburst" aria-hidden="true">✳</div><span className="section-kicker">06 / THE PIN ON YOUR MAP</span><h2>GOOD TIMES<br/>LIVE <em>HERE.</em></h2><div className="art-location-bottom"><p>FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad.</p><div><a href="#/contact" className="art-location-button">FIND THE PLACE <ArrowUpRight size={18}/></a><a href="tel:+918799508567" className="art-phone">+91 87995 08567</a></div></div><div className="location-bottom-meta"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD, INDIA · COME PLAY</span></div></section>
+  <section className="crown-games-strip" data-reveal><div><span>YOUR NEXT FAVOURITE</span><h2>WHAT'S ON<br/><em>YOUR LIST?</em></h2><p>Have a game in mind? Ask the team to confirm what's currently available, along with session rates and timings.</p></div><a href="#/games">EXPLORE GAMES <ArrowUpRight size={18}/></a></section>
+  <InteractiveController />
+  <section className="crown-visit-cta" data-reveal><div><span>READY WHEN YOU ARE</span><h2>LET'S MAKE<br/><em>IT A GAME NIGHT.</em></h2><p>Send your preferred date, time and group size. The team will confirm the details with you.</p></div><a href="#/visit">PLAN YOUR VISIT <ArrowUpRight size={18}/></a></section>
+  <section className="crown-location" data-reveal><div><span>FIND THE CROWN</span><h2>SEE YOU<br/><em>ON SCIENCE CITY ROAD.</em></h2><p>FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad.</p></div><div className="crown-location-actions"><a href="#/contact">GET DIRECTIONS <ArrowUpRight size={17}/></a><a href="tel:+918799508567">+91 87995 08567</a></div></section>
  </main>
 }
 
@@ -783,10 +803,10 @@ function ScrollTools() {
   return <button className={visible ? 'back-to-top back-to-top-visible' : 'back-to-top'} type="button" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><ArrowUp size={17} /></button>
 }
 function App() {
-  const [route, setRoute] = useState(() => typeof window === 'undefined' ? 'home' : routeFromHash())
+  const [route, setRoute] = useState(() => { const initial = typeof window === 'undefined' ? 'home' : routeFromHash(); if (typeof window !== 'undefined') window.__cocCurrentRoute = initial; return initial })
   useEffect(() => {
-    if (!window.location.hash) window.history.replaceState(null, '', window.location.pathname + window.location.search + '#/home')
-    const onChange = () => { setRoute(routeFromHash()); window.scrollTo({ top: 0, behavior: 'auto' }) }
+    if (!window.location.hash || !window.location.hash.startsWith('#/')) window.history.replaceState(null, '', window.location.pathname + window.location.search + '#/home')
+    const onChange = () => { if (window.location.hash.startsWith('#/')) { const nextRoute = routeFromHash(); window.__cocCurrentRoute = nextRoute; setRoute(nextRoute); window.scrollTo({ top: 0, behavior: 'auto' }) } }
     window.addEventListener('hashchange', onChange)
     return () => window.removeEventListener('hashchange', onChange)
   }, [])

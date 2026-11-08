@@ -82,67 +82,60 @@ const FACE_BUTTON_SYMBOLS = {
 // button. The cap follows the original animated button group, so it presses
 // with the button instead of behaving like a screen-space sticker.
 function addFaceButtonDetails(group, id, renderer) {
-  if (!FACE_BUTTON_SYMBOLS[id]) return []
+  if (!FACE_BUTTON_SYMBOLS[id]) return null
+
+  // The licensed model already contains the physical white button caps and
+  // their decal meshes. Measure the complete button assembly in its own local
+  // space, then place only the symbol artwork just above the cap surface. This
+  // avoids stacking a second cap over the original model's authored geometry.
   group.updateMatrixWorld(true)
-  const bounds = new THREE.Box3().setFromObject(group)
-  const size = bounds.getSize(new THREE.Vector3())
+  const worldBounds = new THREE.Box3().setFromObject(group)
+  const worldCenter = worldBounds.getCenter(new THREE.Vector3())
+  const worldCorners = [
+    new THREE.Vector3(worldBounds.min.x, worldBounds.min.y, worldBounds.min.z),
+    new THREE.Vector3(worldBounds.min.x, worldBounds.min.y, worldBounds.max.z),
+    new THREE.Vector3(worldBounds.min.x, worldBounds.max.y, worldBounds.min.z),
+    new THREE.Vector3(worldBounds.min.x, worldBounds.max.y, worldBounds.max.z),
+    new THREE.Vector3(worldBounds.max.x, worldBounds.min.y, worldBounds.min.z),
+    new THREE.Vector3(worldBounds.max.x, worldBounds.min.y, worldBounds.max.z),
+    new THREE.Vector3(worldBounds.max.x, worldBounds.max.y, worldBounds.min.z),
+    new THREE.Vector3(worldBounds.max.x, worldBounds.max.y, worldBounds.max.z),
+  ]
+  const localBounds = new THREE.Box3()
+  for (const corner of worldCorners) localBounds.expandByPoint(group.worldToLocal(corner))
+  const size = localBounds.getSize(new THREE.Vector3())
+  const center = localBounds.getCenter(new THREE.Vector3())
   const radius = Math.min(size.x, size.y) * 0.465
-  if (!Number.isFinite(radius) || radius <= 0.001) return []
-
-  const topZ = bounds.max.z - group.position.z
-  const localX = bounds.getCenter(new THREE.Vector3()).x - group.position.x
-  const localY = bounds.getCenter(new THREE.Vector3()).y - group.position.y
-  const thickness = Math.max(0.008, radius * 0.105)
-  const cap = new THREE.Mesh(
-    new THREE.CylinderGeometry(radius * 0.94, radius, thickness, 64, 1, false),
-    new THREE.MeshPhysicalMaterial({
-      color: 0xf3f4f6,
-      roughness: 0.27,
-      metalness: 0.015,
-      clearcoat: 0.42,
-      clearcoatRoughness: 0.22,
-    }),
-  )
-  cap.geometry.rotateX(Math.PI / 2)
-  cap.position.set(localX, localY, topZ - thickness * 0.5 + 0.001)
-  cap.name = `face-button-cap-${id}`
-  cap.castShadow = false
-  cap.receiveShadow = false
-  group.add(cap)
-
-  const rim = new THREE.Mesh(
-    new THREE.TorusGeometry(radius * 0.94, radius * 0.018, 8, 56),
-    new THREE.MeshStandardMaterial({ color: 0xcbd1d9, roughness: 0.34, metalness: 0.025 }),
-  )
-  rim.position.set(localX, localY, topZ + 0.0015)
-  rim.name = `face-button-rim-${id}`
-  rim.castShadow = false
-  group.add(rim)
+  if (!Number.isFinite(radius) || radius <= 0.001) return null
 
   const artwork = document.createElement('canvas')
   artwork.width = 256
   artwork.height = 256
   const ctx = artwork.getContext('2d')
-  if (!ctx) return [cap, rim]
-  ctx.strokeStyle = '#707b89'
-  ctx.lineWidth = 13
+  if (!ctx) return null
+
+  // A compact, high-contrast grey mark sized like the legends on a real
+  // DualSense cap. The transparent canvas leaves the model's cap material
+  // and highlights untouched.
+  ctx.strokeStyle = '#657080'
+  ctx.lineWidth = 18
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.beginPath()
   if (id === 'triangle') {
-    ctx.moveTo(128, 48)
-    ctx.lineTo(54, 190)
-    ctx.lineTo(202, 190)
+    ctx.moveTo(128, 39)
+    ctx.lineTo(49, 190)
+    ctx.lineTo(207, 190)
     ctx.closePath()
   } else if (id === 'circle') {
-    ctx.arc(128, 128, 70, 0, Math.PI * 2)
+    ctx.arc(128, 128, 83, 0, Math.PI * 2)
   } else if (id === 'square') {
-    ctx.rect(59, 59, 138, 138)
+    ctx.rect(49, 49, 158, 158)
   } else {
-    ctx.moveTo(76, 76)
-    ctx.lineTo(180, 180)
-    ctx.moveTo(180, 76)
-    ctx.lineTo(76, 180)
+    ctx.moveTo(66, 66)
+    ctx.lineTo(190, 190)
+    ctx.moveTo(190, 66)
+    ctx.lineTo(66, 190)
   }
   ctx.stroke()
 
@@ -153,20 +146,25 @@ function addFaceButtonDetails(group, id, renderer) {
   texture.minFilter = THREE.LinearMipmapLinearFilter
   texture.magFilter = THREE.LinearFilter
   const symbol = new THREE.Mesh(
-    new THREE.PlaneGeometry(radius * 1.08, radius * 1.08),
+    new THREE.PlaneGeometry(radius * 1.45, radius * 1.45),
     new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
+      alphaTest: 0.015,
+      depthTest: false,
       depthWrite: false,
       side: THREE.DoubleSide,
       toneMapped: false,
     }),
   )
-  symbol.position.set(localX, localY, topZ + 0.003)
+  symbol.position.set(center.x, center.y, localBounds.max.z + Math.max(0.0015, radius * 0.035))
   symbol.name = `face-button-symbol-${id}`
-  symbol.renderOrder = 3
+  symbol.renderOrder = 100
+  symbol.frustumCulled = false
+  symbol.castShadow = false
+  symbol.receiveShadow = false
   group.add(symbol)
-  return [cap, rim, symbol]
+  return symbol
 }
 
 // The source model is credited in MODEL-CREDITS.md. It is loaded only for the

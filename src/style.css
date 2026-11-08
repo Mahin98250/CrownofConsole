@@ -2056,3 +2056,16 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(prefers-reduced-motion:reduce){
   .controller-3d-canvas{transform:none}
 }
+
+
+/* Phase O — stable 3D handoff: keep the vector controller visible until a real
+   WebGL frame has been drawn, then reveal the model without a blank flash. */
+.controller-3d-canvas{
+  opacity:0;
+  transition:opacity .32s ease;
+  will-change:opacity;
+}
+.controller-3d-ready .controller-3d-canvas{opacity:1}
+@media(prefers-reduced-motion:reduce){
+  .controller-3d-canvas{transition:none}
+}

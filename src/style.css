@@ -1978,3 +1978,7 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(prefers-reduced-motion:reduce){
   .controller-interactive-svg{transition:none}
 }
+
+.controller-3d-ready .controller-hitpad{touch-action:none;cursor:grab}
+.controller-3d-ready.controller-dragging .controller-hitpad{cursor:grabbing}
+.controller-3d-ready .controller-hit{cursor:pointer}

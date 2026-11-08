@@ -72,61 +72,114 @@ function PageTop({ number, kicker, title, italic, intro, dark = false }) {
   </section>
 }
 
+function MoodSelector() {
+  const [mood, setMood] = useState('friendly-rivalry')
+  const options = [
+    { id: 'friendly-rivalry', title: 'Friendly rivalry', note: 'A little competition', prompt: 'I am interested in a friendly competitive gaming session. Could you share what options are currently available, along with rates and timings?' },
+    { id: 'play-together', title: 'Play together', note: 'A shared session', prompt: 'I am planning a gaming visit with friends. Could you share the current group options, rates and availability?' },
+    { id: 'solo-session', title: 'My own pace', note: 'A solo visit', prompt: 'I am interested in a solo gaming visit. Could you share the current options, rates, timings and availability?' }
+  ]
+  const selected = options.find((option) => option.id === mood) || options[0]
+  return <section className="mood-section section-pad" data-reveal>
+    <div className="mood-heading">
+      <Eyebrow>MAKE IT YOUR KIND OF NIGHT</Eyebrow>
+      <span className="mood-counter">INTERACTIVE ENQUIRY / 01—03</span>
+      <h2>What's your<br /><em>next move?</em></h2>
+      <p>Choose the vibe. We'll turn it into a message you can send to the café team. The team will confirm what can be arranged.</p>
+    </div>
+    <div className="mood-picker">
+      {options.map((option, index) => <button key={option.id} type="button" className={mood === option.id ? 'mood-option mood-option-active' : 'mood-option'} onClick={() => setMood(option.id)} aria-pressed={mood === option.id}>
+        <span className="mood-option-no">0{index + 1}</span>
+        <span className="mood-option-copy"><b>{option.title}</b><small>{option.note}</small></span>
+        <span className="mood-option-arrow"><ArrowUpRight size={18} /></span>
+      </button>)}
+      <div className="mood-result">
+        <span>YOUR CURRENT PICK</span>
+        <b>{selected.title}</b>
+        <a href={WA('Hello, The Crown Of Console! ' + selected.prompt)} target="_blank" rel="noreferrer">ENQUIRE ABOUT THIS <ArrowUpRight size={15} /></a>
+      </div>
+    </div>
+  </section>
+}
+
 function HomePage() {
-  return <>
-    <main>
-      <section className="home-hero">
-        <div className="hero-text">
-          <Eyebrow>SCIENCE CITY ROAD · AHMEDABAD</Eyebrow>
-          <h1>Make room<br />for <em>one more</em><br />game.</h1>
-          <p className="hero-description">A place to get together, pick up a controller and make an evening of it. Find us in Ahmedabad and check the details before you visit.</p>
-          <div className="hero-buttons">
-            <a className="button button-lime" href="#/experiences">Explore experiences <ArrowUpRight size={17} /></a>
-            <a className="inline-light-link" href="#/visit">Plan your visit <ArrowDownRight size={16} /></a>
-          </div>
-          <div className="hero-bottomline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD, INDIA</span></div>
+  return <main className="home-page">
+    <section className="home-hero home-hero-awwwards">
+      <div className="hero-topline">
+        <Eyebrow>SCIENCE CITY ROAD · AHMEDABAD</Eyebrow>
+        <span>INDEPENDENT GAMING. SHARED MOMENTS.</span>
+      </div>
+      <div className="hero-stage">
+        <div className="hero-type">
+          <span className="hero-index">THE CROWN OF CONSOLE / 001</span>
+          <h1><span>PRESS</span><span className="hero-word-middle">START<span className="hero-dot">.</span></span><span className="hero-word-last">STAY <em>AWHILE.</em></span></h1>
+          <div className="hero-orbit" aria-hidden="true"><span>PLAY</span><i>✳</i><b>TOGETHER</b></div>
         </div>
-        <div className="hero-image">
+        <div className="hero-photo">
           <img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high" />
-          <div className="image-stamp"><span>VENUE IMAGE</span><b>REFERENCE<br />PHOTOGRAPH</b></div>
-          <div className="image-caption"><span>THE PLAY STARTS HERE</span><span>01 — 06</span></div>
+          <div className="hero-photo-shade" />
+          <div className="hero-photo-tag"><span>VISUAL REFERENCE</span><b>NOT THE<br />ACTUAL VENUE</b></div>
+          <div className="hero-photo-caption"><span>THE PLAY STARTS HERE</span><span>AHMEDABAD, IN</span></div>
+          <span className="hero-photo-side">A PLACE TO PLAY / A REASON TO STAY</span>
         </div>
-        <div className="hero-side-note"><span>SCROLL TO EXPLORE</span><ArrowDown size={16} /></div>
-      </section>
-
-      <section className="home-intro section-pad">
-        <div className="section-index"><span>01 — A PLACE TO PLAY</span><span>NOT JUST ANOTHER STOP</span></div>
-        <div className="intro-grid">
-          <h2>Good games.<br /><em>Better company.</em></h2>
-          <div><p>Some plans don't need much. A few friends, a game you love and somewhere to settle in. That's the feeling we're building around.</p><ActionLink href="#/space">Get to know the space</ActionLink></div>
+      </div>
+      <div className="hero-baseline">
+        <p>A place to meet, pick up a controller and make a little more of the time you spend together.</p>
+        <div className="hero-actions">
+          <a className="button button-lime" href="#/experiences">FIND YOUR PLAY <ArrowUpRight size={16} /></a>
+          <a className="hero-secondary-link" href="#/visit">PLAN A VISIT <ArrowDownRight size={16} /></a>
         </div>
-      </section>
+        <span className="hero-scroll-cue"><i /> SCROLL TO EXPLORE</span>
+      </div>
+    </section>
 
-      <section className="home-feature">
-        <div className="feature-image"><img src={PHOTO.room} alt="Illustrative photograph of a gaming room, not the actual venue" loading="lazy" /><span>REFERENCE PHOTO · NOT THE ACTUAL VENUE</span></div>
-        <div className="feature-copy">
-          <Eyebrow light>TAKE A CLOSER LOOK</Eyebrow>
-          <h2>A little more<br /><em>than screen time.</em></h2>
-          <p>Explore the space, tell us what you'd like to play and check the latest details directly with the café team.</p>
-          <ActionLink href="#/space" light>Explore the space</ActionLink>
-        </div>
-      </section>
+    <div className="ticker" aria-label="The Crown Of Console, Science City Road, Ahmedabad">
+      <div className="ticker-track"><span>THE CROWN OF CONSOLE</span><i>✳</i><span>PRESS START. STAY AWHILE.</span><i>✳</i><span>SCIENCE CITY ROAD · AHMEDABAD</span><i>✳</i><span>THE CROWN OF CONSOLE</span><i>✳</i><span>PRESS START. STAY AWHILE.</span><i>✳</i></div>
+    </div>
 
-      <section className="home-paths section-pad">
-        <div className="section-index"><span>02 — FIND YOUR WAY</span><span>EXPLORE THE SITE</span></div>
-        <div className="path-grid">
-          <a className="path-card path-card-featured" href="#/games"><span className="path-no">01</span><Gamepad2 size={24} /><h3>Got a game<br />in mind?</h3><p>Tell us what you want to play. We'll help check what's currently available.</p><b>Explore games <ArrowUpRight size={16} /></b><span className="path-graphic">PLAY</span></a>
-          <a className="path-card" href="#/experiences"><span className="path-no">02</span><Users size={24} /><h3>Who's<br />coming along?</h3><p>Find the right enquiry path for a solo visit or a group plan.</p><b>See experiences <ArrowUpRight size={16} /></b></a>
-          <a className="path-card" href="#/visit"><span className="path-no">03</span><CalendarDays size={24} /><h3>Make a plan.<br />Then make it happen.</h3><p>Send your preferred date and group size to the team.</p><b>Plan a visit <ArrowUpRight size={16} /></b></a>
-        </div>
-      </section>
+    <section className="home-manifesto section-pad" data-reveal>
+      <div className="manifesto-meta"><span>01 / THE IDEA</span><span>GOOD GAMES ARE BETTER TOGETHER</span></div>
+      <div className="manifesto-layout">
+        <h2>Not just<br />another <em>screen.</em></h2>
+        <div className="manifesto-copy"><span className="manifesto-symbol">✳</span><p>It's the friendly rematch, the unexpected win, the “one more round” that turns into an evening. We're building a place around those moments.</p><a href="#/space" className="text-action">GET TO KNOW THE SPACE <ArrowUpRight size={16} /></a></div>
+      </div>
+      <div className="manifesto-foot"><span>COME AS YOU ARE</span><span>BRING YOUR PEOPLE</span><span>MAKE A MOMENT OF IT</span></div>
+    </section>
 
-      <section className="home-location">
-        <div><Eyebrow light>FIND YOUR WAY HERE</Eyebrow><h2>See you on<br /><em>Science City Road.</em></h2><p>FF/1, Shakti Arcade, Ahmedabad</p></div>
-        <ActionLink href="#/contact" light>Get directions</ActionLink>
-      </section>
-    </main>
-  </>
+    <section className="home-image-story" data-reveal>
+      <div className="story-image-large">
+        <img src={PHOTO.room} alt="Illustrative photograph of a gaming room, not the actual venue" loading="lazy" />
+        <span className="story-image-label">REFERENCE IMAGE · NOT THE ACTUAL VENUE</span>
+        <span className="story-image-number">02 / ATMOSPHERE</span>
+      </div>
+      <div className="story-image-copy">
+        <Eyebrow light>THE SPACE IS PART OF THE STORY</Eyebrow>
+        <h2>Make time<br />for <em>play.</em></h2>
+        <p>Explore the visual direction, then ask the team directly about the current setup, equipment, rates and availability.</p>
+        <a className="action-link action-link-light" href="#/space">EXPLORE THE SPACE <ArrowUpRight size={16} /></a>
+        <span className="story-side-note">A GOOD NIGHT, ONE ROUND AT A TIME.</span>
+      </div>
+    </section>
+
+    <MoodSelector />
+
+    <section className="home-paths-awwwards section-pad" data-reveal>
+      <div className="manifesto-meta"><span>03 / EXPLORE</span><span>YOUR NEXT CHAPTER STARTS HERE</span></div>
+      <div className="explore-heading"><h2>Choose your<br /><em>next move.</em></h2><p>Get to know the space, ask about games or send a visit enquiry. Every page has its own place in the story.</p></div>
+      <div className="explore-grid">
+        <a className="explore-card explore-card-tall" href="#/games"><span className="explore-card-no">01 — DISCOVER</span><Gamepad2 size={27} /><strong>Find your<br /><em>next game.</em></strong><span className="explore-card-foot">ASK ABOUT GAME AVAILABILITY <ArrowUpRight size={17} /></span><b className="explore-ghost">PLAY</b></a>
+        <a className="explore-card explore-card-light" href="#/experiences"><span className="explore-card-no">02 — CONNECT</span><Users size={27} /><strong>Bring the<br /><em>whole crew.</em></strong><span className="explore-card-foot">EXPLORE EXPERIENCES <ArrowUpRight size={17} /></span></a>
+        <a className="explore-card explore-card-accent" href="#/visit"><span className="explore-card-no">03 — MAKE A PLAN</span><CalendarDays size={27} /><strong>Make it<br /><em>happen.</em></strong><span className="explore-card-foot">SEND A VISIT ENQUIRY <ArrowUpRight size={17} /></span></a>
+      </div>
+    </section>
+
+    <section className="home-location-awwwards" data-reveal>
+      <div className="location-watermark" aria-hidden="true">AHM</div>
+      <div className="location-topline"><Eyebrow light>YOUR NEXT STOP</Eyebrow><span>04 / FIND US</span></div>
+      <div className="location-layout"><h2>Meet us<br /><em>in the game.</em></h2><div className="location-details"><p>FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad.</p><a className="button button-lime" href="#/contact">GET DIRECTIONS <ArrowUpRight size={16} /></a><a className="location-phone" href="tel:+918799508567">+91 87995 08567</a></div></div>
+      <div className="location-footer"><span>THE CROWN OF CONSOLE</span><span>SCIENCE CITY ROAD · AHMEDABAD, INDIA</span></div>
+    </section>
+  </main>
 }
 
 function Lightbox({ images, active, setActive }) {
@@ -284,6 +337,21 @@ function Footer() {
   </footer>
 }
 
+function ScrollProgress() {
+  const [progress, setProgress] = useState(0)
+  useEffect(() => {
+    const update = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      setProgress(total > 0 ? (window.scrollY / total) * 100 : 0)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
+  }, [])
+  return <div className="scroll-progress" aria-hidden="true"><span style={{ transform: 'scaleX(' + progress / 100 + ')' }} /></div>
+}
+
 function ScrollTools() {
   const [visible, setVisible] = useState(false)
   useEffect(() => {
@@ -306,8 +374,20 @@ function App() {
     const labels = Object.fromEntries(NAV)
     document.title = (labels[route] || 'Page not found') + ' — The Crown Of Console'
   }, [route])
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll('[data-reveal]'))
+    if (!('IntersectionObserver' in window)) { nodes.forEach((node) => node.classList.add('is-visible')); return }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target) }
+      })
+    }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' })
+    nodes.forEach((node) => observer.observe(node))
+    return () => observer.disconnect()
+  }, [route])
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
+    <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}
     <ScrollTools />

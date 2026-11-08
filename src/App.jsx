@@ -170,6 +170,17 @@ function InteractiveController() {
   ]
   const [active, setActive] = useState('cross')
   const [soundEnabled, setSoundEnabled] = useState(false)
+  const [stickOffsets, setStickOffsets] = useState({ l3: { x: 0, y: 0 }, r3: { x: 0, y: 0 } })
+  const moveStick = (event, id) => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const maxTravel = Math.max(4, bounds.width * 0.13)
+    const dx = event.clientX - (bounds.left + bounds.width / 2)
+    const dy = event.clientY - (bounds.top + bounds.height / 2)
+    const distance = Math.hypot(dx, dy)
+    const scale = distance > maxTravel ? maxTravel / distance : 1
+    setStickOffsets((current) => ({ ...current, [id]: { x: dx * scale, y: dy * scale } }))
+  }
+  const resetStick = (id) => setStickOffsets((current) => ({ ...current, [id]: { x: 0, y: 0 } }))
   const playClick = () => {
     if (!soundEnabled) return
     let context
@@ -360,6 +371,20 @@ function InteractiveController() {
             type="button"
             className={'controller-hit controller-hit-' + control.id + ' controller-hit-' + control.type + (active === control.id ? ' controller-hit-active' : '')}
             onClick={() => selectControl(control.id)}
+            onPointerDown={control.type === 'stick' ? (event) => {
+              event.currentTarget.setPointerCapture(event.pointerId)
+              moveStick(event, control.id)
+            } : undefined}
+            onPointerMove={control.type === 'stick' ? (event) => {
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) moveStick(event, control.id)
+            } : undefined}
+            onPointerUp={control.type === 'stick' ? () => resetStick(control.id) : undefined}
+            onPointerCancel={control.type === 'stick' ? () => resetStick(control.id) : undefined}
+            onLostPointerCapture={control.type === 'stick' ? () => resetStick(control.id) : undefined}
+            style={control.type === 'stick' ? {
+              '--stick-x': (stickOffsets[control.id]?.x || 0) + 'px',
+              '--stick-y': (stickOffsets[control.id]?.y || 0) + 'px'
+            } : undefined}
             onContextMenu={(event) => event.preventDefault()}
             aria-label={'Press ' + control.label}
             aria-pressed={active === control.id}

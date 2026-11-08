@@ -1742,3 +1742,46 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(max-width:760px){
   .controller-visual{max-width:700px}
 }
+
+
+/* Phase J — connected D-pad surfaces and live analogue-stick travel */
+.controller-hit-direction{
+  aspect-ratio:auto;
+  min-width:0;
+  border-radius:3px;
+  z-index:1;
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.96),inset 0 -2px 3px rgba(76,88,105,.24),0 1px 2px rgba(0,0,0,.22);
+}
+.controller-hit-up,
+.controller-hit-down{
+  width:7.8%;
+  height:11.82%;
+}
+.controller-hit-left,
+.controller-hit-right{
+  width:7.8%;
+  height:6.36%;
+}
+.controller-hit-up{border-radius:5px 5px 2px 2px}
+.controller-hit-down{border-radius:2px 2px 5px 5px}
+.controller-hit-left{border-radius:5px 2px 2px 5px}
+.controller-hit-right{border-radius:2px 5px 5px 2px}
+.controller-hit-direction.controller-hit-active{z-index:2}
+.controller-hit-stick{
+  touch-action:none;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
+.controller-hit-stick::after{
+  transform:translate(var(--stick-x,0px),var(--stick-y,0px));
+  transition:transform .075s ease-out;
+}
+.controller-hit-stick:active::after{
+  transform:translate(var(--stick-x,0px),var(--stick-y,0px)) scale(.94);
+}
+.controller-hit-stick.controller-hit-active::after{
+  filter:brightness(1.12);
+}
+@media(prefers-reduced-motion:reduce){
+  .controller-hit-stick::after{transition:none}
+}

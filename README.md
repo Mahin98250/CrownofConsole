@@ -2,6 +2,14 @@
 
 A custom React website for The Crown Of Console gaming cafe in Ahmedabad.
 
+## Owner review
+
+The complete page structure, content requirements, customer journeys, design system, event-page template, future modules, approval checklist and change-request register are documented in:
+
+**[Owner Website Blueprint](OWNER_WEBSITE_BLUEPRINT.md)**
+
+Share this document with the business owner before final content sign-off. Capture requested changes in its change-request register, update the blueprint, and only then implement approved changes.
+
 ## Stack
 
 - React 18
@@ -34,10 +42,10 @@ The Vite base path is set to `/CrownofConsole/`. The GitHub Pages publishing sou
 
 ## Current customer journey
 
-- Browse the cafe introduction and location.
+- Browse the café introduction and location.
 - Read practical notes about checking current rates, games and timings.
 - Submit a visit enquiry with preferred date, time of day and group size.
-- Review the pre-filled WhatsApp message and send it to the cafe.
+- Review the pre-filled WhatsApp message and send it to the café.
 - Open directions or call the listed phone number.
 
 The enquiry form is a WhatsApp hand-off, not an online reservation system. There is no database or server-side booking service in this version.
@@ -45,26 +53,29 @@ The enquiry form is a WhatsApp hand-off, not an online reservation system. There
 ## Business details currently published
 
 - Address: FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad
-- Phone: +91 8799508567
+- Phone: +91 87995 08567
 
-## Content that still needs confirmation from the business
+## Content awaiting business confirmation
 
-Do not publish guessed details. Confirm these with the cafe team before adding them:
+Do not publish guessed details. Confirm these with the café team before adding them:
 
-- Actual opening hours and weekly closing day
+- Official logo
+- Actual venue photographs
+- Exact PlayStation model(s), equipment and station quantity
+- Available games and platforms
+- Opening hours and weekly closing day
 - Current hourly rates, packages and membership terms
-- Available PCs, consoles, peripherals and specifications
-- Games and platforms currently installed
 - Group capacity and booking / cancellation policy
-- Original photographs of the actual venue
+- Facilities and amenities
 - Official social media profiles
 
-## Quality checklist before launch
+## Quality checklist before final launch
 
-- [ ] Replace temporary stock photography with approved venue photographs.
+- [ ] Owner approves the page structure and visual direction.
+- [ ] Replace temporary reference imagery with approved venue photographs.
 - [ ] Verify address, phone number and map pin with the business.
 - [ ] Confirm current prices, hours, games and hardware before publishing.
 - [ ] Test WhatsApp enquiry on Android, iOS and desktop.
-- [ ] Test navigation, form fields and layout at mobile and desktop widths.
+- [ ] Test navigation, forms and layouts at mobile and desktop widths.
 - [ ] Confirm GitHub Actions build and Pages deployment are green.
 - [ ] Add a custom domain only after the business approves the domain name.

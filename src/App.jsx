@@ -415,6 +415,49 @@ function ScrollTools() {
   }, [])
   return <button className={visible ? 'back-to-top back-to-top-visible' : 'back-to-top'} type="button" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><ArrowUp size={17} /></button>
 }
+function StartupIntro() {
+  const [visible, setVisible] = useState(() => {
+    try { return sessionStorage.getItem('coc-intro-seen') !== 'yes' } catch { return true }
+  })
+  useEffect(() => {
+    if (!visible) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) { setVisible(false); return }
+    const timer = window.setTimeout(() => {
+      setVisible(false)
+      try { sessionStorage.setItem('coc-intro-seen', 'yes') } catch {}
+    }, 2600)
+    return () => window.clearTimeout(timer)
+  }, [visible])
+  const dismiss = () => {
+    try { sessionStorage.setItem('coc-intro-seen', 'yes') } catch {}
+    setVisible(false)
+  }
+  if (!visible) return null
+  return <div className="startup-intro" role="dialog" aria-label="The Crown Of Console introduction">
+    <div className="startup-grain" aria-hidden="true" />
+    <div className="startup-topline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD · INDIA</span></div>
+    <div className="startup-center">
+      <span className="startup-kicker">POWERING UP YOUR PLAY SPACE</span>
+      <svg className="startup-controller" viewBox="0 0 520 300" role="img" aria-label="Illustration of a modern wireless gaming controller">
+        <defs><linearGradient id="padShell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset="1" stopColor="#d9d7cf"/></linearGradient></defs>
+        <path className="controller-shell" d="M150 76c-34 0-58 23-72 61L38 224c-12 32 8 54 35 44l78-42h218l78 42c27 10 47-12 35-44l-40-87c-14-38-38-61-72-61-34 0-61 15-110 15S184 76 150 76Z" fill="url(#padShell)" stroke="#aaa99f" strokeWidth="3"/>
+        <path d="M177 83c18 14 43 21 83 21s65-7 83-21" fill="none" stroke="#c4c2b9" strokeWidth="3"/>
+        <rect x="220" y="100" width="80" height="48" rx="17" fill="#171717"/>
+        <circle cx="260" cy="124" r="9" fill="#D8FF3E"/>
+        <path d="M119 143h76M157 105v76" stroke="#171717" strokeWidth="13" strokeLinecap="round"/>
+        <circle cx="359" cy="122" r="13" fill="#171717"/><circle cx="389" cy="151" r="13" fill="#171717"/><circle cx="329" cy="151" r="13" fill="#171717"/><circle cx="359" cy="180" r="13" fill="#171717"/>
+        <circle cx="199" cy="205" r="22" fill="#bdbbb2" stroke="#88877f" strokeWidth="3"/><circle cx="321" cy="205" r="22" fill="#bdbbb2" stroke="#88877f" strokeWidth="3"/>
+        <path d="M238 169h44" stroke="#aaa99f" strokeWidth="4" strokeLinecap="round"/>
+      </svg>
+      <div className="startup-wordmark"><b>READY</b><em> PLAYER ONE.</em></div>
+      <div className="startup-loading"><span /></div>
+      <span className="startup-status">PRESS START TO ENTER</span>
+    </div>
+    <div className="startup-bottomline"><span>GOOD GAMES. GREAT COMPANY.</span><button type="button" onClick={dismiss}>SKIP INTRO ↗</button></div>
+  </div>
+}
+
 function App() {
   const [route, setRoute] = useState(() => typeof window === 'undefined' ? 'home' : routeFromHash())
   useEffect(() => {
@@ -463,7 +506,7 @@ function App() {
   return <>
     <ControllerIntro />
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <ScrollProgress />
+    <StartupIntro />\n    <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}
     <ScrollTools />

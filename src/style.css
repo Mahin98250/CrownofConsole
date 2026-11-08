@@ -1785,3 +1785,117 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(prefers-reduced-motion:reduce){
   .controller-hit-stick::after{transition:none}
 }
+
+
+/* Phase K — tactile response, optical highlights and hardware-like control depth */
+.controller-demo{
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(113,151,196,.2),transparent 43%),
+    radial-gradient(ellipse at 50% 100%,rgba(0,0,0,.46),transparent 58%),
+    linear-gradient(152deg,#292f38 0%,#191e26 52%,#10151c 100%);
+}
+.controller-visual::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  pointer-events:none;
+  inset:8% 7% 7%;
+  border-radius:48%;
+  background:radial-gradient(ellipse at 50% 44%,rgba(194,215,244,.12),transparent 64%);
+  filter:blur(15px);
+}
+.controller-interactive-svg{
+  filter:
+    drop-shadow(0 19px 15px rgba(0,0,0,.43))
+    drop-shadow(0 2px 1px rgba(255,255,255,.12))
+    drop-shadow(0 -1px 1px rgba(0,0,0,.3));
+}
+.controller-hit{
+  -webkit-tap-highlight-color:transparent;
+  transition:
+    transform .105s cubic-bezier(.2,.8,.2,1),
+    filter .14s ease,
+    box-shadow .14s ease,
+    background .14s ease,
+    border-color .14s ease;
+}
+.controller-hit:not(.controller-hit-stick):not(.controller-hit-touchpad):active{
+  transform:translate(-50%,-44%) scale(.94);
+}
+.controller-hit-face{
+  box-shadow:
+    inset 0 1.8px 2px rgba(255,255,255,.23),
+    inset 0 -3px 4px rgba(0,0,0,.58),
+    0 2px 1px rgba(255,255,255,.07),
+    0 3px 5px rgba(0,0,0,.45);
+}
+.controller-hit-face:active{
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.56),0 1px 1px rgba(255,255,255,.05);
+}
+.controller-hit-direction{
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,.98),
+    inset 0 -2.5px 3px rgba(65,77,94,.32),
+    0 1px 0 rgba(255,255,255,.22),
+    0 2px 3px rgba(0,0,0,.3);
+}
+.controller-hit-direction:active{
+  box-shadow:inset 0 3px 4px rgba(60,70,85,.36),0 0 1px rgba(255,255,255,.2);
+}
+.controller-hit-shoulder,
+.controller-hit-trigger{
+  border-top-color:rgba(255,255,255,.48);
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,.25),
+    inset 0 -3px 4px rgba(0,0,0,.55),
+    0 3px 4px rgba(0,0,0,.38);
+}
+.controller-hit-touchpad{
+  backdrop-filter:blur(1px);
+  -webkit-backdrop-filter:blur(1px);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.13),
+    inset 0 -3px 6px rgba(0,0,0,.12),
+    0 1px 1px rgba(255,255,255,.05);
+}
+.controller-hit-touchpad:active{
+  transform:translate(-50%,-48%) scale(.985);
+}
+.controller-hit-stick{
+  box-shadow:
+    inset 0 0 0 3px #18212b,
+    inset 0 2px 5px rgba(255,255,255,.2),
+    inset 0 -3px 5px rgba(0,0,0,.5),
+    0 3px 5px rgba(0,0,0,.5);
+}
+.controller-hit-stick::after{
+  will-change:transform;
+}
+.controller-hit-system{
+  box-shadow:inset 0 1.5px 2px rgba(255,255,255,.24),inset 0 -2.5px 3px rgba(0,0,0,.58),0 2px 3px rgba(0,0,0,.42);
+}
+.controller-hit-active:not(.controller-hit-face):not(.controller-hit-direction):not(.controller-hit-touchpad){
+  filter:brightness(1.12);
+}
+.controller-hit:focus-visible{
+  outline:2px solid #e5ff83;
+  outline-offset:4px;
+}
+.controller-lightbar{
+  height:1.8%;
+  filter:blur(.1px);
+  transition:background .18s ease,box-shadow .18s ease,opacity .18s ease;
+}
+@media(hover:hover){
+  .controller-hit:not(.controller-hit-touchpad):hover{filter:brightness(1.14)}
+  .controller-hit-stick:hover{filter:none}
+}
+@media(max-width:520px){
+  .controller-demo{overflow:hidden}
+  .controller-visual{width:100%;max-width:100%;transform:none}
+  .controller-status-actions{gap:6px}
+  .sound-toggle{padding:6px 7px}
+}
+@media(prefers-reduced-motion:reduce){
+  .controller-hit,.controller-lightbar{transition:none}
+}

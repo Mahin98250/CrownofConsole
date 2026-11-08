@@ -160,7 +160,6 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       if (!dragState || dragState.id !== event.pointerId) return
       dragState = null
       container.classList.remove('controller-dragging')
-      lastDragTime = performance.now()
     }
     container?.addEventListener('pointerdown', handlePointerDown)
     container?.addEventListener('pointermove', handlePointerMove)
@@ -183,9 +182,14 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
         // roughness/metalness or converting every surface to a new material.
         const cloneMaterial = (source) => {
           const material = source.clone()
-          if (material.map) {
-            material.map.colorSpace = THREE.SRGBColorSpace
-            material.map.anisotropy = Math.min(lowPowerDevice ? 6 : 12, renderer.capabilities.getMaxAnisotropy())
+          const maxAnisotropy = Math.min(lowPowerDevice ? 8 : 16, renderer.capabilities.getMaxAnisotropy())
+          // Keep data maps linear, mark only visible colour maps as sRGB, and
+          // improve texture sampling on fine button legends and shell grain.
+          for (const key of ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'aoMap', 'emissiveMap', 'alphaMap', 'bumpMap', 'displacementMap']) {
+            const texture = material[key]
+            if (!texture) continue
+            texture.anisotropy = maxAnisotropy
+            if (key === 'map' || key === 'emissiveMap') texture.colorSpace = THREE.SRGBColorSpace
           }
           if (material.emissive) {
             material.userData.baseEmissive = material.emissive.clone()

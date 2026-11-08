@@ -4,6 +4,9 @@ const app = read('../src/App.jsx')
 const css = read('../src/style.css')
 const html = read('../index.html')
 const vite = read('../vite.config.js')
+const threeController = read('../src/ThreeController.jsx')
+const packageJson = read('../package.json')
+const modelCredits = read('../MODEL-CREDITS.md')
 const failures = []
 const requireCheck = (condition, message) => { if (!condition) failures.push(message) }
 const expectedGames = ['EA SPORTS FC 27','GRAND THEFT AUTO V','EA SPORTS FC 26','GRAN TURISMO 7','NBA 2K26','CALL OF DUTY: BLACK OPS 7',"MARVEL'S SPIDER-MAN 2",'IT TAKES TWO','MINECRAFT']
@@ -13,6 +16,9 @@ requireCheck((app.match(/function GameplayCard\(/g) || []).length === 1, 'Reusab
 requireCheck(app.includes('onError={() => setImageFailed(true)}'), 'Game image error fallback is missing.')
 requireCheck(!app.includes('StartupIntro') && !app.includes('startup-intro'), 'Blocking startup splash must be removed.')
 requireCheck(app.includes('function DualSenseMotion()'), 'Animated DualSense controller accent is missing.')
+requireCheck(app.includes('ThreeController') && app.includes('modelReady'), 'Photorealistic 3D controller integration and vector fallback are missing.')
+requireCheck(threeController.includes('GLTFLoader') && threeController.includes('RoomEnvironment') && threeController.includes('ACESFilmicToneMapping') && threeController.includes('controller-3d-canvas'), 'Three.js controller renderer, PBR environment lighting or canvas is missing.')
+requireCheck(packageJson.includes('"three"') && modelCredits.includes('CC BY 4.0') && modelCredits.includes('Taohid Animation'), 'Three.js dependency or required 3D model attribution is missing.')
 requireCheck(app.includes('function InteractiveController()') && app.includes('controller-hitpad') && app.includes('aria-label={\'Press \' + control.label}') && app.includes("id: 'touchpad'") && app.includes("id: 'l3'") && app.includes("id: 'r3'"), 'Expanded accessible DualSense controller controls are missing.')
 requireCheck(app.includes('interactive-grip-grain') && app.includes('interactive-touchpad') && app.includes('M83 96') && app.includes("symbol: 'PS'"), 'Detailed controller shell, touchpad and physical control surfaces are missing.')
 requireCheck(app.includes('setPointerCapture(event.pointerId)') && app.includes('moveStick(event, control.id)') && app.includes('stickOffsets'), 'Analogue sticks must respond to pointer movement and recenter on release.')
@@ -22,7 +28,7 @@ requireCheck(app.includes('The Crown Of Console is a PlayStation gaming café in
 requireCheck(app.includes('function ShareTheCrown()') && app.includes('navigator.share'), 'Native website sharing is missing.')
 requireCheck(app.includes('function QuickHelp()') && app.includes('QUICK ANSWERS · NOT A LIVE CHAT OR BOOKING SYSTEM'), 'Quick help assistant is missing or misrepresented.')
 requireCheck(app.includes('function playClick()') === false && app.includes('const playClick = () =>') && app.includes('SOUND OFF'), 'Optional controller sound toggle is missing.')
-requireCheck(css.includes('.dualsense-motion') && css.includes('@keyframes dualsense-float') && css.includes('.controller-hit-active') && css.includes('Phase J — connected D-pad surfaces') && css.includes('translate(var(--stick-x,0px),var(--stick-y,0px))') && css.includes('.genre-filter-active') && css.includes('.quick-help-panel') && css.includes('.share-the-crown'), 'Controller, sharing and quick help styles are missing.')
+requireCheck(css.includes('.dualsense-motion') && css.includes('@keyframes dualsense-float') && css.includes('.controller-hit-active') && css.includes('.controller-3d-ready') && css.includes('.controller-hit-pressed') && css.includes('Phase J — connected D-pad surfaces') && css.includes('translate(var(--stick-x,0px),var(--stick-y,0px))') && css.includes('.genre-filter-active') && css.includes('.quick-help-panel') && css.includes('.share-the-crown'), 'Controller, sharing and quick help styles are missing.')
 requireCheck(css.includes('-webkit-touch-callout:none') && css.includes('user-select:none!important') && css.includes('touch-action:manipulation'), 'Controller mobile text-selection and touch handling protections are missing.')
 requireCheck(!app.includes('YOUR LOGO'), 'A public YOUR LOGO placeholder remains.')
 for (const route of ['home','space','games','experiences','visit','contact']) requireCheck(app.includes(`['${route}'`), `Core route is missing: ${route}`)

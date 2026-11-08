@@ -225,7 +225,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       canvas.dataset.ready = 'true'
       callbacksRef.current.onReady?.()
     }, undefined, (error) => {
-      if (!disposed) onError?.(error)
+      if (!disposed) callbacksRef.current.onError?.(error)
     })
 
     resizeObserver = new ResizeObserver(setSize)
@@ -317,7 +317,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       environmentTarget?.dispose()
       renderer?.dispose()
     }
-  }, [onReady, onError])
+  }, [])
 
   return <canvas ref={canvasRef} className="controller-3d-canvas" aria-hidden="true" />
 }

@@ -1640,3 +1640,13 @@ body{background:var(--art-paper);color:var(--art-ink)}
   .controller-hit{transition:none}
   .controller-visual{transform:none}
 }
+
+
+/* Controller interaction polish: keep hover/press centred on the physical hit zone. */
+.controller-hit:hover{transform:translate(-50%,-50%) scale(1.04)}
+.controller-hit-shoulder{
+  background:linear-gradient(145deg,#4f5b6b,#18212c);
+}
+.controller-hit-shoulder.controller-hit-active{
+  background:linear-gradient(145deg,#586577,#202b39);
+}

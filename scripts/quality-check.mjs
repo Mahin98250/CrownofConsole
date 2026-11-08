@@ -13,6 +13,7 @@ requireCheck((app.match(/function GameplayCard\(/g) || []).length === 1, 'Reusab
 requireCheck(app.includes('onError={() => setImageFailed(true)}'), 'Game image error fallback is missing.')
 requireCheck(!app.includes('StartupIntro') && !app.includes('startup-intro'), 'Blocking startup splash must be removed.')
 requireCheck(app.includes('function DualSenseMotion()'), 'Animated DualSense controller accent is missing.')
+requireCheck(app.includes('The Crown Of Console is a PlayStation gaming café in Ahmedabad'), 'Homepage must clearly explain the café in its opening introduction.')
 requireCheck(css.includes('.dualsense-motion') && css.includes('@keyframes dualsense-float'), 'Controller motion styles are missing.')
 requireCheck(!app.includes('YOUR LOGO'), 'A public YOUR LOGO placeholder remains.')
 for (const route of ['home','space','games','experiences','visit','contact']) requireCheck(app.includes(`['${route}'`), `Core route is missing: ${route}`)

@@ -3,7 +3,7 @@ import controllerPhoto from './assets/crown-controller-studio.webp'
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
-  Phone, Users, X, Zap, Clock3, Instagram
+  Phone, Users, X, Zap, Clock3, Instagram, Camera
 } from 'lucide-react'
 
 const PHONE = '918799508567'
@@ -40,7 +40,7 @@ const PHOTO = {
 
 const NAV = [
   ['home', 'Home'],
-  ['space', 'The space'],
+  ['space', 'Gaming Space'],
   ['games', 'Games'],
   ['experiences', 'Experiences'],
   ['visit', 'Plan a visit'],
@@ -103,28 +103,19 @@ function PlayerSelector() {
   </section>
 }
 function HomePage() {
- return <main id="main-content" tabIndex="-1" className="home-page art-playground">
-  <section className="art-hero">
-   <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>INDEPENDENT PLAY CLUB / EST. AHMEDABAD</span></div>
-   <div className="art-hero-stage"><div className="hero-shape hero-shape-orange"/><div className="hero-shape hero-shape-blue"/>
-    <div className="hero-type-art"><span className="hero-eyebrow-art">A DIFFERENT KIND OF GAME NIGHT</span><h1>PLAY<br/><em>OUTSIDE</em><br/>THE <span>LINES.</span></h1><p>Good games are only the beginning. Make a little noise, find your people and turn an ordinary day into a story worth replaying.</p><a className="art-pill-link" href="#player-lab">FIND YOUR PLAY STYLE <ArrowDownRight size={17}/></a></div>
-    <div className="hero-art-collage"><div className="collage-photo"><img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high"/><span>VISUAL REFERENCE · NOT THE ACTUAL VENUE</span></div><div className="collage-sticker collage-sticker-yellow">NO<br/>PAUSE<br/>BUTTON</div><div className="collage-sticker collage-sticker-blue">LET'S<br/>PLAY!</div><div className="collage-caption"><b>01</b><span>THE GOOD STUFF<br/>HAPPENS TOGETHER</span></div></div>
-    <div className="hero-side-index">SCROLL TO GET IN <span>↓</span></div>
-   </div>
-   <div className="hero-bottom-art"><span>NOT JUST A PLACE TO PLAY.</span><span>A PLACE TO MAKE A MOMENT.</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
+ return <main id="main-content" tabIndex="-1" className="home-page crown-home">
+  <section className="crown-hero">
+   <div className="crown-hero-image" role="img" aria-label="PlayStation gaming lounge visual reference, not the actual venue"><span className="image-disclaimer">VISUAL DIRECTION · NOT THE ACTUAL VENUE</span></div>
+   <div className="crown-hero-content"><Eyebrow light>PLAYSTATION GAMING · AHMEDABAD</Eyebrow><h1>PRESS START.<br/><em>FIND YOUR PEOPLE.</em></h1><p>PlayStation sessions, friendly competition and time well spent together at The Crown Of Console.</p><div className="crown-hero-actions"><a className="crown-button crown-button-blue" href="#/space">Explore the gaming space <ArrowUpRight size={17}/></a><a className="crown-button crown-button-outline" href="#/visit">Plan your visit <ArrowUpRight size={17}/></a></div><div className="crown-hero-foot"><span>PLAY · CONNECT · COMPETE</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div></div><div className="crown-hero-index">01 / THE EXPERIENCE</div>
   </section>
-  <section className="manifesto-art" data-reveal><div className="art-section-meta"><span>01 / THE HOUSE RULES</span><span>GOOD ENERGY ONLY (THE REST IS UP TO YOU)</span></div><div className="manifesto-art-grid"><h2>LESS<br/>SCROLL.<br/><em>MORE</em><br/>SCORE.</h2><div className="manifesto-art-note"><span className="asterisk-doodle">✳</span><p>Some nights are made for getting out, catching up and finding out who really has the better game. That's the feeling behind The Crown Of Console.</p><span className="handwritten-note">bring your people ↗</span></div></div><div className="manifesto-art-bottom"><span>GOOD GAMES</span><b>+</b><span>GREAT COMPANY</span><b>=</b><span>ONE MORE ROUND</span></div></section>
-  <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
-  <PlayerSelector/>
-  <section className="art-directory" data-reveal><div className="art-section-meta"><span>05 / OPEN THE DOORS</span><span>TAKE YOUR PICK</span></div><div className="directory-heading"><h2>WHERE TO<br/><em>FROM HERE?</em></h2><span>THERE'S MORE THAN ONE WAY TO PLAY.</span></div><div className="directory-grid">
-   <a href="#/games" className="directory-tile directory-games"><span>01 — THE LINEUP</span><b>GOT A<br/><em>GAME?</em></b><i>↗</i><small>ASK WHAT'S AVAILABLE</small></a>
-   <a href="#/experiences" className="directory-tile directory-experiences"><span>02 — YOUR PEOPLE</span><b>MAKE IT<br/><em>A MATCH.</em></b><i>↗</i><small>EXPLORE EXPERIENCES</small></a>
-   <a href="#/visit" className="directory-tile directory-visit"><span>03 — MAKE A PLAN</span><b>SEE YOU<br/><em>THERE.</em></b><i>↗</i><small>PLAN A VISIT</small></a>
-  </div></section>
-  <section className="art-location" data-reveal><div className="location-sunburst" aria-hidden="true">✳</div><span className="section-kicker">06 / THE PIN ON YOUR MAP</span><h2>GOOD TIMES<br/>LIVE <em>HERE.</em></h2><div className="art-location-bottom"><p>FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad.</p><div><a href="#/contact" className="art-location-button">FIND THE PLACE <ArrowUpRight size={18}/></a><a href="tel:+918799508567" className="art-phone">+91 87995 08567</a></div></div><div className="location-bottom-meta"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD, INDIA · COME PLAY</span></div></section>
+  <section className="crown-intro section-pad" data-reveal><div className="crown-section-label"><span>01 — MORE THAN A CONSOLE</span><span>THE CROWN OF CONSOLE</span></div><div className="crown-intro-grid"><h2>GOOD GAMES.<br/><em>BETTER COMPANY.</em></h2><div><p>Whether you're here for a close match, a favourite game or a session with friends, the best part is pressing start together.</p><a className="crown-text-link" href="#/experiences">Explore ways to play <ArrowUpRight size={17}/></a></div></div></section>
+  <section className="crown-space-feature" data-reveal><div className="crown-space-photo"><img src={PHOTO.room} alt="Gaming lounge atmosphere reference, not the actual venue" loading="lazy"/><span className="image-disclaimer">REFERENCE IMAGE · NOT THE ACTUAL VENUE</span></div><div className="crown-space-copy"><Eyebrow>THE GAMING SPACE</Eyebrow><h2>YOUR NEXT<br/><em>PLAYER ONE</em><br/>MOMENT.</h2><p>Explore the PlayStation gaming experience and ask the team about the current setup, games and rates.</p><a className="crown-button crown-button-dark" href="#/space">Explore the space <ArrowUpRight size={17}/></a></div></section>
+  <section className="crown-modes section-pad" data-reveal><div className="crown-section-label"><span>02 — HOW DO YOU PLAY?</span><span>CHOOSE YOUR SESSION STYLE</span></div><div className="crown-modes-heading"><h2>MAKE IT<br/><em>YOUR GAME.</em></h2><p>Pick the kind of session you're thinking about. Then ask the team what can be arranged.</p></div><div className="crown-mode-grid"><a href="#/experiences" className="crown-mode-card"><span>01 / SOLO</span><Gamepad2 size={31}/><h3>Play your way.</h3><p>A session focused on your favourite game.</p><b>Explore solo play <ArrowUpRight size={17}/></b></a><a href="#/experiences" className="crown-mode-card crown-mode-highlight"><span>02 / VERSUS</span><Zap size={31}/><h3>Bring the rivalry.</h3><p>A friendly head-to-head challenge.</p><b>Explore versus play <ArrowUpRight size={17}/></b></a><a href="#/experiences" className="crown-mode-card"><span>03 / WITH FRIENDS</span><Users size={31}/><h3>Bring your crew.</h3><p>Make time for a game together.</p><b>Explore group play <ArrowUpRight size={17}/></b></a></div></section>
+  <section className="crown-controller-section" data-reveal><div className="crown-section-label"><span>03 — THE CONTROLLER STUDY</span><span>PHOTO VS 3D CONCEPT</span></div><div className="crown-controller-grid"><div className="crown-controller-copy"><Eyebrow light>BUILT AROUND PLAY</Eyebrow><h2>THE DETAIL<br/><em>MATTERS.</em></h2><p>We're comparing two visual directions: a real photographed controller and a carefully lit 3D product render. The final choice will follow a fair side-by-side review.</p><a href="#/contact" className="crown-text-link crown-text-link-light">Ask about the gaming setup <ArrowUpRight size={17}/></a></div><div className="crown-controller-option"><span>3D CONCEPT · CURRENT VISUAL</span><img src={controllerPhoto} alt="Current controller 3D-style visual concept, not a photograph of the café" loading="lazy"/><small>Lighting, angle and integration will be refined during comparison.</small></div><div className="crown-controller-option crown-photo-pending"><span>REAL PHOTOGRAPHY · TO BE ADDED</span><div className="photo-frame"><Camera size={36}/><b>REAL CONTROLLER PHOTO</b><small>Waiting for an actual controller photograph to compare fairly.</small></div><small>No stock image will be presented as your own equipment.</small></div></div></section>
+  <section className="crown-discovery section-pad" data-reveal><div className="crown-section-label"><span>04 — EXPLORE THE EXPERIENCE</span><span>YOUR NEXT STEP</span></div><div className="crown-discovery-list"><a href="#/games"><span>01</span><div><h3>Games</h3><p>Ask about titles currently available to play.</p></div><ArrowUpRight/></a><a href="#/experiences"><span>02</span><div><h3>Experiences</h3><p>Explore solo, versus and group session ideas.</p></div><ArrowUpRight/></a><a href="#/visit"><span>03</span><div><h3>Visit &amp; pricing</h3><p>Send an enquiry about rates, timings and availability.</p></div><ArrowUpRight/></a></div></section>
+  <section className="crown-location" data-reveal><div><Eyebrow light>FIND THE CROWN OF CONSOLE</Eyebrow><h2>YOUR GAME<br/><em>STARTS HERE.</em></h2><p>FF/1, Shakti Arcade, Above Kutchi King, Near ICICI Bank, Science City Road, Ahmedabad.</p><div className="crown-hero-actions"><a className="crown-button crown-button-blue" href="#/contact">Get directions <ArrowUpRight size={17}/></a><a className="crown-button crown-button-outline" href="tel:+918799508567">Call +91 87995 08567 <Phone size={16}/></a></div></div><span>THE CROWN OF CONSOLE · AHMEDABAD</span></section>
  </main>
 }
-
 function Lightbox({ images, active, setActive }) {
   useEffect(() => {
     if (active === null) return
@@ -154,7 +145,7 @@ function SpacePage() {
     { src: PHOTO.desk, alt: 'Illustrative gaming desk setup', caption: 'The setup' }
   ]
   return <main id="main-content" tabIndex="-1" className="inner-page">
-    <PageTop number="01" kicker="THE SPACE" title="A place to" italic="plug in." intro="A first look at the kind of gaming atmosphere we're aiming to share. The photographs on this page are temporary references, not pictures of the actual café." />
+    <PageTop number="01" kicker="PLAYSTATION GAMING SPACE" title="PlayStation" italic="gaming space." intro="A first look at the kind of gaming atmosphere we're aiming to share. The photographs on this page are temporary references, not pictures of the actual café." />
     <section className="space-story section-pad">
       <div className="story-number">01 <span>— THE IDEA</span></div>
       <div className="story-content"><h2>Come for the game.<br /><em>Stay for the moment.</em></h2><p>Whether you're planning ahead or just checking us out, start with the details that matter. Message the team for confirmed information about the current setup, rates and availability.</p><ActionLink href="#/visit">Ask about a visit</ActionLink></div>
@@ -407,7 +398,6 @@ function App() {
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <StartupIntro />
     <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}

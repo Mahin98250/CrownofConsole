@@ -219,12 +219,12 @@ function InteractiveController() {
     <div className="controller-lab-copy">
       <Eyebrow>03 / PRESS START</Eyebrow>
       <h2 id="controller-lab-title">TAKE<br/><em>CONTROL.</em></h2>
-      <p>Explore a detailed 3D DualSense model. Press the physical controls to see the real mesh parts move, or drag either stick. This is a visual demo — no controller is connected.</p>
+      <p>Explore the detailed 3D controller. Tap the buttons, drag either stick, pull the triggers for variable pressure, or drag the empty space to rotate the model. No hardware is connected.</p>
       <span className="controller-demo-note">LIVE 3D MODEL · PHYSICAL PARTS RESPOND</span>
     </div>
     <div className="controller-demo">
       <div className="controller-status">
-        <span>DUALSENSE / INTERACTIVE DEMO</span>
+        <span>DUALSENSE / LIVE 3D MODEL</span>
         <div className="controller-status-actions">
           <strong aria-live="polite">{selected.label}</strong>
           <button type="button" className="sound-toggle" aria-pressed={soundEnabled} onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? 'SOUND ON' : 'SOUND OFF'}</button>

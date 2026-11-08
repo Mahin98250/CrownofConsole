@@ -185,14 +185,14 @@ function GamesPage() {
     <section className="game-showcase section-pad" aria-labelledby="popular-games-title">
       <div className="game-showcase-heading"><div><Eyebrow>POPULAR ON PLAYSTATION 5</Eyebrow><h2 id="popular-games-title">WHAT DO YOU<br/><em>WANT TO PLAY?</em></h2></div><p>Football, racing, open-world adventures and multiplayer favourites. These are popular PS5 titles you can ask our team about.</p></div>
       <div className="game-category-grid">
-        <article className="game-category game-category-feature"><span>01 / FOOTBALL</span><h3>EA SPORTS FC 27</h3><p>Take the pitch, build your team and challenge your friends.</p><b>ALSO ASK ABOUT FC 26</b></article>
-        <article className="game-category"><span>02 / OPEN WORLD</span><h3>Grand Theft Auto V</h3><p>Explore Los Santos and create your own adventure.</p></article>
-        <article className="game-category"><span>03 / RACING</span><h3>Gran Turismo 7</h3><p>Get behind the wheel and race for the finish.</p></article>
-        <article className="game-category"><span>04 / SPORTS</span><h3>NBA 2K26</h3><p>Bring basketball competition to the screen.</p></article>
-        <article className="game-category"><span>05 / ACTION</span><h3>Call of Duty</h3><p>Ask about the latest available Black Ops title.</p></article>
-        <article className="game-category"><span>06 / ADVENTURE</span><h3>Spider-Man 2</h3><p>Swing through the city in a superhero adventure.</p></article>
-        <article className="game-category"><span>07 / FRIENDS</span><h3>It Takes Two</h3><p>A co-op adventure made to play together.</p></article>
-        <article className="game-category"><span>08 / MORE TO EXPLORE</span><h3>Minecraft & Fortnite</h3><p>Creative building and online action favourites.</p></article>
+        <article className="game-category game-category-feature"><span>01 / FOOTBALL</span><img src="https://gameplay.com.co/cdn/shop/files/EA_SPORTS_FC_27_PREVENTA_PS5.jpg?v=1782578665&width=990" alt="EA SPORTS FC 27 original game cover artwork" loading="lazy"/><h3>EA SPORTS FC 27</h3><b>ASK ABOUT FC 26 TOO</b></article>
+        <article className="game-category"><span>02 / OPEN WORLD</span><img src="https://cdn.awsli.com.br/600x1000/53/53761/produto/13497485/f79f4aac01.jpg" alt="Grand Theft Auto V original game cover artwork" loading="lazy"/><h3>Grand Theft Auto V</h3></article>
+        <article className="game-category"><span>03 / RACING</span><img src="https://cdn.shoplightspeed.com/shops/622154/files/73494240/sony-playstation-gran-turismo-7-standard-edition-p.jpg" alt="Gran Turismo 7 original game cover artwork" loading="lazy"/><h3>Gran Turismo 7</h3></article>
+        <article className="game-category"><span>04 / SPORTS</span><img src="https://down-id.img.susercontent.com/file/id-11134207-7ra0s-mcy5yii8qfpz45" alt="NBA 2K26 original game cover artwork" loading="lazy"/><h3>NBA 2K26</h3></article>
+        <article className="game-category"><span>05 / ACTION</span><img src="https://www.nfm.com/on/demandware.static/-/Sites-nfm-master-catalog/default/dw87df00f6/images/068/91/68919281-1.jpg" alt="Call of Duty Black Ops 7 original game cover artwork" loading="lazy"/><h3>Call of Duty: Black Ops 7</h3></article>
+        <article className="game-category"><span>06 / ADVENTURE</span><img src="https://icuracao.com/cdn/shop/files/1_08F-B10-1000038005_66be56d6a62fb.jpg?v=1728091722" alt="Marvel's Spider-Man 2 original game cover artwork" loading="lazy"/><h3>Marvel's Spider-Man 2</h3></article>
+        <article className="game-category"><span>07 / CO-OP</span><img src="https://m.media-amazon.com/images/M/MV5BM2YyMDg4YzctMWFlYy00YWNhLWFkNDQtOTZlZjBkMDU5YTdmXkEyXkFqcGc%40._V1_FMjpg_UX1000_.jpg" alt="It Takes Two original game cover artwork" loading="lazy"/><h3>It Takes Two</h3></article>
+        <article className="game-category"><span>08 / CREATIVE</span><img src="https://i5.walmartimages.com/asr/11d74acb-e79f-4a96-b864-bc2cdb4b0db8_1.c30b7ba1d1683218b43028254e52dbbc.jpeg" alt="Minecraft original game cover artwork" loading="lazy"/><h3>Minecraft</h3></article>
       </div>
       <div className="game-showcase-foot"><p>Game availability at the café may vary. Ask us which titles are currently installed before visiting.</p><a href={WA('Hello! I would like to check which PS5 games are currently available at The Crown Of Console, including EA SPORTS FC 27, FC 26 and GTA V.')} target="_blank" rel="noreferrer">ASK ABOUT GAME AVAILABILITY <ArrowUpRight size={16}/></a></div>
     </section>

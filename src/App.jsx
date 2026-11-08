@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import ThreeController from './ThreeController.jsx'
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
@@ -170,6 +171,7 @@ function InteractiveController() {
   ]
   const [active, setActive] = useState('cross')
   const [pressed, setPressed] = useState(null)
+  const [modelReady, setModelReady] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [stickOffsets, setStickOffsets] = useState({ l3: { x: 0, y: 0 }, r3: { x: 0, y: 0 } })
   const moveStick = (event, id) => {
@@ -214,8 +216,8 @@ function InteractiveController() {
     <div className="controller-lab-copy">
       <Eyebrow>03 / PRESS START</Eyebrow>
       <h2 id="controller-lab-title">TAKE<br/><em>CONTROL.</em></h2>
-      <p>Explore the controls of a DualSense-inspired controller. Press any button or stick to feel the response and light change. Just for fun — no controller is connected.</p>
-      <span className="controller-demo-note">A SMALL INTERACTIVE DEMO · BUILT INTO THIS PAGE</span>
+      <p>Explore a detailed 3D DualSense model. Press the physical controls to see the real mesh parts move, or drag either stick. This is a visual demo — no controller is connected.</p>
+      <span className="controller-demo-note">LIVE 3D MODEL · PHYSICAL PARTS RESPOND</span>
     </div>
     <div className="controller-demo">
       <div className="controller-status">
@@ -225,7 +227,8 @@ function InteractiveController() {
           <button type="button" className="sound-toggle" aria-pressed={soundEnabled} onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? 'SOUND ON' : 'SOUND OFF'}</button>
         </div>
       </div>
-      <div className="controller-visual">
+      <div className={'controller-visual' + (modelReady ? ' controller-3d-ready' : '')}>
+        <ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} />
         <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1">

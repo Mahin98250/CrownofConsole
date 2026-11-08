@@ -117,8 +117,8 @@ function addFaceButtonDetails(group, id, renderer) {
   // A compact, high-contrast grey mark sized like the legends on a real
   // DualSense cap. The transparent canvas leaves the model's cap material
   // and highlights untouched.
-  ctx.strokeStyle = '#657080'
-  ctx.lineWidth = 18
+  ctx.strokeStyle = '#4b5563'
+  ctx.lineWidth = 22
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.beginPath()
@@ -146,20 +146,23 @@ function addFaceButtonDetails(group, id, renderer) {
   texture.minFilter = THREE.LinearMipmapLinearFilter
   texture.magFilter = THREE.LinearFilter
   const symbol = new THREE.Mesh(
-    new THREE.PlaneGeometry(radius * 1.45, radius * 1.45),
+    new THREE.PlaneGeometry(radius * 1.52, radius * 1.52),
     new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
       alphaTest: 0.015,
-      depthTest: false,
+      depthTest: true,
       depthWrite: false,
-      side: THREE.DoubleSide,
+      side: THREE.FrontSide,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -2,
       toneMapped: false,
     }),
   )
-  symbol.position.set(center.x, center.y, localBounds.max.z + Math.max(0.0015, radius * 0.035))
+  symbol.position.set(center.x, center.y, localBounds.max.z + Math.max(0.00035, radius * 0.008))
   symbol.name = `face-button-symbol-${id}`
-  symbol.renderOrder = 100
+  symbol.renderOrder = 2
   symbol.frustumCulled = false
   symbol.castShadow = false
   symbol.receiveShadow = false

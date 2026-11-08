@@ -27,8 +27,8 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     let frame = 0
     let previousTime = 0
     let lastRenderTime = 0
-    let renderInterval = 1000 / 30
-    let pixelRatioCap = 1.25
+    let renderInterval = 1000 / 45
+    let pixelRatioCap = 1.5
     let lowPowerDevice = false
     let lastWidth = 0
     let lastHeight = 0
@@ -95,14 +95,14 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       const cores = navigator.hardwareConcurrency || 4
       const compactScreen = window.matchMedia('(max-width: 760px)').matches
       lowPowerDevice = memory <= 4 || cores <= 4 || compactScreen
-      pixelRatioCap = lowPowerDevice ? 1.15 : 1.6
-      renderInterval = 1000 / (lowPowerDevice ? 30 : 45)
+      pixelRatioCap = lowPowerDevice ? 1.35 : 1.9
+      renderInterval = 1000 / (lowPowerDevice ? 45 : 60)
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: !lowPowerDevice,
-        powerPreference: 'low-power',
-        precision: lowPowerDevice ? 'mediump' : 'highp',
+        antialias: true,
+        powerPreference: 'default',
+        precision: 'highp',
         stencil: false,
         depth: true,
         preserveDrawingBuffer: false,
@@ -110,7 +110,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       renderer.setClearColor(0x000000, 0)
       renderer.outputColorSpace = THREE.SRGBColorSpace
       renderer.toneMapping = THREE.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1.12
+      renderer.toneMappingExposure = 1.08
       // The product stage uses a soft contact shadow; disabling a large live shadow map
       // avoids GPU spikes and shadow-map shimmer on integrated/mobile graphics.
       renderer.shadowMap.enabled = false
@@ -180,28 +180,14 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
 
       for (const object of meshes) {
         const geometry = object.geometry.clone().applyMatrix4(object.matrixWorld)
-        const enhanceMaterial = (source) => {
-          const material = source.isMeshStandardMaterial
-            ? new THREE.MeshPhysicalMaterial().copy(source)
-            : source.clone()
+        // Preserve the licensed GLB's authored PBR materials and texture maps.
+        // The original material setup is more faithful than forcibly changing
+        // roughness/metalness or converting every surface to a new material.
+        const cloneMaterial = (source) => {
+          const material = source.clone()
           if (material.map) {
             material.map.colorSpace = THREE.SRGBColorSpace
-            material.map.anisotropy = Math.min(lowPowerDevice ? 4 : 8, renderer.capabilities.getMaxAnisotropy())
-          }
-          if (material.normalMap) material.normalScale.set(0.85, 0.85)
-          if ('roughness' in material) material.roughness = Math.max(0.26, Math.min(0.88, material.roughness))
-          if ('metalness' in material) material.metalness = Math.min(material.metalness, 0.12)
-          // The shell is satin plastic, not metal: broad, restrained highlights
-          // make the curves read like a manufactured DualSense body.
-          if (['front_body', 'VRayMtl55'].includes(material.name)) {
-            material.roughness = material.name === 'front_body' ? 0.34 : 0.46
-            material.metalness = 0.015
-            material.clearcoat = 0.34
-            material.clearcoatRoughness = 0.3
-          } else if (['Material.002', 'Material.009', 'Material.007'].includes(material.name)) {
-            material.roughness = 0.29
-            material.clearcoat = 0.42
-            material.clearcoatRoughness = 0.2
+            material.map.anisotropy = Math.min(lowPowerDevice ? 6 : 12, renderer.capabilities.getMaxAnisotropy())
           }
           if (material.emissive) {
             material.userData.baseEmissive = material.emissive.clone()
@@ -210,9 +196,8 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
           return material
         }
         const materials = Array.isArray(object.material)
-          ? object.material.map(enhanceMaterial)
-          : enhanceMaterial(object.material)
-        const materialList = Array.isArray(materials) ? materials : [materials]
+          ? object.material.map(cloneMaterial)
+          : cloneMaterial(object.material)
 
         const mesh = new THREE.Mesh(geometry, materials)
         mesh.name = object.name
@@ -280,12 +265,10 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       previousTime = time
       const blend = reduceMotion.matches ? 1 : 1 - Math.exp(-19 * dt)
       const input = interactionRef.current
-      const isIdle = !input.pressed && !input.active && !dragState && time - lastDragTime > 1800
-      if (!reduceMotion.matches && isIdle) {
-        model.position.y = Math.sin(time * 0.00075) * 0.018
-        model.rotation.x = pose.x + Math.sin(time * 0.00055) * 0.012
-        model.rotation.y = pose.y + Math.sin(time * 0.00032) * 0.018
-      } else if (!dragState) {
+      // A real controller on a product stage should remain still at rest.
+      // Only direct pointer dragging changes its pose; this avoids toy-like
+      // floating/swaying motion and frame-rate variations reading as flicker.
+      if (!dragState) {
         model.position.y += (0 - model.position.y) * blend
         model.rotation.x += (pose.x - model.rotation.x) * blend
         model.rotation.y += (pose.y - model.rotation.y) * blend

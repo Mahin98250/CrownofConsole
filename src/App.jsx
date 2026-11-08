@@ -323,6 +323,19 @@ function ControllerIntro() {
     if (!visible) return
     document.body.classList.add('controller-intro-active')
     const onKeyDown = (event) => {
+      if (event.key === 'Tab') {
+        const controls = Array.from(document.querySelectorAll('.controller-intro button'))
+        const first = controls[0]
+        const last = controls[controls.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last?.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first?.focus()
+        }
+        return
+      }
       if (['x', 'X', 'Enter', 'Escape'].includes(event.key)) {
         event.preventDefault()
         dismiss()

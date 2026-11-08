@@ -1,7 +1,74 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+
+
+// Build a compact, procedural studio reflection rig. Broad softboxes create
+// readable highlights on glossy buttons while the darker sweep keeps the shell
+// from looking metallic. It is generated locally: no remote HDRI or extra asset.
+function createStudioEnvironment(renderer, lowPowerDevice) {
+  const canvas = document.createElement('canvas')
+  canvas.width = lowPowerDevice ? 768 : 1024
+  canvas.height = lowPowerDevice ? 384 : 512
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return null
+
+  const w = canvas.width
+  const h = canvas.height
+  const base = ctx.createLinearGradient(0, 0, 0, h)
+  base.addColorStop(0, '#657080')
+  base.addColorStop(0.24, '#303945')
+  base.addColorStop(0.52, '#111820')
+  base.addColorStop(0.78, '#252e39')
+  base.addColorStop(1, '#77808a')
+  ctx.fillStyle = base
+  ctx.fillRect(0, 0, w, h)
+
+  const glow = (x, y, radius, colour) => {
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius)
+    gradient.addColorStop(0, colour)
+    gradient.addColorStop(1, 'rgba(255,255,255,0)')
+    ctx.fillStyle = gradient
+    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2)
+  }
+  glow(w * 0.5, h * 0.48, w * 0.42, 'rgba(170,190,215,.18)')
+  glow(w * 0.04, h * 0.52, w * 0.22, 'rgba(220,230,245,.12)')
+  glow(w * 0.96, h * 0.46, w * 0.2, 'rgba(210,225,245,.1)')
+
+  // Large diffused studio panels, plus narrow edge strips for crisp contours.
+  const panel = (x, y, width, height, alpha = 0.9) => {
+    ctx.save()
+    ctx.shadowColor = 'rgba(255,255,255,.5)'
+    ctx.shadowBlur = Math.max(12, h * 0.055)
+    const gradient = ctx.createLinearGradient(x, y, x + width, y + height)
+    gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.72})`)
+    gradient.addColorStop(0.5, `rgba(238,244,255,${alpha})`)
+    gradient.addColorStop(1, `rgba(205,219,238,${alpha * 0.68})`)
+    ctx.fillStyle = gradient
+    ctx.fillRect(x, y, width, height)
+    ctx.restore()
+  }
+  panel(w * 0.105, h * 0.18, w * 0.12, h * 0.36, 0.72)
+  panel(w * 0.39, h * 0.07, w * 0.2, h * 0.19, 0.62)
+  panel(w * 0.755, h * 0.2, w * 0.105, h * 0.4, 0.78)
+  panel(w * 0.925, h * 0.3, w * 0.025, h * 0.28, 0.48)
+  panel(w * 0.28, h * 0.82, w * 0.38, h * 0.035, 0.34)
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.mapping = THREE.EquirectangularReflectionMapping
+  texture.colorSpace = THREE.SRGBColorSpace
+  texture.generateMipmaps = true
+  texture.minFilter = THREE.LinearMipmapLinearFilter
+  texture.magFilter = THREE.LinearFilter
+  texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy())
+
+  const pmrem = new THREE.PMREMGenerator(renderer)
+  pmrem.compileEquirectangularShader()
+  const target = pmrem.fromEquirectangular(texture)
+  texture.dispose()
+  pmrem.dispose()
+  return target
+}
 
 // The source model is credited in MODEL-CREDITS.md. It is loaded only for the
 // visual controller; all interaction state and hit targets remain in React.
@@ -131,13 +198,11 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     rim.position.set(0, 3.5, -5)
     scene.add(rim)
 
-    const pmrem = new THREE.PMREMGenerator(renderer)
-    const room = new RoomEnvironment()
-    environmentTarget = pmrem.fromScene(room, 0.04)
-    scene.environment = environmentTarget.texture
-    scene.environmentIntensity = 0.78
-    room.dispose()
-    pmrem.dispose()
+    environmentTarget = createStudioEnvironment(renderer, lowPowerDevice)
+    if (environmentTarget) {
+      scene.environment = environmentTarget.texture
+      scene.environmentIntensity = 0.86
+    }
 
     const handlePointerDown = (event) => {
       if (!hitpad || event.target !== hitpad || !canvas.dataset.ready) return

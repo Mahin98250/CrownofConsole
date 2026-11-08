@@ -1352,3 +1352,37 @@ body{background:var(--art-paper);color:var(--art-ink)}
  .genre-filter{padding:0 10px;font-size:7px}
 }
 @media(prefers-reduced-motion:reduce){.controller-hit{transition:none}}
+
+
+/* Phase G — share, quick help and optional controller sound */
+.controller-status-actions{display:flex;align-items:center;gap:10px}
+.sound-toggle{padding:6px 8px;border:1px solid rgba(242,239,232,.3);background:transparent;color:#d8ff3e;font-size:7px;font-weight:900;letter-spacing:.8px;cursor:pointer}
+.sound-toggle[aria-pressed="true"]{background:#d8ff3e;color:#171717;border-color:#d8ff3e}
+.sound-toggle:focus-visible,.share-the-crown button:focus-visible,.quick-help button:focus-visible{outline:3px solid #d8ff3e;outline-offset:3px}
+.share-the-crown{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px;padding:clamp(34px,6vw,72px) clamp(22px,7vw,100px);background:#202020;color:#f2efe8}
+.share-the-crown>div>span{font-size:8px;font-weight:900;letter-spacing:1.5px;color:#d8ff3e}
+.share-the-crown h2{margin:13px 0;font-size:clamp(34px,5vw,62px);line-height:.88;letter-spacing:-.06em}
+.share-the-crown h2 em{font-family:var(--serif);font-weight:500;color:#d8ff3e}
+.share-the-crown p{margin:0;color:#c3c0b7;font-size:11px;line-height:1.7}
+.share-the-crown>button{display:flex;align-items:center;gap:12px;padding:16px 20px;border:0;background:#d8ff3e;color:#171717;font-size:9px;font-weight:900;letter-spacing:1px;cursor:pointer}
+.share-the-crown>small{grid-column:1/-1;color:#aaa79e;font-size:8px;letter-spacing:.8px}
+.quick-help{position:fixed;z-index:80;right:22px;bottom:88px;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.quick-help-trigger{display:flex;align-items:center;gap:9px;padding:13px 17px;border:1px solid #d8ff3e;border-radius:99px;background:#202020;color:#d8ff3e;font-size:9px;font-weight:900;letter-spacing:1px;box-shadow:0 8px 28px rgba(0,0,0,.2);cursor:pointer}
+.quick-help-panel{width:min(360px,calc(100vw - 32px));padding:18px;background:#f2efe8;color:#202020;box-shadow:0 16px 60px rgba(0,0,0,.28);border:1px solid rgba(32,32,32,.18)}
+.quick-help-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:13px;border-bottom:1px solid rgba(32,32,32,.18)}
+.quick-help-head>div{display:grid;gap:4px}.quick-help-head span{font-size:7px;letter-spacing:1.2px;color:#68645b}.quick-help-head b{font-size:13px;letter-spacing:1px}
+.quick-help-head>button{display:grid;place-items:center;width:32px;height:32px;border:1px solid rgba(32,32,32,.2);background:transparent;cursor:pointer}
+.quick-help-answer{padding:17px 0 13px}.quick-help-answer>b{font-family:var(--serif);font-size:20px}.quick-help-answer p{margin:8px 0 0;color:#625f58;font-size:11px;line-height:1.65}
+.quick-help-topics{display:flex;flex-wrap:wrap;gap:7px;padding-bottom:15px}
+.quick-help-topic{padding:8px 10px;border:1px solid rgba(32,32,32,.2);background:transparent;color:#202020;font-size:8px;font-weight:800;cursor:pointer}
+.quick-help-topic.active{background:#202020;color:#d8ff3e;border-color:#202020}
+.quick-help-panel>a{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#d8ff3e;color:#171717;text-decoration:none;font-size:8px;font-weight:900;letter-spacing:.8px}
+.quick-help-panel>small{display:block;margin-top:11px;color:#777269;font-size:7px;letter-spacing:.7px}
+@media(max-width:640px){
+ .share-the-crown{grid-template-columns:1fr;gap:17px;padding:38px 22px 28px}
+ .share-the-crown>button{justify-content:center;width:100%}
+ .quick-help{right:12px;bottom:83px}
+ .quick-help-panel{width:min(340px,calc(100vw - 24px))}
+ .quick-help-trigger{padding:12px 14px}
+}
+@media(prefers-reduced-motion:reduce){.quick-help-trigger,.share-the-crown>button{transition:none}}

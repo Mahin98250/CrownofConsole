@@ -159,6 +159,27 @@ function InteractiveController() {
     { id: 'square', label: 'SQUARE', symbol: '□', message: 'Try something different. Discover a new favourite.' }
   ]
   const [active, setActive] = useState('cross')
+  const [soundEnabled, setSoundEnabled] = useState(false)
+  const playClick = () => {
+    if (!soundEnabled) return
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext
+      if (!AudioContextClass) return
+      const context = new AudioContextClass()
+      const oscillator = context.createOscillator()
+      const gain = context.createGain()
+      oscillator.type = 'sine'
+      oscillator.frequency.setValueAtTime(520, context.currentTime)
+      oscillator.frequency.exponentialRampToValueAtTime(760, context.currentTime + 0.07)
+      gain.gain.setValueAtTime(0.045, context.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.11)
+      oscillator.connect(gain)
+      gain.connect(context.destination)
+      oscillator.start()
+      oscillator.stop(context.currentTime + 0.12)
+      oscillator.onended = () => context.close()
+    } catch { /* Sound is optional and must never block the experience. */ }
+  }
   const selected = controls.find((control) => control.id === active) || controls[6]
   return <section className="controller-lab section-pad" data-reveal aria-labelledby="controller-lab-title">
     <div className="controller-lab-copy">
@@ -170,7 +191,7 @@ function InteractiveController() {
     <div className="controller-demo">
       <div className="controller-status">
         <span>DUALSENSE / INTERACTIVE DEMO</span>
-        <strong>{selected.label}</strong>
+        <div className="controller-status-actions"><strong>{selected.label}</strong><button type="button" className="sound-toggle" aria-pressed={soundEnabled} onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? 'SOUND ON' : 'SOUND OFF'}</button></div>
       </div>
       <div className="controller-visual">
         <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true">
@@ -192,7 +213,7 @@ function InteractiveController() {
             key={control.id}
             type="button"
             className={`controller-hit controller-hit-${control.id}${active === control.id ? ' controller-hit-active' : ''}`}
-            onClick={() => setActive(control.id)}
+            onClick={() => { setActive(control.id); playClick() }}
             aria-label={`Press ${control.label}`}
             aria-pressed={active === control.id}
           >{control.symbol}</button>)}
@@ -223,6 +244,7 @@ function HomePage() {
   <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
   <InteractiveController />
   <PlayerSelector/>
+  <ShareTheCrown/>
   <section className="art-directory" data-reveal><div className="art-section-meta"><span>05 / OPEN THE DOORS</span><span>TAKE YOUR PICK</span></div><div className="directory-heading"><h2>WHERE TO<br/><em>FROM HERE?</em></h2><span>THERE'S MORE THAN ONE WAY TO PLAY.</span></div><div className="directory-grid">
    <a href="#/games" className="directory-tile directory-games"><span>01 — THE LINEUP</span><b>GOT A<br/><em>GAME?</em></b><i>↗</i><small>ASK WHAT'S AVAILABLE</small></a>
    <a href="#/experiences" className="directory-tile directory-experiences"><span>02 — YOUR PEOPLE</span><b>MAKE IT<br/><em>A MATCH.</em></b><i>↗</i><small>EXPLORE EXPERIENCES</small></a>
@@ -426,6 +448,37 @@ function Footer() {
 }
 
 
+
+function ShareTheCrown() {
+  const [status, setStatus] = useState('')
+  const share = async () => {
+    const shareData = {
+      title: 'The Crown Of Console',
+      text: 'A PlayStation gaming café in Ahmedabad. Bring your friends for head-to-head matches, co-op adventures and multiplayer gaming.',
+      url: window.location.href.split('#')[0] + '#/home'
+    }
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+        setStatus('Ready to share — thanks!')
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url)
+        setStatus('Link and intro copied.')
+      } else {
+        window.open(WA(shareData.text + ' ' + shareData.url), '_blank', 'noopener,noreferrer')
+        setStatus('Share message opened in WhatsApp.')
+      }
+    } catch (error) {
+      if (error?.name !== 'AbortError') setStatus('Sharing is unavailable on this browser.')
+    }
+  }
+  return <section className="share-the-crown" data-reveal>
+    <div><span>PASS THE CONTROLLER</span><h2>GOOD GAMES<br/><em>TRAVEL FAST.</em></h2><p>Know someone who'd love a game night? Send them the Crown.</p></div>
+    <button type="button" onClick={share}>SHARE THE CROWN <ArrowUpRight size={17}/></button>
+    <small aria-live="polite">{status || 'ONE TAP TO SHARE THE WEBSITE'}</small>
+  </section>
+}
+
 function AnalyticsConsent() {
   const [choice, setChoice] = useState(() => {
     try { return window.localStorage.getItem('coc-analytics-consent') || 'unset' } catch { return 'no' }
@@ -445,6 +498,31 @@ function AnalyticsConsent() {
   </aside>
 }
 
+
+
+function QuickHelp() {
+  const [open, setOpen] = useState(false)
+  const [topic, setTopic] = useState('welcome')
+  const answers = {
+    welcome: ['Hey, welcome to The Crown Of Console!', 'We are a PlayStation gaming café on Science City Road, Ahmedabad. Bring your friends for head-to-head, co-op and multiplayer gaming.'],
+    rates: ['How much does it cost?', 'Rates can change. Message the team on WhatsApp for current session prices and packages.'],
+    games: ['Which games can I play?', 'The website shows popular titles to explore, not a live installed-games list. Ask the team to confirm a specific game before visiting.'],
+    hours: ['When are you open?', 'Current opening hours have not been verified on this website. Please message or call before travelling.'],
+    booking: ['Can I book online?', 'The visit form sends an enquiry only. Your visit is not booked until the team replies and confirms availability.'],
+    location: ['Where are you located?', 'FF/1, Shakti Arcade, above Kutchi King, near ICICI Bank, Science City Road, Ahmedabad.']
+  }
+  const answer = answers[topic] || answers.welcome
+  return <div className="quick-help">
+    {open && <section className="quick-help-panel" aria-label="Quick help assistant">
+      <div className="quick-help-head"><div><span>THE CROWN OF CONSOLE</span><b>QUICK HELP</b></div><button type="button" aria-label="Close quick help" onClick={() => setOpen(false)}><X size={17}/></button></div>
+      <div className="quick-help-answer" aria-live="polite"><b>{answer[0]}</b><p>{answer[1]}</p></div>
+      <div className="quick-help-topics">{[['welcome','Start here'],['rates','Rates'],['games','Games'],['hours','Opening hours'],['booking','Booking'],['location','Location']].map(([id,label]) => <button type="button" key={id} className={topic===id?'quick-help-topic active':'quick-help-topic'} aria-pressed={topic===id} onClick={() => setTopic(id)}>{label}</button>)}</div>
+      <a href={WA('Hello! I have a question about The Crown Of Console.')} target="_blank" rel="noreferrer">ASK THE TEAM ON WHATSAPP <ArrowUpRight size={15}/></a>
+      <small>QUICK ANSWERS · NOT A LIVE CHAT OR BOOKING SYSTEM</small>
+    </section>}
+    <button type="button" className="quick-help-trigger" aria-expanded={open} onClick={() => setOpen(!open)}><MessageCircle size={18}/>{open?'CLOSE':'QUICK HELP'}</button>
+  </div>
+}
 
 function ScrollProgress() {
   const [progress, setProgress] = useState(0)
@@ -522,6 +600,7 @@ function App() {
     <Header route={route} />
     {pages[route] || <NotFound />}
     <ScrollTools />
+    <QuickHelp />
     <Footer />
     <AnalyticsConsent />
     <a className="mobile-enquiry" href={WA('Hello! I would like to check current rates and availability at The Crown Of Console.')} target="_blank" rel="noreferrer"><MessageCircle size={17} /> Enquire on WhatsApp <ArrowUpRight size={16} /></a>

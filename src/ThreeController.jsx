@@ -6,8 +6,6 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 // The source model is credited in MODEL-CREDITS.md. It is loaded only for the
 // visual controller; all interaction state and hit targets remain in React.
 const MODEL_URL = 'https://raw.githubusercontent.com/SafaElmali/dualsense-studio/main/controller/dualsense.glb'
-const CONTROL_ALIASES = { l3: 'left-stick', r3: 'right-stick' }
-
 export default function ThreeController({ active, pressed, stickOffsets, triggerPressure, onReady, onError, onLayout }) {
   const canvasRef = useRef(null)
   const interactionRef = useRef({ active, pressed, stickOffsets, triggerPressure })
@@ -15,11 +13,11 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
 
   useEffect(() => {
     callbacksRef.current = { onReady, onError, onLayout }
-  }, [])
+  }, [onReady, onError, onLayout])
 
   useEffect(() => {
     interactionRef.current = { active, pressed, stickOffsets, triggerPressure }
-  }, [active, pressed, stickOffsets])
+  }, [active, pressed, stickOffsets, triggerPressure])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -35,7 +33,6 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100)
     const model = new THREE.Group()
     const controls = new Map()
-    const raycastMeshes = []
     const pose = { x: 0.08, y: -0.12, z: -0.018 }
     let dragState = null
     let lastDragTime = 0
@@ -182,7 +179,6 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
         } else {
           model.add(mesh)
         }
-        raycastMeshes.push(mesh)
       }
 
       // Give each moving part its own physical pivot so button presses move the

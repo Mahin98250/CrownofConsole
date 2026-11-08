@@ -105,65 +105,6 @@ function PageTop({ number, kicker, title, italic, intro, dark = false }) {
   </section>
 }
 
-function PlayerSelector() {
-  const [player,setPlayer]=useState('crew')
-  const options=[
-    {id:'solo',n:'01',title:'SOLO MODE',sub:'Your own pace.',message:'I am interested in a solo gaming visit. Could you share the current options, rates and timings?'},
-    {id:'rivals',n:'02',title:'RIVAL MODE',sub:'Friendly competition.',message:'I would like to ask about a competitive or head-to-head gaming visit. What options are currently available?'},
-    {id:'crew',n:'03',title:'CREW MODE',sub:'Bring your people.',message:'I am planning a group gaming visit. Could you share current options, rates and availability?'}
-  ]
-  const active=options.find(x=>x.id===player)||options[2]
-  return <section className="player-lab" id="player-lab" data-reveal>
-    <div className="lab-heading"><span className="section-kicker">04 / YOUR PLAY STYLE</span><span className="lab-sticker">PICK A SIDE ✳</span><h2>WHO'S<br/><em>PLAYING?</em></h2><p>Every good session starts with a plan. Choose your mode and send the team a message to check what's possible.</p></div>
-    <div className="player-console"><div className="console-top"><span>PLAYER SELECT</span><span>CHOOSE 01 — 03</span></div>
-      <div className="player-options">{options.map(x=><button type="button" key={x.id} onClick={()=>setPlayer(x.id)} className={player===x.id?'player-option player-option-active':'player-option'} aria-pressed={player===x.id}><span className="player-number">{x.n}</span><span className="player-option-text"><b>{x.title}</b><small>{x.sub}</small></span><span className="player-check">{player===x.id?'✳':'+'}</span></button>)}</div>
-      <div className="player-confirm"><div><small>YOUR SELECTED MODE</small><strong>{active.title}</strong></div><a href={WA('Hello, The Crown Of Console! '+active.message)} target="_blank" rel="noreferrer">LET'S TALK <ArrowUpRight size={17}/></a></div><span className="console-scribble" aria-hidden="true">GG!</span>
-    </div>
-  </section>
-}
-function DualSenseMotion() {
-  return <div className="dualsense-motion" aria-hidden="true">
-    <span className="dualsense-orbit dualsense-orbit-one" />
-    <span className="dualsense-orbit dualsense-orbit-two" />
-    <svg className="dualsense-controller" viewBox="0 0 360 220" role="presentation">
-      <defs>
-        <linearGradient id="controller-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".52" stopColor="#dfe3e8"/><stop offset="1" stopColor="#aeb6c2"/></linearGradient>
-        <linearGradient id="controller-grip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f4f6f9"/><stop offset="1" stopColor="#aab3c0"/></linearGradient>
-        <linearGradient id="controller-light" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#39a6ff"/><stop offset=".5" stopColor="#b8dfff"/><stop offset="1" stopColor="#39a6ff"/></linearGradient>
-      </defs>
-      <path d="M104 49c-19 1-32 14-40 37L34 160c-8 22 7 37 26 29l61-30h118l61 30c19 8 34-7 26-29l-30-74c-8-23-21-36-40-37-36-2-51 10-76 10s-40-12-76-10Z" fill="url(#controller-shell)" stroke="#7e8998" strokeWidth="3" strokeLinejoin="round"/>
-      <path d="M67 112 43 165c-5 13 2 22 14 16l47-24-37-45Zm226 0 24 53c5 13-2 22-14 16l-47-24 37-45Z" fill="url(#controller-grip)" opacity=".8"/>
-      <path d="M130 48c7-13 22-20 50-20s43 7 50 20l-10 28h-80Z" fill="#c8ced7" stroke="#929dab" strokeWidth="2"/>
-      <rect x="145" y="43" width="70" height="36" rx="13" fill="#202630" stroke="#8994a3" strokeWidth="2"/>
-      <path d="M157 53h46" stroke="#4d5867" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M93 100v48M69 124h48" stroke="#515c6a" strokeWidth="13" strokeLinecap="round"/>
-      <path d="M93 100v48M69 124h48" stroke="#e9edf2" strokeWidth="8" strokeLinecap="round"/>
-      <circle cx="259" cy="104" r="10" fill="#25303d"/><circle cx="283" cy="126" r="10" fill="#25303d"/><circle cx="235" cy="126" r="10" fill="#25303d"/><circle cx="259" cy="148" r="10" fill="#25303d"/>
-      <circle cx="259" cy="104" r="4" fill="#4ea8ff"/><circle cx="283" cy="126" r="4" fill="#f36b7f"/><circle cx="235" cy="126" r="4" fill="#d8ff3e"/><circle cx="259" cy="148" r="4" fill="#a88aff"/>
-      <circle cx="133" cy="160" r="21" fill="#8994a2"/><circle cx="133" cy="157" r="17" fill="#252d38" stroke="#cbd1da" strokeWidth="2"/>
-      <circle cx="227" cy="160" r="21" fill="#8994a2"/><circle cx="227" cy="157" r="17" fill="#252d38" stroke="#cbd1da" strokeWidth="2"/>
-      <path d="M174 103h12m-6-6v12" stroke="#566170" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M164 88c9-5 23-5 32 0" stroke="url(#controller-light)" strokeWidth="4" strokeLinecap="round" fill="none"/>
-      <path d="M156 190c13 8 35 8 48 0" stroke="#7e8998" strokeWidth="2" fill="none" opacity=".6"/>
-    </svg>
-    <span className="dualsense-label"><i /> DUALSENSE / PLAY READY</span>
-  </div>
-}
-
-
-function DeferredController({ children }) {
- const host = useRef(null)
- const [visible, setVisible] = useState(false)
- useEffect(() => {
-  if (!host.current || visible) return
-  if (!('IntersectionObserver' in window)) { setVisible(true); return }
-  const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } }, { rootMargin: '320px 0px' })
-  observer.observe(host.current)
-  return () => observer.disconnect()
- }, [visible])
- return <div ref={host} className="controller-deferred">{visible ? children : <div className="controller-loading" aria-label="Interactive controller loading"><span>INTERACTIVE CONTROLLER</span><b>Scroll to explore</b></div>}</div>
-}
-
 function InteractiveController() {
   const controls = [
     { id: 'up', label: 'D-PAD UP', symbol: '↑', type: 'direction', message: 'Look up. Spot the next move before the competition does.' },
@@ -702,36 +643,6 @@ function Footer() {
 
 
 
-function ShareTheCrown() {
-  const [status, setStatus] = useState('')
-  const share = async () => {
-    const shareData = {
-      title: 'The Crown Of Console',
-      text: 'A PlayStation gaming café in Ahmedabad. Bring your friends for head-to-head matches, co-op adventures and multiplayer gaming.',
-      url: window.location.href.split('#')[0] + '#/home'
-    }
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData)
-        setStatus('Ready to share — thanks!')
-      } else if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url)
-        setStatus('Link and intro copied.')
-      } else {
-        window.open(WA(shareData.text + ' ' + shareData.url), '_blank', 'noopener,noreferrer')
-        setStatus('Share message opened in WhatsApp.')
-      }
-    } catch (error) {
-      if (error?.name !== 'AbortError') setStatus('Sharing is unavailable on this browser.')
-    }
-  }
-  return <section className="share-the-crown" data-reveal>
-    <div><span>PASS THE CONTROLLER</span><h2>GOOD GAMES<br/><em>TRAVEL FAST.</em></h2><p>Know someone who'd love a game night? Send them the Crown.</p></div>
-    <button type="button" onClick={share}>SHARE THE CROWN <ArrowUpRight size={17}/></button>
-    <small aria-live="polite">{status || 'ONE TAP TO SHARE THE WEBSITE'}</small>
-  </section>
-}
-
 function AnalyticsConsent() {
   const [choice, setChoice] = useState(() => {
     try { return window.localStorage.getItem('coc-analytics-consent') || 'unset' } catch { return 'no' }
@@ -752,30 +663,6 @@ function AnalyticsConsent() {
 }
 
 
-
-function QuickHelp() {
-  const [open, setOpen] = useState(false)
-  const [topic, setTopic] = useState('welcome')
-  const answers = {
-    welcome: ['Hey, welcome to The Crown Of Console!', 'We are a PlayStation gaming café on Science City Road, Ahmedabad. Bring your friends for head-to-head, co-op and multiplayer gaming.'],
-    rates: ['How much does it cost?', 'Rates can change. Message the team on WhatsApp for current session prices and packages.'],
-    games: ['Which games can I play?', 'The website shows popular titles to explore, not a live installed-games list. Ask the team to confirm a specific game before visiting.'],
-    hours: ['When are you open?', 'Current opening hours have not been verified on this website. Please message or call before travelling.'],
-    booking: ['Can I book online?', 'The visit form sends an enquiry only. Your visit is not booked until the team replies and confirms availability.'],
-    location: ['Where are you located?', 'FF/1, Shakti Arcade, above Kutchi King, near ICICI Bank, Science City Road, Ahmedabad.']
-  }
-  const answer = answers[topic] || answers.welcome
-  return <div className="quick-help">
-    {open && <section className="quick-help-panel" aria-label="Quick help assistant">
-      <div className="quick-help-head"><div><span>THE CROWN OF CONSOLE</span><b>QUICK HELP</b></div><button type="button" aria-label="Close quick help" onClick={() => setOpen(false)}><X size={17}/></button></div>
-      <div className="quick-help-answer" aria-live="polite"><b>{answer[0]}</b><p>{answer[1]}</p></div>
-      <div className="quick-help-topics">{[['welcome','Start here'],['rates','Rates'],['games','Games'],['hours','Opening hours'],['booking','Booking'],['location','Location']].map(([id,label]) => <button type="button" key={id} className={topic===id?'quick-help-topic active':'quick-help-topic'} aria-pressed={topic===id} onClick={() => setTopic(id)}>{label}</button>)}</div>
-      <a href={WA('Hello! I have a question about The Crown Of Console.')} target="_blank" rel="noreferrer">ASK THE TEAM ON WHATSAPP <ArrowUpRight size={15}/></a>
-      <small>QUICK ANSWERS · NOT A LIVE CHAT OR BOOKING SYSTEM</small>
-    </section>}
-    <button type="button" className="quick-help-trigger" aria-expanded={open} onClick={() => setOpen(!open)}><MessageCircle size={18}/>{open?'CLOSE':'QUICK HELP'}</button>
-  </div>
-}
 
 function ScrollProgress() {
   const [progress, setProgress] = useState(0)
@@ -853,7 +740,6 @@ function App() {
     <Header route={route} />
     {pages[route] || <NotFound />}
     <ScrollTools />
-    <QuickHelp />
     <Footer />
     <AnalyticsConsent />
     <a className="mobile-enquiry" href={WA('Hello! I would like to check current rates and availability at The Crown Of Console.')} target="_blank" rel="noreferrer"><MessageCircle size={17} /> Enquire on WhatsApp <ArrowUpRight size={16} /></a>

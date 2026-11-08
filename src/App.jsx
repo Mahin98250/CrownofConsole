@@ -326,7 +326,7 @@ function ScrollTools() {
 }
 function StartupIntro() {
   const [visible, setVisible] = useState(() => {
-    try { return sessionStorage.getItem('coc-intro-seen') !== 'yes' } catch { return true }
+    try { return sessionStorage.getItem('coc-intro-seen-v2') !== 'yes' } catch { return true }
   })
   useEffect(() => {
     if (!visible) return
@@ -334,12 +334,12 @@ function StartupIntro() {
     if (reduced) { setVisible(false); return }
     const timer = window.setTimeout(() => {
       setVisible(false)
-      try { sessionStorage.setItem('coc-intro-seen', 'yes') } catch {}
+      try { sessionStorage.setItem('coc-intro-seen-v2', 'yes') } catch {}
     }, 2600)
     return () => window.clearTimeout(timer)
   }, [visible])
   const dismiss = () => {
-    try { sessionStorage.setItem('coc-intro-seen', 'yes') } catch {}
+    try { sessionStorage.setItem('coc-intro-seen-v2', 'yes') } catch {}
     setVisible(false)
   }
   if (!visible) return null

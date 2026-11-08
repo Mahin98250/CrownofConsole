@@ -41,6 +41,21 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     scene.add(model)
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const reportLayout = () => {
+      if (!controls.size || camera.position.z <= 0) return
+      model.updateMatrixWorld(true)
+      camera.updateMatrixWorld(true)
+      const layout = {}
+      for (const [id, group] of controls) {
+        const point = model.localToWorld(group.position.clone()).project(camera)
+        const key = id === 'left-stick' ? 'l3' : id === 'right-stick' ? 'r3' : id
+        layout[key] = {
+          left: ((point.x + 1) / 2) * 100,
+          top: ((1 - point.y) / 2) * 100,
+        }
+      }
+      callbacksRef.current.onLayout?.(layout)
+    }
     const setSize = () => {
       if (!renderer || disposed) return
       const bounds = canvas.getBoundingClientRect()
@@ -49,18 +64,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       renderer.setSize(bounds.width, bounds.height, false)
       camera.aspect = bounds.width / bounds.height
       camera.updateProjectionMatrix()
-      if (controls.size && camera.position.z > 0) {
-        const layout = {}
-        for (const [id, group] of controls) {
-          const point = model.localToWorld(group.position.clone()).project(camera)
-          const key = id === 'left-stick' ? 'l3' : id === 'right-stick' ? 'r3' : id
-          layout[key] = {
-            left: ((point.x + 1) / 2) * 100,
-            top: ((1 - point.y) / 2) * 100,
-          }
-        }
-        callbacksRef.current.onLayout?.(layout)
-      }
+      reportLayout()
     }
 
     try {
@@ -122,6 +126,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       pose.y += dx * 0.008
       pose.x = THREE.MathUtils.clamp(pose.x + dy * 0.006, -0.5, 0.72)
       model.rotation.set(pose.x, pose.y, pose.z)
+      reportLayout()
       lastDragTime = performance.now()
     }
     const handlePointerUp = (event) => {

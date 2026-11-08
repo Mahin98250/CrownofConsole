@@ -6,18 +6,18 @@
   background:#0d1210;
   font-synthesis:none;
   text-rendering:optimizeLegibility;
-  --bg:#0d1210;
-  --bg-soft:#151c19;
-  --bg-raised:#1b2420;
-  --paper:#e8e5dc;
-  --paper-2:#dcd9ce;
-  --ink:#161d19;
+  --bg:#171717;
+  --bg-soft:#202020;
+  --bg-raised:#292929;
+  --paper:#F2EFE8;
+  --paper-2:#E8E4DB;
+  --ink:#171717;
   --muted:#929991;
   --muted-dark:#59625b;
   --line:rgba(238,234,224,.16);
   --line-dark:rgba(22,29,25,.17);
-  --lime:#c9ef70;
-  --lime-dark:#9fbe50;
+  --lime:#D8FF3E;
+  --lime-dark:#A9C92E;
   --display:'Manrope',sans-serif;
   --serif:'Playfair Display',Georgia,serif;
   --ease:cubic-bezier(.2,.7,.25,1);
@@ -719,13 +719,13 @@ body{background:var(--night)}
 
 /* CROWN OF CONSOLE — ARTISTIC PLAYGROUND CREATIVE SYSTEM */
 :root{
- --art-paper:#f5edda;
+ --art-paper:#F2EFE8;
  --art-ink:#171717;
- --art-blue:#3f4cff;
- --art-orange:#ff6038;
- --art-yellow:#f7d94c;
- --art-lilac:#c6b7ff;
- --art-green:#c5e56b;
+ --art-blue:#171717;
+ --art-orange:#D8FF3E;
+ --art-yellow:#D8FF3E;
+ --art-lilac:#E5E1D8;
+ --art-green:#D8FF3E;
  --art-line:rgba(23,23,23,.2);
  --art-display:'Manrope',Arial,sans-serif;
 }

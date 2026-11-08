@@ -1943,3 +1943,38 @@ body{background:var(--art-paper);color:var(--art-ink)}
 @media(prefers-reduced-motion:reduce){
   .controller-hit-pressed{transition:none}
 }
+
+
+/* Phase M — photoreal 3D model layer with graceful vector fallback */
+.controller-3d-canvas{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  outline:0;
+}
+.controller-interactive-svg{z-index:2;transition:opacity .25s ease}
+.controller-3d-ready .controller-interactive-svg{
+  opacity:0;
+  visibility:hidden;
+}
+.controller-3d-ready .controller-hit{
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  text-shadow:none!important;
+}
+.controller-3d-ready .controller-hit::after{opacity:0}
+.controller-3d-ready .controller-hitpad{z-index:5}
+.controller-3d-ready .controller-hit:focus-visible{
+  outline:2px solid #d8ff3e;
+  outline-offset:2px;
+}
+.controller-3d-ready .controller-lightbar{z-index:3}
+@media(prefers-reduced-motion:reduce){
+  .controller-interactive-svg{transition:none}
+}

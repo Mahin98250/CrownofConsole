@@ -149,76 +149,140 @@ function DualSenseMotion() {
 
 function InteractiveController() {
   const controls = [
-    { id: 'up', label: 'D-PAD UP', symbol: '↑', message: 'Look up. Spot the next move before the competition does.' },
-    { id: 'left', label: 'D-PAD LEFT', symbol: '←', message: 'Change direction. A new route can change the whole match.' },
-    { id: 'right', label: 'D-PAD RIGHT', symbol: '→', message: 'Switch lanes. There is always another way to play.' },
-    { id: 'down', label: 'D-PAD DOWN', symbol: '↓', message: 'Reset your focus. The next round starts fresh.' },
-    { id: 'triangle', label: 'TRIANGLE', symbol: '△', message: 'Think ahead. Make the clever play.' },
-    { id: 'circle', label: 'CIRCLE', symbol: '○', message: 'Take the shot. Sometimes instinct wins.' },
-    { id: 'cross', label: 'CROSS', symbol: '×', message: 'Press start. Your next gaming story begins here.' },
-    { id: 'square', label: 'SQUARE', symbol: '□', message: 'Try something different. Discover a new favourite.' }
+    { id: 'up', label: 'D-PAD UP', symbol: '↑', type: 'direction', message: 'Look up. Spot the next move before the competition does.' },
+    { id: 'left', label: 'D-PAD LEFT', symbol: '←', type: 'direction', message: 'Change direction. A new route can change the whole match.' },
+    { id: 'right', label: 'D-PAD RIGHT', symbol: '→', type: 'direction', message: 'Switch lanes. There is always another way to play.' },
+    { id: 'down', label: 'D-PAD DOWN', symbol: '↓', type: 'direction', message: 'Reset your focus. The next round starts fresh.' },
+    { id: 'triangle', label: 'TRIANGLE', symbol: '△', type: 'face', message: 'Think ahead. Make the clever play.' },
+    { id: 'circle', label: 'CIRCLE', symbol: '○', type: 'face', message: 'Take the shot. Sometimes instinct wins.' },
+    { id: 'cross', label: 'CROSS', symbol: '×', type: 'face', message: 'Press start. Your next gaming story begins here.' },
+    { id: 'square', label: 'SQUARE', symbol: '□', type: 'face', message: 'Try something different. Discover a new favourite.' },
+    { id: 'l1', label: 'LEFT SHOULDER · L1', symbol: 'L1', type: 'shoulder', message: 'Left shoulder. Keep your reactions quick and your timing sharp.' },
+    { id: 'r1', label: 'RIGHT SHOULDER · R1', symbol: 'R1', type: 'shoulder', message: 'Right shoulder. A small press can make a big difference.' },
+    { id: 'l2', label: 'LEFT TRIGGER · L2', symbol: 'L2', type: 'trigger', message: 'Left trigger. Ease into the move and control the pace.' },
+    { id: 'r2', label: 'RIGHT TRIGGER · R2', symbol: 'R2', type: 'trigger', message: 'Right trigger. Commit to the moment when it counts.' },
+    { id: 'l3', label: 'LEFT ANALOG STICK · L3', symbol: '●', type: 'stick', message: 'Left stick. Find your movement and take the lead.' },
+    { id: 'r3', label: 'RIGHT ANALOG STICK · R3', symbol: '●', type: 'stick', message: 'Right stick. Adjust your view and keep your eyes on the game.' },
+    { id: 'create', label: 'CREATE BUTTON', symbol: '≡', type: 'system', message: 'Create. Capture the moments worth keeping.' },
+    { id: 'options', label: 'OPTIONS BUTTON', symbol: '☰', type: 'system', message: 'Options. Take a breath, then get back into the action.' },
+    { id: 'touchpad', label: 'TOUCHPAD', symbol: '', type: 'touchpad', message: 'Touchpad. A little surface with plenty of possibilities.' },
+    { id: 'ps', label: 'PLAYSTATION BUTTON', symbol: '✧', type: 'ps', message: 'The home button. Every great session starts somewhere.' }
   ]
   const [active, setActive] = useState('cross')
   const [soundEnabled, setSoundEnabled] = useState(false)
   const playClick = () => {
     if (!soundEnabled) return
+    let context
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext
       if (!AudioContextClass) return
-      const context = new AudioContextClass()
+      context = new AudioContextClass()
       const oscillator = context.createOscillator()
       const gain = context.createGain()
-      oscillator.type = 'sine'
-      oscillator.frequency.setValueAtTime(520, context.currentTime)
-      oscillator.frequency.exponentialRampToValueAtTime(760, context.currentTime + 0.07)
-      gain.gain.setValueAtTime(0.045, context.currentTime)
-      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.11)
+      oscillator.type = 'triangle'
+      oscillator.frequency.setValueAtTime(460, context.currentTime)
+      oscillator.frequency.exponentialRampToValueAtTime(680, context.currentTime + 0.045)
+      gain.gain.setValueAtTime(0.025, context.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.085)
       oscillator.connect(gain)
       gain.connect(context.destination)
       oscillator.start()
-      oscillator.stop(context.currentTime + 0.12)
+      oscillator.stop(context.currentTime + 0.09)
       oscillator.onended = () => context.close()
-    } catch { /* Sound is optional and must never block the experience. */ }
+    } catch {
+      try { context?.close() } catch { /* Audio is optional. */ }
+    }
   }
   const selected = controls.find((control) => control.id === active) || controls[6]
+  const selectControl = (id) => {
+    setActive(id)
+    playClick()
+  }
   return <section className="controller-lab section-pad" data-reveal aria-labelledby="controller-lab-title">
     <div className="controller-lab-copy">
       <Eyebrow>03 / PRESS START</Eyebrow>
       <h2 id="controller-lab-title">TAKE<br/><em>CONTROL.</em></h2>
-      <p>Give the buttons a try. Every press changes the controller's light and brings up a little gaming cue. Just for fun — no controller is connected.</p>
+      <p>Explore the controls of a DualSense-inspired controller. Press any button or stick to feel the response and light change. Just for fun — no controller is connected.</p>
       <span className="controller-demo-note">A SMALL INTERACTIVE DEMO · BUILT INTO THIS PAGE</span>
     </div>
     <div className="controller-demo">
       <div className="controller-status">
         <span>DUALSENSE / INTERACTIVE DEMO</span>
-        <div className="controller-status-actions"><strong>{selected.label}</strong><button type="button" className="sound-toggle" aria-pressed={soundEnabled} onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? 'SOUND ON' : 'SOUND OFF'}</button></div>
+        <div className="controller-status-actions">
+          <strong aria-live="polite">{selected.label}</strong>
+          <button type="button" className="sound-toggle" aria-pressed={soundEnabled} onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? 'SOUND ON' : 'SOUND OFF'}</button>
+        </div>
       </div>
       <div className="controller-visual">
-        <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true">
+        <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true" focusable="false">
           <defs>
-            <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".54" stopColor="#e1e5eb"/><stop offset="1" stopColor="#aeb7c3"/></linearGradient>
-            <linearGradient id="interactive-grip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f7f8fa"/><stop offset="1" stopColor="#aeb7c3"/></linearGradient>
+            <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffffff"/><stop offset=".24" stopColor="#f1f3f6"/><stop offset=".62" stopColor="#d8dde5"/><stop offset="1" stopColor="#9ca7b5"/></linearGradient>
+            <linearGradient id="interactive-grip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#edf0f4"/><stop offset="1" stopColor="#8e9aaa"/></linearGradient>
+            <linearGradient id="interactive-touchpad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#d6dce5"/><stop offset="1" stopColor="#aeb8c6"/></linearGradient>
+            <linearGradient id="interactive-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3c4654"/><stop offset="1" stopColor="#111923"/></linearGradient>
+            <radialGradient id="interactive-stick"><stop offset="0" stopColor="#536071"/><stop offset=".72" stopColor="#222c38"/><stop offset="1" stopColor="#0c1118"/></radialGradient>
+            <pattern id="interactive-grip-grain" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r=".55" fill="#6c7787" opacity=".38"/></pattern>
           </defs>
-          <path d="M104 49c-19 1-32 14-40 37L34 160c-8 22 7 37 26 29l61-30h118l61 30c19 8 34-7 26-29l-30-74c-8-23-21-36-40-37-36-2-51 10-76 10s-40-12-76-10Z" fill="url(#interactive-shell)" stroke="#7e8998" strokeWidth="3" strokeLinejoin="round"/>
-          <path d="M67 112 43 165c-5 13 2 22 14 16l47-24-37-45Zm226 0 24 53c5 13-2 22-14 16l-47-24 37-45Z" fill="url(#interactive-grip)"/>
-          <rect x="145" y="43" width="70" height="36" rx="13" fill="#202630" stroke="#8994a3" strokeWidth="2"/>
-          <path d="M157 53h46" stroke="#4d5867" strokeWidth="2" strokeLinecap="round"/>
-          <circle cx="133" cy="157" r="19" fill="#252d38" stroke="#aeb7c3" strokeWidth="3"/>
-          <circle cx="227" cy="157" r="19" fill="#252d38" stroke="#aeb7c3" strokeWidth="3"/>
-          <path d="M174 103h12m-6-6v12" stroke="#566170" strokeWidth="2" strokeLinecap="round"/>
-          <path d="M164 88c9-5 23-5 32 0" stroke="#b5c1cf" strokeWidth="4" strokeLinecap="round" fill="none"/>
+          <ellipse cx="180" cy="185" rx="137" ry="20" fill="#000000" opacity=".2"/>
+          <path d="M104 39c-20 1-34 15-42 39L34 158c-8 23 7 38 27 30l60-27h118l60 27c20 8 35-7 27-30l-28-80c-8-24-22-38-42-39-36-2-51 10-76 10s-40-12-76-10Z" fill="url(#interactive-shell)" stroke="#7f8997" strokeWidth="2.5" strokeLinejoin="round"/>
+          <path d="M69 108 43 163c-5 13 2 22 14 16l45-22-33-49Zm222 0 26 55c5 13-2 22-14 16l-45-22 33-49Z" fill="url(#interactive-grip)" opacity=".88"/>
+          <path d="M69 111 45 164l57-8-33-45Zm222 0 24 53-57-8 33-45Z" fill="url(#interactive-grip-grain)" opacity=".8"/>
+          <path d="M58 83c6-20 15-31 29-34l21-3-3 27-27 38-20-28Zm244 0c-6-20-15-31-29-34l-21-3 3 27 27 38 20-28Z" fill="#aeb8c6" stroke="#828d9b" strokeWidth="1.5"/>
+          <path d="M85 45h44l7 24H82c-7 0-10-4-8-10l3-8c1-4 4-6 8-6Zm190 0h-44l-7 24h54c7 0 10-4 8-10l-3-8c-1-4-4-6-8-6Z" fill="url(#interactive-dark)" stroke="#7e8998" strokeWidth="1.5"/>
+          <path d="M85 49h42M233 49h42" stroke="#aeb9c8" strokeWidth="1.5" opacity=".7" strokeLinecap="round"/>
+          <path d="M110 35c8-12 28-17 70-17s62 5 70 17l-7 23H117Z" fill="#c5cdd8" stroke="#919baa" strokeWidth="1.5"/>
+          <path d="M145 37h70l-4 42h-62Z" fill="url(#interactive-touchpad)" stroke="#929eae" strokeWidth="1.6"/>
+          <path d="M151 42h58M151 73h58" stroke="#ffffff" strokeWidth="1" opacity=".45"/>
+          <path d="M157 46v25M203 46v25" stroke="#8f9aaa" strokeWidth=".6" opacity=".35"/>
+          <path d="M158 87h44" stroke="#7b8797" strokeWidth="1.2" strokeLinecap="round" opacity=".55"/>
+          <rect x="166" y="91" width="28" height="5" rx="2.5" fill="#a5afbd"/>
+          <g fill="url(#interactive-dark)" stroke="#667282" strokeWidth="1">
+            <rect x="143" y="101" width="15" height="9" rx="3"/>
+            <rect x="202" y="101" width="15" height="9" rx="3"/>
+          </g>
+          <path d="M174 119h12" stroke="#647080" strokeWidth="1.5" strokeLinecap="round"/>
+          <g fill="url(#interactive-dark)" stroke="#8c98a8" strokeWidth="1.5">
+            <circle cx="133" cy="157" r="23"/>
+            <circle cx="227" cy="157" r="23"/>
+          </g>
+          <g fill="url(#interactive-stick)" stroke="#0c1118" strokeWidth="1">
+            <circle cx="133" cy="157" r="17"/>
+            <circle cx="227" cy="157" r="17"/>
+          </g>
+          <g fill="none" stroke="#657183" strokeWidth=".7" opacity=".8">
+            <circle cx="133" cy="157" r="13"/><circle cx="227" cy="157" r="13"/>
+            <path d="M133 143v4m0 20v4m-14-14h4m20 0h4m66-14v4m0 20v4m-14-14h4m20 0h4"/>
+          </g>
+          <path d="M93 100v48M69 124h48" stroke="#5d6878" strokeWidth="17" strokeLinecap="round"/>
+          <path d="M93 100v48M69 124h48" stroke="#dce1e8" strokeWidth="11" strokeLinecap="round"/>
+          <path d="M93 102v44M71 124h44" stroke="#f9fafb" strokeWidth="1.1" opacity=".7" strokeLinecap="round"/>
+          <g fill="url(#interactive-dark)" stroke="#7a8798" strokeWidth="1.4">
+            <circle cx="259" cy="104" r="11.5"/><circle cx="283" cy="126" r="11.5"/>
+            <circle cx="235" cy="126" r="11.5"/><circle cx="259" cy="148" r="11.5"/>
+          </g>
+          <g fill="none" stroke="#96a2b2" strokeWidth=".7" opacity=".7">
+            <circle cx="259" cy="104" r="8.5"/><circle cx="283" cy="126" r="8.5"/>
+            <circle cx="235" cy="126" r="8.5"/><circle cx="259" cy="148" r="8.5"/>
+          </g>
+          <path d="M171 130h18" stroke="#7d8999" strokeWidth="1" opacity=".45"/>
+          <path d="M172 136h16m-12 4h8m-8 4h8" stroke="#697586" strokeWidth="1" strokeLinecap="round" opacity=".7"/>
+          <circle cx="180" cy="159" r="5.5" fill="url(#interactive-dark)" stroke="#8793a3" strokeWidth="1"/>
+          <path d="M175 177h10" stroke="#8994a3" strokeWidth="1.1" strokeLinecap="round"/>
+          <path d="M119 27c13-7 29-9 61-9s48 2 61 9" fill="none" stroke="#ffffff" strokeWidth="1.2" opacity=".7"/>
         </svg>
-        <div className="controller-hitpad">
+        <div className="controller-hitpad" role="group" aria-label="Interactive controller buttons">
           {controls.map((control) => <button
             key={control.id}
             type="button"
-            className={`controller-hit controller-hit-${control.id}${active === control.id ? ' controller-hit-active' : ''}`}
-            onClick={() => { setActive(control.id); playClick() }}
-            aria-label={`Press ${control.label}`}
+            className={'controller-hit controller-hit-' + control.id + ' controller-hit-' + control.type + (active === control.id ? ' controller-hit-active' : '')}
+            onClick={() => selectControl(control.id)}
+            onContextMenu={(event) => event.preventDefault()}
+            aria-label={'Press ' + control.label}
             aria-pressed={active === control.id}
+            draggable="false"
           >{control.symbol}</button>)}
         </div>
-        <span className={`controller-lightbar controller-lightbar-${active}`} aria-hidden="true"/>
+        <span className={'controller-lightbar controller-lightbar-' + active} aria-hidden="true"/>
       </div>
       <div className="controller-feedback" aria-live="polite">
         <span>YOUR MOVE</span>
@@ -228,7 +292,6 @@ function InteractiveController() {
     </div>
   </section>
 }
-
 function HomePage() {
  return <main id="main-content" tabIndex="-1" className="home-page art-playground">
   <section className="art-hero">

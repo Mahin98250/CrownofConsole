@@ -499,6 +499,14 @@ function StartupIntro() {
         <g fill="#b8bbb8" opacity=".9"><circle cx="366" cy="268" r="3"/><circle cx="534" cy="268" r="3"/></g>
         <path d="M108 360c-4 16 5 28 20 22l103-45M792 360c4 16-5 28-20 22l-103-45" fill="none" stroke="#fff" strokeWidth="4" opacity=".6"/>
         <path d="M180 384c30 12 65 9 96-4M720 384c-30 12-65 9-96-4" fill="none" stroke="#8e9390" strokeWidth="2" opacity=".5"/>
+        <path d="M107 327c-9 22-18 43-25 62-4 12 3 22 14 17l112-50M793 327c9 22 18 43 25 62 4 12-3 22-14 17l-112-50" fill="none" stroke="#777c79" strokeWidth="1.5" opacity=".38"/>
+        <path d="M118 351l-7 17m20-24-7 18m20-25-7 18m20-25-7 18m20-25-7 18m20-25-7 18M782 351l7 17m-20-24 7 18m-20-25 7 18m-20-25 7 18m-20-25 7 18m-20-25 7 18" stroke="#8d928f" strokeWidth="1" opacity=".32"/>
+        <path d="M260 112c38 17 70 25 190 25s152-8 190-25" fill="none" stroke="#fff" strokeWidth="2" opacity=".72"/>
+        <path d="M350 244c26 9 65 13 100 13s74-4 100-13" fill="none" stroke="#070809" strokeWidth="2" opacity=".5"/>
+        <g fill="#737875" opacity=".8"><circle cx="423" cy="255" r="2"/><circle cx="438" cy="255" r="2"/><circle cx="453" cy="255" r="2"/><circle cx="468" cy="255" r="2"/><circle cx="483" cy="255" r="2"/></g>
+        <path d="M376 147c-7 16-9 37-7 57M524 147c7 16 9 37 7 57" fill="none" stroke="#5d6260" strokeWidth="1.5" opacity=".5"/>
+        <path d="M258 316c-4 23-1 43 10 57M642 316c4 23 1 43-10 57" fill="none" stroke="#cfd1ce" strokeWidth="2" opacity=".32"/>
+        <path d="M165 118c-18 7-32 20-44 39M735 118c18 7 32 20 44 39" fill="none" stroke="#fff" strokeWidth="3" opacity=".7"/>
       </svg>
       <div className="startup-wordmark"><b>READY</b><em> PLAYER ONE.</em></div>
       <div className="startup-loading"><span /></div>

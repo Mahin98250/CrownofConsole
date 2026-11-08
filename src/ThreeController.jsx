@@ -70,6 +70,105 @@ function createStudioEnvironment(renderer, lowPowerDevice) {
   return target
 }
 
+
+const FACE_BUTTON_SYMBOLS = {
+  triangle: 'triangle',
+  circle: 'circle',
+  cross: 'cross',
+  square: 'square',
+}
+
+// Add a small, real 3D cap and a crisp engraved-style symbol to each face
+// button. The cap follows the original animated button group, so it presses
+// with the button instead of behaving like a screen-space sticker.
+function addFaceButtonDetails(group, id, renderer) {
+  if (!FACE_BUTTON_SYMBOLS[id]) return []
+  group.updateMatrixWorld(true)
+  const bounds = new THREE.Box3().setFromObject(group)
+  const size = bounds.getSize(new THREE.Vector3())
+  const radius = Math.min(size.x, size.y) * 0.465
+  if (!Number.isFinite(radius) || radius <= 0.001) return []
+
+  const topZ = bounds.max.z - group.position.z
+  const localX = bounds.getCenter(new THREE.Vector3()).x - group.position.x
+  const localY = bounds.getCenter(new THREE.Vector3()).y - group.position.y
+  const thickness = Math.max(0.008, radius * 0.105)
+  const cap = new THREE.Mesh(
+    new THREE.CylinderGeometry(radius * 0.94, radius, thickness, 64, 1, false),
+    new THREE.MeshPhysicalMaterial({
+      color: 0xf3f4f6,
+      roughness: 0.27,
+      metalness: 0.015,
+      clearcoat: 0.42,
+      clearcoatRoughness: 0.22,
+    }),
+  )
+  cap.geometry.rotateX(Math.PI / 2)
+  cap.position.set(localX, localY, topZ - thickness * 0.5 + 0.001)
+  cap.name = `face-button-cap-${id}`
+  cap.castShadow = false
+  cap.receiveShadow = false
+  group.add(cap)
+
+  const rim = new THREE.Mesh(
+    new THREE.TorusGeometry(radius * 0.94, radius * 0.018, 8, 56),
+    new THREE.MeshStandardMaterial({ color: 0xcbd1d9, roughness: 0.34, metalness: 0.025 }),
+  )
+  rim.position.set(localX, localY, topZ + 0.0015)
+  rim.name = `face-button-rim-${id}`
+  rim.castShadow = false
+  group.add(rim)
+
+  const artwork = document.createElement('canvas')
+  artwork.width = 256
+  artwork.height = 256
+  const ctx = artwork.getContext('2d')
+  if (!ctx) return [cap, rim]
+  ctx.strokeStyle = '#707b89'
+  ctx.lineWidth = 13
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  ctx.beginPath()
+  if (id === 'triangle') {
+    ctx.moveTo(128, 48)
+    ctx.lineTo(54, 190)
+    ctx.lineTo(202, 190)
+    ctx.closePath()
+  } else if (id === 'circle') {
+    ctx.arc(128, 128, 70, 0, Math.PI * 2)
+  } else if (id === 'square') {
+    ctx.rect(59, 59, 138, 138)
+  } else {
+    ctx.moveTo(76, 76)
+    ctx.lineTo(180, 180)
+    ctx.moveTo(180, 76)
+    ctx.lineTo(76, 180)
+  }
+  ctx.stroke()
+
+  const texture = new THREE.CanvasTexture(artwork)
+  texture.colorSpace = THREE.SRGBColorSpace
+  texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy())
+  texture.generateMipmaps = true
+  texture.minFilter = THREE.LinearMipmapLinearFilter
+  texture.magFilter = THREE.LinearFilter
+  const symbol = new THREE.Mesh(
+    new THREE.PlaneGeometry(radius * 1.08, radius * 1.08),
+    new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      toneMapped: false,
+    }),
+  )
+  symbol.position.set(localX, localY, topZ + 0.003)
+  symbol.name = `face-button-symbol-${id}`
+  symbol.renderOrder = 3
+  group.add(symbol)
+  return [cap, rim, symbol]
+}
+
 // The source model is credited in MODEL-CREDITS.md. It is loaded only for the
 // visual controller; all interaction state and hit targets remain in React.
 const MODEL_URL = 'https://raw.githubusercontent.com/SafaElmali/dualsense-studio/main/controller/dualsense.glb'
@@ -300,6 +399,13 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
         for (const child of group.children) child.geometry.translate(-pivot.x, -pivot.y, -pivot.z)
         group.position.copy(pivot)
         group.userData.rest = pivot.clone()
+      }
+
+      // The four PlayStation action buttons use the real white-cap / grey-glyph
+      // treatment. These details are attached to their moving mesh groups.
+      for (const id of ['triangle', 'circle', 'cross', 'square']) {
+        const group = controls.get(id)
+        if (group) addFaceButtonDetails(group, id, renderer)
       }
 
       const bounds = new THREE.Box3().setFromObject(model)

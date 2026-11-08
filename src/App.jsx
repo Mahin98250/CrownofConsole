@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import controllerPhoto from './assets/crown-controller-studio.webp'
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
-  Check, ChevronDown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
+  Check, ChevronDown, Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
   Phone, Users, X, Zap, Clock3, Instagram
 } from 'lucide-react'
 
@@ -27,8 +28,12 @@ function loadAnalytics() {
   document.head.appendChild(script)
 }
 function trackEvent(name, params = {}) {
-  if (localStorage.getItem('coc-analytics-consent') === 'yes' && typeof window.gtag === 'function') {
-    window.gtag('event', name, params)
+  try {
+    if (window.localStorage.getItem('coc-analytics-consent') === 'yes' && typeof window.gtag === 'function') {
+      window.gtag('event', name, params)
+    }
+  } catch {
+    // Analytics must never interrupt the customer journey when storage is unavailable.
   }
 }
 const PHOTO = {
@@ -36,6 +41,18 @@ const PHOTO = {
   room: 'https://images.unsplash.com/photo-1792635926439-4f19b4d311e0?auto=format&fit=crop&w=1400&q=85',
   desk: 'https://images.unsplash.com/photo-1632603093711-0d93a0bcc6cc?auto=format&fit=crop&w=1400&q=85'
 }
+
+const GAME_GALLERY = [
+  { title: 'EA SPORTS FC 27', category: '01 / FOOTBALL', short: 'FC 27', src: 'https://d.techtimes.com/en/full/469882/sports-fc.png', alt: 'EA SPORTS FC 27 football match gameplay', wide: true },
+  { title: 'GRAND THEFT AUTO V', category: '02 / OPEN WORLD', short: 'GTA V', src: 'https://cdn.mos.cms.futurecdn.net/AQw34cg4TbtrUEA6MJ9a3d.jpg', alt: 'Grand Theft Auto V open-world gameplay' },
+  { title: 'EA SPORTS FC 26', category: '03 / FOOTBALL', short: 'FC 26', src: 'https://www.maniac.de/wp-content/uploads/2025/10/ea-sports-fc-26-TEST.jpg', alt: 'EA SPORTS FC 26 football gameplay' },
+  { title: 'GRAN TURISMO 7', category: '04 / RACING', short: 'GT 7', src: 'https://www.xtgamer.net/wp-content/uploads/granturismo7-08-scaled.jpg', alt: 'Gran Turismo 7 racing gameplay' },
+  { title: 'NBA 2K26', category: '05 / BASKETBALL', short: '2K26', src: 'https://image.api.playstation.com/vulcan/ap/rnd/202507/0209/830e75bc7c63c3f7dd329643ddaf97ce386b9fe0cda8ba5d.jpg?format=jpg&h=810&w=1440', alt: 'NBA 2K26 basketball gameplay' },
+  { title: 'CALL OF DUTY: BLACK OPS 7', category: '06 / ACTION', short: 'BLACK OPS 7', src: 'https://cdn.mos.cms.futurecdn.net/ERWHrJnW3xSK8Zwiw7o3jX.jpg', alt: 'Call of Duty Black Ops 7 action gameplay', wide: true },
+  { title: "MARVEL'S SPIDER-MAN 2", category: '07 / ADVENTURE', short: 'SPIDER-MAN 2', src: 'https://assetsio.gnwcdn.com/spider-man-2-hunters.jpg?auto=webp&fit=bounds&format=jpg&height=2048&quality=85&width=2048', alt: "Marvel's Spider-Man 2 gameplay" },
+  { title: 'IT TAKES TWO', category: '08 / CO-OP', short: 'IT TAKES TWO', src: 'https://cdn.staticneo.com/ew/2/20/IT2_CH1-BitingDust-Boss2.jpg', alt: 'It Takes Two cooperative gameplay' },
+  { title: 'MINECRAFT', category: '09 / CREATIVE', short: 'MINECRAFT', src: 'https://gamebeatz.com/cdn/shop/files/video_games-playstation_5-Minecraft-_4.jpg?v=1746444551&width=1200', alt: 'Minecraft gameplay', wide: true }
+]
 
 const NAV = [
   ['home', 'Home'],
@@ -65,7 +82,7 @@ function Header({ route }) {
  return <>
   <div className="utility-bar art-utility"><span>THE CROWN OF CONSOLE <b>✳</b> AHMEDABAD</span><a href="tel:+918799508567"><Phone size={12}/> {PHONE_DISPLAY}</a></div>
   <header className="site-header art-header">
-   <a className="brand-mark" href="#/home" aria-label="The Crown Of Console home"><span className="logo-placeholder">YOUR LOGO</span><span className="brand-name">THE CROWN<br/><b>OF CONSOLE</b></span></a>
+   <a className="brand-mark" href="#/home" aria-label="The Crown Of Console home"><span className="brand-seal" aria-hidden="true"><Crown size={18} strokeWidth={1.8}/></span><span className="brand-name">THE CROWN<br/><b>OF CONSOLE</b></span></a>
    <button className="nav-toggle art-nav-toggle" type="button" aria-label={open?'Close menu':'Open menu'} aria-expanded={open} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button>
    <nav className={open?'main-nav art-main-nav nav-open':'main-nav art-main-nav'} aria-label="Main navigation">
     {NAV.map(([path,label],i)=><a key={path} href={'#/'+path} className={route===path?'nav-active':''} aria-current={route===path?'page':undefined}><span>0{i+1}</span>{label}</a>)}
@@ -106,7 +123,7 @@ function HomePage() {
   <section className="art-hero">
    <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>INDEPENDENT PLAY CLUB / EST. AHMEDABAD</span></div>
    <div className="art-hero-stage"><div className="hero-shape hero-shape-orange"/><div className="hero-shape hero-shape-blue"/>
-    <div className="hero-type-art"><span className="hero-eyebrow-art">A DIFFERENT KIND OF GAME NIGHT</span><h1>PLAY<br/><em>OUTSIDE</em><br/>THE <span>LINES.</span></h1><p>Good games are only the beginning. Make a little noise, find your people and turn an ordinary day into a story worth replaying.</p><a className="art-pill-link" href="#player-lab">FIND YOUR PLAY STYLE <ArrowDownRight size={17}/></a></div>
+    <div className="hero-type-art"><span className="hero-eyebrow-art">PLAYSTATION GAMING CAFÉ · AHMEDABAD</span><h1>PLAY<br/><em>OUTSIDE</em><br/>THE <span>LINES.</span></h1><p>Good games are only the beginning. Make a little noise, find your people and turn an ordinary day into a story worth replaying.</p><a className="art-pill-link" href="#player-lab">FIND YOUR PLAY STYLE <ArrowDownRight size={17}/></a></div>
     <div className="hero-art-collage"><div className="collage-photo"><img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high"/><span>VISUAL REFERENCE · NOT THE ACTUAL VENUE</span></div><div className="collage-sticker collage-sticker-yellow">NO<br/>PAUSE<br/>BUTTON</div><div className="collage-sticker collage-sticker-blue">LET'S<br/>PLAY!</div><div className="collage-caption"><b>01</b><span>THE GOOD STUFF<br/>HAPPENS TOGETHER</span></div></div>
     <div className="hero-side-index">SCROLL TO GET IN <span>↓</span></div>
    </div>
@@ -168,6 +185,18 @@ function SpacePage() {
   </main>
 }
 
+function GameplayCard({ game, index }) {
+  const [imageFailed, setImageFailed] = useState(false)
+  return <article className={['gameplay-frame', game.wide ? 'gameplay-frame-wide' : '', imageFailed ? 'gameplay-frame-fallback' : ''].filter(Boolean).join(' ')}>
+    {!imageFailed
+      ? <img src={game.src} alt={game.alt} loading={index < 2 ? 'eager' : 'lazy'} decoding="async" onError={() => setImageFailed(true)} />
+      : <div className="gameplay-image-placeholder" aria-hidden="true"><span>{game.category}</span><b>{game.short}</b><small>IMAGE PREVIEW UNAVAILABLE</small></div>}
+    <div className="gameplay-frame-shade"></div>
+    <span className="gameplay-frame-index">{game.category}</span>
+    <h3>{game.title}</h3>
+  </article>
+}
+
 function GamesPage() {
   const [game, setGame] = useState('')
   const [kind, setKind] = useState('A specific game')
@@ -184,15 +213,7 @@ function GamesPage() {
     <section className="game-showcase section-pad" aria-labelledby="popular-games-title">
       <div className="game-showcase-heading"><div><Eyebrow>POPULAR ON PLAYSTATION 5</Eyebrow><h2 id="popular-games-title">WHAT DO YOU<br/><em>WANT TO PLAY?</em></h2></div><p>Football, racing, open-world adventures and multiplayer favourites. These are popular PS5 titles you can ask our team about.</p></div>
       <div className="gameplay-gallery">
-        <article className={"gameplay-frame gameplay-frame-1"}><img src="https://d.techtimes.com/en/full/469882/sports-fc.png" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="FC 27 in-game match action" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">01 / FOOTBALL</span><h3>EA SPORTS FC 27</h3></article>
-        <article className={"gameplay-frame gameplay-frame-2"}><img src="https://cdn.mos.cms.futurecdn.net/AQw34cg4TbtrUEA6MJ9a3d.jpg" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="GTA V PS5 in-game driving scene" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">02 / OPEN WORLD</span><h3>GRAND THEFT AUTO V</h3></article>
-<article className={"gameplay-frame gameplay-frame-9"}><img src="https://www.maniac.de/wp-content/uploads/2025/10/ea-sports-fc-26-TEST.jpg" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="EA Sports FC 26 PS5 gameplay" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">03 / FOOTBALL</span><h3>EA SPORTS FC 26</h3></article>
-        <article className={"gameplay-frame gameplay-frame-3"}><img src="https://www.xtgamer.net/wp-content/uploads/granturismo7-08-scaled.jpg" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="Gran Turismo 7 cockpit racing gameplay" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">04 / RACING</span><h3>GRAN TURISMO 7</h3></article>
-        <article className={"gameplay-frame gameplay-frame-4"}><img src="https://image.api.playstation.com/vulcan/ap/rnd/202507/0209/830e75bc7c63c3f7dd329643ddaf97ce386b9fe0cda8ba5d.jpg?format=jpg&h=810&w=1440" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="NBA 2K26 in-game basketball match" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">05 / BASKETBALL</span><h3>NBA 2K26</h3></article>
-        <article className={"gameplay-frame gameplay-frame-5"}><img src="https://cdn.mos.cms.futurecdn.net/ERWHrJnW3xSK8Zwiw7o3jX.jpg" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="Call of Duty Black Ops 7 multiplayer gameplay" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">06 / ACTION</span><h3>CALL OF DUTY: BLACK OPS 7</h3></article>
-        <article className={"gameplay-frame gameplay-frame-6"}><img src="https://assetsio.gnwcdn.com/spider-man-2-hunters.jpg?auto=webp&fit=bounds&format=jpg&height=2048&quality=85&width=2048" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="Spider-Man 2 in-game city traversal" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">07 / ADVENTURE</span><h3>MARVEL'S SPIDER-MAN 2</h3></article>
-        <article className={"gameplay-frame gameplay-frame-7"}><img src="https://cdn.staticneo.com/ew/2/20/IT2_CH1-BitingDust-Boss2.jpg" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="It Takes Two split-screen gameplay" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">08 / CO-OP</span><h3>IT TAKES TWO</h3></article>
-        <article className={"gameplay-frame gameplay-frame-8"}><img src="https://gamebeatz.com/cdn/shop/files/video_games-playstation_5-Minecraft-_4.jpg?v=1746444551&width=1200" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("gameplay-frame-fallback") }} alt="Minecraft in-game building scene" loading="eager" decoding="async" /><div className="gameplay-frame-shade"></div><span className="gameplay-frame-index">09 / CREATIVE</span><h3>MINECRAFT</h3></article>
+        {GAME_GALLERY.map((game, index) => <GameplayCard key={game.title} game={game} index={index} />)}
       </div>
       <div className="game-showcase-foot"><p>Game availability at the café may vary. Ask us which titles are currently installed before visiting.</p><a href={WA('Hello! I would like to check which PS5 games are currently available at The Crown Of Console, including EA SPORTS FC 27, FC 26 and GTA V.')} target="_blank" rel="noreferrer">ASK ABOUT GAME AVAILABILITY <ArrowUpRight size={16}/></a></div>
     </section>
@@ -293,21 +314,27 @@ function NotFound() {
 
 function Footer() {
   return <footer className="site-footer">
-    <div className="footer-main"><div className="footer-brand"><span className="logo-placeholder">YOUR LOGO</span><div><b>THE CROWN OF CONSOLE</b><small>SCIENCE CITY ROAD · AHMEDABAD</small></div></div><div className="footer-cta"><span>READY WHEN YOU ARE.</span><a href="#/visit">Plan a visit <ArrowUpRight size={17} /></a></div></div>
+    <div className="footer-main"><div className="footer-brand"><span className="brand-seal" aria-hidden="true"><Crown size={18} strokeWidth={1.8}/></span><div><b>THE CROWN OF CONSOLE</b><small>SCIENCE CITY ROAD · AHMEDABAD</small></div></div><div className="footer-cta"><span>READY WHEN YOU ARE.</span><a href="#/visit">Plan a visit <ArrowUpRight size={17} /></a></div></div>
     <div className="footer-bottom"><span>© {new Date().getFullYear()} THE CROWN OF CONSOLE</span><div><a href="#/contact">CONTACT</a><a href="tel:+918799508567">CALL THE TEAM</a></div><a href="#/home">BACK TO TOP ↑</a></div>
   </footer>
 }
 
 
 function AnalyticsConsent() {
-  const [choice, setChoice] = useState(() => localStorage.getItem('coc-analytics-consent') || 'unset')
+  const [choice, setChoice] = useState(() => {
+    try { return window.localStorage.getItem('coc-analytics-consent') || 'unset' } catch { return 'no' }
+  })
+  const choose = (value) => {
+    try { window.localStorage.setItem('coc-analytics-consent', value) } catch {}
+    setChoice(value)
+  }
   useEffect(() => { if (choice === 'yes') loadAnalytics() }, [choice])
   if (!ANALYTICS_ID || choice !== 'unset') return null
   return <aside className="analytics-consent" aria-label="Analytics preferences">
     <div><b>HELP US MAKE THE SITE BETTER.</b><p>Optional website analytics help us understand which pages are useful. No analytics runs unless you agree.</p></div>
     <div className="analytics-consent-actions">
-      <button type="button" onClick={() => { localStorage.setItem('coc-analytics-consent','no'); setChoice('no') }}>No thanks</button>
-      <button type="button" onClick={() => { localStorage.setItem('coc-analytics-consent','yes'); setChoice('yes') }}>Allow analytics</button>
+      <button type="button" onClick={() => choose('no')}>No thanks</button>
+      <button type="button" onClick={() => choose('yes')}>Allow analytics</button>
     </div>
   </aside>
 }
@@ -339,8 +366,9 @@ function ScrollTools() {
   return <button className={visible ? 'back-to-top back-to-top-visible' : 'back-to-top'} type="button" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><ArrowUp size={17} /></button>
 }
 function StartupIntro() {
+  const [imageFailed, setImageFailed] = useState(false)
   const [visible, setVisible] = useState(() => {
-    try { return sessionStorage.getItem('coc-intro-seen-v2') !== 'yes' } catch { return true }
+    try { return sessionStorage.getItem('coc-intro-seen-v3') !== 'yes' } catch { return true }
   })
   useEffect(() => {
     if (!visible) return
@@ -348,12 +376,12 @@ function StartupIntro() {
     if (reduced) { setVisible(false); return }
     const timer = window.setTimeout(() => {
       setVisible(false)
-      try { sessionStorage.setItem('coc-intro-seen-v2', 'yes') } catch {}
+      try { sessionStorage.setItem('coc-intro-seen-v3', 'yes') } catch {}
     }, 3200)
     return () => window.clearTimeout(timer)
   }, [visible])
   const dismiss = () => {
-    try { sessionStorage.setItem('coc-intro-seen-v2', 'yes') } catch {}
+    try { sessionStorage.setItem('coc-intro-seen-v3', 'yes') } catch {}
     setVisible(false)
   }
   if (!visible) return null
@@ -364,7 +392,7 @@ function StartupIntro() {
       <span className="startup-kicker">POWERING UP YOUR PLAY SPACE</span>
       <div className="startup-controller-wrap" aria-hidden="true">
         <span className="startup-light-pool" />
-        <img className="startup-controller-photo" src="https://d.techtimes.com/en/full/469882/sports-fc.png" alt="" fetchPriority="high" decoding="async" />
+        <img className="startup-controller-photo" src={imageFailed ? controllerPhoto : GAME_GALLERY[0].src} onError={() => setImageFailed(true)} alt="" fetchPriority="high" decoding="async" />
       </div>
       <div className="startup-wordmark"><b>READY</b><em> PLAYER ONE.</em></div>
       <div className="startup-loading"><span /></div>

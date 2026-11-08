@@ -26,6 +26,8 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install
+      - name: Static quality checks
+        run: npm run check
       - name: Build
         run: npm run build
       - name: Upload artifact

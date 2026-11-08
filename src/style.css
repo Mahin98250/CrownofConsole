@@ -1314,3 +1314,5 @@ body.controller-intro-active{overflow:hidden}
 @keyframes intro-progress{to{transform:scaleX(1)}}
 @media(max-width:520px){.startup-intro{padding:22px 20px}.startup-topline,.startup-bottomline{font-size:6px;letter-spacing:1px}.startup-controller{width:min(86vw,420px)}.startup-wordmark{font-size:clamp(43px,12vw,66px)}}
 @media(prefers-reduced-motion:reduce){.startup-intro,.startup-controller,.startup-loading span{animation:none}.startup-loading span{transform:scaleX(1)}}
+
+.story-content .action-link{color:var(--art-ink);border-color:rgba(23,23,23,.3)}

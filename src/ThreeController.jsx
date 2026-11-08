@@ -43,7 +43,6 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const controls = new Map()
     const pose = { x: 0.08, y: -0.12, z: -0.018 }
     let dragState = null
-    let lastDragTime = 0
     const container = canvas.parentElement
     const hitpad = container?.querySelector('.controller-hitpad')
     scene.add(model)
@@ -110,7 +109,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       renderer.setClearColor(0x000000, 0)
       renderer.outputColorSpace = THREE.SRGBColorSpace
       renderer.toneMapping = THREE.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1.08
+      renderer.toneMappingExposure = 1.04
       // The product stage uses a soft contact shadow; disabling a large live shadow map
       // avoids GPU spikes and shadow-map shimmer on integrated/mobile graphics.
       renderer.shadowMap.enabled = false
@@ -125,10 +124,10 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     key.position.set(-3.5, 5.5, 6)
     key.castShadow = false
     scene.add(key)
-    const fill = new THREE.DirectionalLight(0xdce7ff, 1.65)
+    const fill = new THREE.DirectionalLight(0xd6e4ff, 1.25)
     fill.position.set(4, 1.5, 5)
     scene.add(fill)
-    const rim = new THREE.DirectionalLight(0xe8efff, 2.65)
+    const rim = new THREE.DirectionalLight(0xe1e9ff, 2.2)
     rim.position.set(0, 3.5, -5)
     scene.add(rim)
 
@@ -136,7 +135,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const room = new RoomEnvironment()
     environmentTarget = pmrem.fromScene(room, 0.04)
     scene.environment = environmentTarget.texture
-    scene.environmentIntensity = 1.05
+    scene.environmentIntensity = 0.78
     room.dispose()
     pmrem.dispose()
 
@@ -156,7 +155,6 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       pose.x = THREE.MathUtils.clamp(pose.x + dy * 0.006, -0.5, 0.72)
       model.rotation.set(pose.x, pose.y, pose.z)
       reportLayout()
-      lastDragTime = performance.now()
     }
     const handlePointerUp = (event) => {
       if (!dragState || dragState.id !== event.pointerId) return

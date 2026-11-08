@@ -811,3 +811,26 @@ These are the currently supplied business details. The owner should verify them 
 The proposal is a six-page premium PlayStation gaming café website with a clear customer journey, enquiry-first visit flow and a reusable design system. It is intentionally prepared to support seasonal pages and future business features without rebuilding the core website. The owner meeting should focus on validating the page structure and visual direction, then supplying the factual business information needed to replace the remaining placeholders.
 
 **The blueprint is the review baseline. Owner feedback should be recorded here before corresponding website changes are implemented.**
+
+
+## 18. Interim visual design freeze — 8 November 2026
+
+**Current direction: keep the restored artistic / graphic-designer-style interface as the permanent working baseline unless the owner requests a change.** This is the user's preferred design direction and is ready to show the owner; it is not yet final owner sign-off.
+
+### Freeze rules until owner review
+
+- Do not replace the current visual identity with a generic gaming-café template.
+- Do not redesign the colour palette, typography, page composition, hero layout, motion language or overall multi-page structure without explicit owner feedback and user approval.
+- Do not make another broad visual redesign as part of ordinary improvements.
+- Keep improvements incremental and within the existing design: clearer gaming-café messaging, stronger content hierarchy, accessible contrast, better real venue imagery when supplied, clearer calls to action, responsive refinements and usability fixes.
+- Preserve the existing six-page architecture and this owner blueprint.
+- If the owner asks for a different design, record the exact request in the change-request register, update this blueprint, and get confirmation before changing the interface.
+
+### Owner review status
+
+- [x] User selected the restored artistic interface as the working baseline.
+- [x] Keep the current design unchanged while awaiting owner feedback.
+- [ ] Owner confirms the current visual direction.
+- [ ] Owner requests specific changes (if any); record them before implementation.
+
+**Important:** “Permanent” here means the design is frozen as the working baseline until the owner review. Final brand/design approval belongs to the business owner.

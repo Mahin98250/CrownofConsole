@@ -248,11 +248,7 @@ function InteractiveController() {
               <feComposite in2="SourceGraphic" operator="over"/>
             </filter>
           </defs>
-
-          <!-- Soft contact shadow beneath the controller -->
           <ellipse cx="180" cy="187" rx="135" ry="17" fill="#000" opacity=".25"/>
-
-          <!-- Continuous DualSense shell: broad shoulders, soft waist and flared grips -->
           <path d="M105 39
             C84 40 69 53 61 76
             L31 153
@@ -269,8 +265,6 @@ function InteractiveController() {
             C225 37 209 51 180 51
             C151 51 135 37 105 39Z"
             fill="url(#interactive-shell)" stroke="#8994a3" strokeWidth="2.8" strokeLinejoin="round"/>
-
-          <!-- Grip panels, moulded into the main body -->
           <path d="M66 103
             C58 119 49 144 43 160
             C39 171 45 181 57 179
@@ -287,8 +281,6 @@ function InteractiveController() {
             fill="none" stroke="#fff" strokeWidth="1.2" opacity=".55" strokeLinecap="round"/>
           <path d="M62 125c-5 13-10 26-12 34 10-1 23-9 36-17m212-17c5 13 10 26 12 34-10-1-23-9-36-17"
             fill="url(#interactive-grip-grain)" opacity=".9"/>
-
-          <!-- Upper shoulder moulding and trigger wells -->
           <path d="M63 83
             C68 59 80 46 99 45
             L133 46 143 69 92 87 75 111Z"
@@ -301,8 +293,6 @@ function InteractiveController() {
             fill="none" stroke="#fff" strokeWidth="1.4" opacity=".8" strokeLinecap="round"/>
           <path d="M84 88c13 2 28-1 42-8m150 0c14 7 29 10 42 8"
             fill="none" stroke="#8995a4" strokeWidth="1.2" opacity=".55"/>
-
-          <!-- Touchpad housing and inset surface -->
           <path d="M112 37
             C122 25 143 20 180 20
             C217 20 238 25 248 37
@@ -323,20 +313,14 @@ function InteractiveController() {
           <path d="M129 43h102v29H129Z" fill="url(#interactive-touch-grain)" opacity=".48"/>
           <path d="M116 79c17 7 39 10 64 10s47-3 64-10"
             fill="none" stroke="#7f8b9b" strokeWidth="1.4" opacity=".55"/>
-
-          <!-- Centre controls and microphone / speaker details -->
           <rect x="166" y="94" width="28" height="5" rx="2.5" fill="#9aa6b5" stroke="#7d8998" strokeWidth=".7"/>
           <path d="M171 110h18m-16 5h14m-12 5h10" stroke="#7d8998" strokeWidth="1.1" strokeLinecap="round" opacity=".75"/>
           <path d="M173 132h14m-11 5h8m-6 5h4" stroke="#7d8998" strokeWidth=".9" strokeLinecap="round" opacity=".55"/>
-
-          <!-- D-pad base: a single joined cross beneath the four press surfaces -->
           <path d="M83 96
             Q83 92 87 92h12q4 0 4 4v17h17q4 0 4 4v14q0 4-4 4h-17v17q0 4-4 4H87q-4 0-4-4v-17H66q-4 0-4-4v-14q0-4 4-4h17Z"
             fill="#7f8b9a" stroke="#697586" strokeWidth="1.2" opacity=".95"/>
           <path d="M87 98v53m-20-27h53" stroke="#e9edf2" strokeWidth="1" opacity=".45"/>
           <path d="M93 102v44M71 124h44" stroke="#b6c0cc" strokeWidth="1" opacity=".3"/>
-
-          <!-- Analog stick wells and metallic rims -->
           <g>
             <circle cx="133" cy="157" r="24" fill="#778494" stroke="#4f5d6f" strokeWidth="2"/>
             <circle cx="133" cy="157" r="20" fill="url(#interactive-dark)" stroke="#9ca8b7" strokeWidth="1.2"/>
@@ -351,8 +335,6 @@ function InteractiveController() {
             <circle cx="227" cy="157" r="13" fill="none" stroke="#667486" strokeWidth=".7" opacity=".8"/>
             <circle cx="227" cy="157" r="8" fill="none" stroke="#718093" strokeWidth=".55" opacity=".45"/>
           </g>
-
-          <!-- Face-button wells with the familiar four-colour markings -->
           <g fill="url(#interactive-dark)" stroke="#8290a1" strokeWidth="1.35">
             <circle cx="259" cy="104" r="12.2"/><circle cx="283" cy="126" r="12.2"/>
             <circle cx="235" cy="126" r="12.2"/><circle cx="259" cy="148" r="12.2"/>
@@ -361,8 +343,6 @@ function InteractiveController() {
             <circle cx="259" cy="104" r="9.4"/><circle cx="283" cy="126" r="9.4"/>
             <circle cx="235" cy="126" r="9.4"/><circle cx="259" cy="148" r="9.4"/>
           </g>
-
-          <!-- Create, options and PS key wells -->
           <g fill="url(#interactive-dark)" stroke="#7c8999" strokeWidth="1">
             <circle cx="143" cy="101" r="7.5"/><circle cx="217" cy="101" r="7.5"/>
             <circle cx="180" cy="159" r="7.2"/>

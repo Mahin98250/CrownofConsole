@@ -113,6 +113,12 @@ function HomePage() {
    </div>
    <div className="hero-bottom-art"><span>NOT JUST A PLACE TO PLAY.</span><span>A PLACE TO MAKE A MOMENT.</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
   </section>
+  <section className="cafe-facts" aria-label="Gaming café facilities" data-reveal>
+    <div><strong>08</strong><span>PLAYSTATION 5<br/>CONSOLES</span></div>
+    <div><strong>08</strong><span>GAMING<br/>SCREENS</span></div>
+    <div><strong>✳</strong><span>BEAN BAG<br/>SEATING</span></div>
+    <a href="#/space">GET TO KNOW THE SPACE <ArrowUpRight size={15}/></a>
+  </section>
   <section className="manifesto-art" data-reveal><div className="art-section-meta"><span>01 / THE HOUSE RULES</span><span>GOOD ENERGY ONLY (THE REST IS UP TO YOU)</span></div><div className="manifesto-art-grid"><h2>LESS<br/>SCROLL.<br/><em>MORE</em><br/>SCORE.</h2><div className="manifesto-art-note"><span className="asterisk-doodle">✳</span><p>Some nights are made for getting out, catching up and finding out who really has the better game. That's the feeling behind The Crown Of Console.</p><span className="handwritten-note">bring your people ↗</span></div></div><div className="manifesto-art-bottom"><span>GOOD GAMES</span><b>+</b><span>GREAT COMPANY</span><b>=</b><span>ONE MORE ROUND</span></div></section>
   <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
   <PlayerSelector/>
@@ -159,6 +165,15 @@ function SpacePage() {
       <div className="story-number">01 <span>— THE IDEA</span></div>
       <div className="story-content"><h2>Come for the game.<br /><em>Stay for the moment.</em></h2><p>Whether you're planning ahead or just checking us out, start with the details that matter. Message the team for confirmed information about the current setup, rates and availability.</p><ActionLink href="#/visit">Ask about a visit</ActionLink></div>
     </section>
+    <section className="space-facilities section-pad" aria-label="Gaming café facilities">
+      <div className="section-index"><span>02 — THE SETUP</span><span>ROOM FOR YOUR NEXT SESSION</span></div>
+      <div className="space-facility-grid">
+        <div><strong>08</strong><b>PLAYSTATION 5 CONSOLES</b></div>
+        <div><strong>08</strong><b>TELEVISIONS</b></div>
+        <div><strong>✳</strong><b>BEAN BAG SEATING</b></div>
+      </div>
+      <p>A comfortable place to settle in, pick a game and enjoy time with your friends.</p>
+    </section>
     <section className="gallery-page section-pad">
       <div className="section-index"><span>02 — VISUAL REFERENCES</span><span>SELECT A FRAME TO EXPAND</span></div>
       <div className="gallery-masonry">{images.map((item, index) => <button className={'gallery-tile gallery-tile-' + index} key={item.src} onClick={() => setActive(index)}><img src={item.src} alt={item.alt} loading="lazy" /><span><b>0{index + 1}</b>{item.caption}<ArrowUpRight size={17} /></span></button>)}</div>
@@ -182,6 +197,20 @@ function GamesPage() {
   }
   return <main id="main-content" tabIndex="-1" className="inner-page">
     <PageTop number="02" kicker="GAME DISCOVERY" title="What's on" italic="your list?" intro="Have a title in mind? Tell us what you're looking for and the café team can confirm whether it's currently available. We don't publish an unverified game catalogue." dark />
+    <section className="game-showcase section-pad" aria-labelledby="popular-games-title">
+      <div className="game-showcase-heading"><div><Eyebrow>POPULAR ON PLAYSTATION 5</Eyebrow><h2 id="popular-games-title">WHAT DO YOU<br/><em>WANT TO PLAY?</em></h2></div><p>Football, racing, open-world adventures and multiplayer favourites. These are popular PS5 titles you can ask our team about.</p></div>
+      <div className="game-category-grid">
+        <article className="game-category game-category-feature"><span>01 / FOOTBALL</span><h3>EA SPORTS FC 27</h3><p>Take the pitch, build your team and challenge your friends.</p><b>ALSO ASK ABOUT FC 26</b></article>
+        <article className="game-category"><span>02 / OPEN WORLD</span><h3>Grand Theft Auto V</h3><p>Explore Los Santos and create your own adventure.</p></article>
+        <article className="game-category"><span>03 / RACING</span><h3>Gran Turismo 7</h3><p>Get behind the wheel and race for the finish.</p></article>
+        <article className="game-category"><span>04 / SPORTS</span><h3>NBA 2K26</h3><p>Bring basketball competition to the screen.</p></article>
+        <article className="game-category"><span>05 / ACTION</span><h3>Call of Duty</h3><p>Ask about the latest available Black Ops title.</p></article>
+        <article className="game-category"><span>06 / ADVENTURE</span><h3>Spider-Man 2</h3><p>Swing through the city in a superhero adventure.</p></article>
+        <article className="game-category"><span>07 / FRIENDS</span><h3>It Takes Two</h3><p>A co-op adventure made to play together.</p></article>
+        <article className="game-category"><span>08 / MORE TO EXPLORE</span><h3>Minecraft & Fortnite</h3><p>Creative building and online action favourites.</p></article>
+      </div>
+      <div className="game-showcase-foot"><p>Game availability at the café may vary. Ask us which titles are currently installed before visiting.</p><a href={WA('Hello! I would like to check which PS5 games are currently available at The Crown Of Console, including EA SPORTS FC 27, FC 26 and GTA V.')} target="_blank" rel="noreferrer">ASK ABOUT GAME AVAILABILITY <ArrowUpRight size={16}/></a></div>
+    </section>
     <section className="games-intro section-pad">
       <div className="games-aside"><span>YOUR NEXT<br />PICK</span><Gamepad2 size={46} /><small>ENQUIRE DIRECTLY</small></div>
       <div className="games-form-wrap"><Eyebrow>LET'S CHECK AVAILABILITY</Eyebrow><h2>What do you<br /><em>want to play?</em></h2>

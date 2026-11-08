@@ -172,6 +172,7 @@ function InteractiveController() {
   const [active, setActive] = useState('cross')
   const [pressed, setPressed] = useState(null)
   const [modelReady, setModelReady] = useState(false)
+  const [controlLayout, setControlLayout] = useState(null)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [stickOffsets, setStickOffsets] = useState({ l3: { x: 0, y: 0 }, r3: { x: 0, y: 0 } })
   const [triggerPressure, setTriggerPressure] = useState({ l2: 0, r2: 0 })
@@ -230,7 +231,7 @@ function InteractiveController() {
         </div>
       </div>
       <div className={'controller-visual' + (modelReady ? ' controller-3d-ready' : '')}>
-        <ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} triggerPressure={triggerPressure} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} />
+        <ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} triggerPressure={triggerPressure} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} onLayout={setControlLayout} />
         <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1">
@@ -435,10 +436,16 @@ function InteractiveController() {
             }}
             onKeyUp={() => setPressed(null)}
             onBlur={() => setPressed(null)}
-            style={control.type === 'stick' ? {
-              '--stick-x': (stickOffsets[control.id]?.x || 0) + 'px',
-              '--stick-y': (stickOffsets[control.id]?.y || 0) + 'px'
-            } : undefined}
+            style={{
+              ...(control.type === 'stick' ? {
+                '--stick-x': (stickOffsets[control.id]?.x || 0) + 'px',
+                '--stick-y': (stickOffsets[control.id]?.y || 0) + 'px'
+              } : {}),
+              ...(modelReady && controlLayout?.[control.id] ? {
+                left: controlLayout[control.id].left + '%',
+                top: controlLayout[control.id].top + '%'
+              } : {})
+            }}
             onContextMenu={(event) => event.preventDefault()}
             aria-label={'Press ' + control.label}
             aria-pressed={active === control.id}

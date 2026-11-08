@@ -11,6 +11,11 @@ const CONTROL_ALIASES = { l3: 'left-stick', r3: 'right-stick' }
 export default function ThreeController({ active, pressed, stickOffsets, onReady, onError }) {
   const canvasRef = useRef(null)
   const interactionRef = useRef({ active, pressed, stickOffsets })
+  const callbacksRef = useRef({ onReady, onError })
+
+  useEffect(() => {
+    callbacksRef.current = { onReady, onError }
+  }, [])
 
   useEffect(() => {
     interactionRef.current = { active, pressed, stickOffsets }
@@ -58,7 +63,7 @@ export default function ThreeController({ active, pressed, stickOffsets, onReady
       renderer.shadowMap.enabled = true
       renderer.shadowMap.type = THREE.PCFSoftShadowMap
     } catch (error) {
-      onError?.(error)
+      callbacksRef.current.onError?.(error)
       return undefined
     }
 
@@ -172,7 +177,7 @@ export default function ThreeController({ active, pressed, stickOffsets, onReady
 
       setSize()
       canvas.dataset.ready = 'true'
-      onReady?.()
+      callbacksRef.current.onReady?.()
     }, undefined, (error) => {
       if (!disposed) onError?.(error)
     })

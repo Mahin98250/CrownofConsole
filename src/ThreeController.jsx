@@ -30,7 +30,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     let environmentTarget
     let resizeObserver
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100)
+    const camera = new THREE.PerspectiveCamera(29, 1, 0.1, 100)
     const model = new THREE.Group()
     const controls = new Map()
     const pose = { x: 0.08, y: -0.12, z: -0.018 }
@@ -77,9 +77,10 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       renderer.setClearColor(0x000000, 0)
       renderer.outputColorSpace = THREE.SRGBColorSpace
       renderer.toneMapping = THREE.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1.04
+      renderer.toneMappingExposure = 1.12
       renderer.shadowMap.enabled = true
       renderer.shadowMap.type = THREE.PCFSoftShadowMap
+      renderer.info.autoReset = true
     } catch (error) {
       callbacksRef.current.onError?.(error)
       return undefined
@@ -89,17 +90,21 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const key = new THREE.DirectionalLight(0xfff7ec, 3.1)
     key.position.set(-3.5, 5.5, 6)
     key.castShadow = true
-    key.shadow.mapSize.set(1024, 1024)
+    key.shadow.mapSize.set(2048, 2048)
     key.shadow.camera.left = -4
     key.shadow.camera.right = 4
     key.shadow.camera.top = 4
     key.shadow.camera.bottom = -4
-    key.shadow.normalBias = 0.018
+    key.shadow.normalBias = 0.025
+    key.shadow.bias = -0.00012
+    key.shadow.radius = 7
+    key.shadow.camera.near = 0.5
+    key.shadow.camera.far = 18
     scene.add(key)
-    const fill = new THREE.DirectionalLight(0xd6e4ff, 1.25)
+    const fill = new THREE.DirectionalLight(0xdce7ff, 1.65)
     fill.position.set(4, 1.5, 5)
     scene.add(fill)
-    const rim = new THREE.DirectionalLight(0xe1e9ff, 2.2)
+    const rim = new THREE.DirectionalLight(0xe8efff, 2.65)
     rim.position.set(0, 3.5, -5)
     scene.add(rim)
 
@@ -107,7 +112,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const room = new RoomEnvironment()
     environmentTarget = pmrem.fromScene(room, 0.04)
     scene.environment = environmentTarget.texture
-    scene.environmentIntensity = 0.78
+    scene.environmentIntensity = 1.05
     room.dispose()
     pmrem.dispose()
 
@@ -151,19 +156,39 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
 
       for (const object of meshes) {
         const geometry = object.geometry.clone().applyMatrix4(object.matrixWorld)
-        const materials = Array.isArray(object.material)
-          ? object.material.map((material) => material.clone())
-          : object.material.clone()
-        const materialList = Array.isArray(materials) ? materials : [materials]
-        for (const material of materialList) {
-          if (material.map) material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy())
-          if ('roughness' in material) material.roughness = Math.max(0.22, Math.min(0.82, material.roughness))
-          if ('metalness' in material) material.metalness = Math.min(material.metalness, 0.18)
+        const enhanceMaterial = (source) => {
+          const material = source.isMeshStandardMaterial
+            ? new THREE.MeshPhysicalMaterial().copy(source)
+            : source.clone()
+          if (material.map) {
+            material.map.colorSpace = THREE.SRGBColorSpace
+            material.map.anisotropy = Math.min(12, renderer.capabilities.getMaxAnisotropy())
+          }
+          if (material.normalMap) material.normalScale.set(0.85, 0.85)
+          if ('roughness' in material) material.roughness = Math.max(0.26, Math.min(0.88, material.roughness))
+          if ('metalness' in material) material.metalness = Math.min(material.metalness, 0.12)
+          // The shell is satin plastic, not metal: broad, restrained highlights
+          // make the curves read like a manufactured DualSense body.
+          if (['front_body', 'VRayMtl55'].includes(material.name)) {
+            material.roughness = material.name === 'front_body' ? 0.34 : 0.46
+            material.metalness = 0.015
+            material.clearcoat = 0.34
+            material.clearcoatRoughness = 0.3
+          } else if (['Material.002', 'Material.009', 'Material.007'].includes(material.name)) {
+            material.roughness = 0.29
+            material.clearcoat = 0.42
+            material.clearcoatRoughness = 0.2
+          }
           if (material.emissive) {
             material.userData.baseEmissive = material.emissive.clone()
             material.userData.baseEmissiveIntensity = material.emissiveIntensity || 0
           }
+          return material
         }
+        const materials = Array.isArray(object.material)
+          ? object.material.map(enhanceMaterial)
+          : enhanceMaterial(object.material)
+        const materialList = Array.isArray(materials) ? materials : [materials]
 
         const mesh = new THREE.Mesh(geometry, materials)
         mesh.name = object.name
@@ -209,7 +234,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
 
       const verticalFit = size.y / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 0.82)
       const horizontalFit = size.x / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.55 * 0.88)
-      camera.position.set(0, 0, Math.max(verticalFit, horizontalFit, 3.5) * 1.08)
+      camera.position.set(0, 0, Math.max(verticalFit, horizontalFit, 3.5) * 1.035)
       camera.lookAt(0, 0, 0)
 
       const ground = new THREE.Mesh(

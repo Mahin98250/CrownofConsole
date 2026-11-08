@@ -1075,3 +1075,21 @@ body{background:var(--art-paper);color:var(--art-ink);font-family:'DM Sans',sans
  .section-pad{padding-left:6%;padding-right:6%}
  .site-footer{padding-bottom:70px}
 }
+
+
+/* Phase D — accessible navigation and interactive game discovery */
+.skip-link{position:fixed;z-index:1000;left:14px;top:10px;padding:12px 16px;background:var(--art-yellow);color:var(--art-ink);font-size:12px;font-weight:900;transform:translateY(-160%);transition:transform .2s}
+.skip-link:focus{transform:translateY(0)}
+#main-content:focus{outline:none}
+.game-intent-field{min-width:0;margin:0 0 22px;padding:0;border:0}
+.game-intent-field legend{margin-bottom:12px;color:var(--art-ink);font-size:11px;font-weight:800}
+.game-intents{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.game-intent{min-height:72px;padding:12px;display:grid;grid-template-columns:25px 1fr 20px;align-items:center;gap:8px;text-align:left;border:1px solid rgba(23,23,23,.24);background:transparent;color:var(--art-ink);transition:background .2s,border-color .2s,transform .2s}
+.game-intent:hover{transform:translateY(-2px);border-color:var(--art-blue)}
+.game-intent>span{align-self:start;color:var(--art-orange);font-family:var(--serif);font-size:17px}
+.game-intent>b{font-size:10px;line-height:1.45}
+.game-intent>i{font-style:normal;font-size:18px;text-align:center}
+.game-intent-active{background:var(--art-blue);border-color:var(--art-blue);color:white}
+.game-intent-active>span{color:var(--art-yellow)}
+.game-intent:focus-visible,.skip-link:focus-visible{outline:3px solid var(--art-orange);outline-offset:3px}
+@media(max-width:520px){.game-intents{grid-template-columns:1fr}.game-intent{min-height:60px}}

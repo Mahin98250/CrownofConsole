@@ -113,12 +113,6 @@ function HomePage() {
    </div>
    <div className="hero-bottom-art"><span>NOT JUST A PLACE TO PLAY.</span><span>A PLACE TO MAKE A MOMENT.</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
   </section>
-  <section className="cafe-facts" aria-label="Gaming café facilities" data-reveal>
-    <div><strong>08</strong><span>PLAYSTATION 5<br/>CONSOLES</span></div>
-    <div><strong>08</strong><span>GAMING<br/>SCREENS</span></div>
-    <div><strong>✳</strong><span>BEAN BAG<br/>SEATING</span></div>
-    <a href="#/space">GET TO KNOW THE SPACE <ArrowUpRight size={15}/></a>
-  </section>
   <section className="manifesto-art" data-reveal><div className="art-section-meta"><span>01 / THE HOUSE RULES</span><span>GOOD ENERGY ONLY (THE REST IS UP TO YOU)</span></div><div className="manifesto-art-grid"><h2>LESS<br/>SCROLL.<br/><em>MORE</em><br/>SCORE.</h2><div className="manifesto-art-note"><span className="asterisk-doodle">✳</span><p>Some nights are made for getting out, catching up and finding out who really has the better game. That's the feeling behind The Crown Of Console.</p><span className="handwritten-note">bring your people ↗</span></div></div><div className="manifesto-art-bottom"><span>GOOD GAMES</span><b>+</b><span>GREAT COMPANY</span><b>=</b><span>ONE MORE ROUND</span></div></section>
   <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
   <PlayerSelector/>
@@ -164,15 +158,6 @@ function SpacePage() {
     <section className="space-story section-pad">
       <div className="story-number">01 <span>— THE IDEA</span></div>
       <div className="story-content"><h2>Come for the game.<br /><em>Stay for the moment.</em></h2><p>Whether you're planning ahead or just checking us out, start with the details that matter. Message the team for confirmed information about the current setup, rates and availability.</p><ActionLink href="#/visit">Ask about a visit</ActionLink></div>
-    </section>
-    <section className="space-facilities section-pad" aria-label="Gaming café facilities">
-      <div className="section-index"><span>02 — THE SETUP</span><span>ROOM FOR YOUR NEXT SESSION</span></div>
-      <div className="space-facility-grid">
-        <div><strong>08</strong><b>PLAYSTATION 5 CONSOLES</b></div>
-        <div><strong>08</strong><b>TELEVISIONS</b></div>
-        <div><strong>✳</strong><b>BEAN BAG SEATING</b></div>
-      </div>
-      <p>A comfortable place to settle in, pick a game and enjoy time with your friends.</p>
     </section>
     <section className="gallery-page section-pad">
       <div className="section-index"><span>02 — VISUAL REFERENCES</span><span>SELECT A FRAME TO EXPAND</span></div>

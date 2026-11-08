@@ -1275,34 +1275,3 @@ body{background:var(--art-paper);color:var(--art-ink)}
 }
 
 
-/* Café details and curated PS5 game discovery — added within the existing art direction */
-.cafe-facts{padding:24px 7.2%;display:flex;align-items:center;justify-content:space-between;gap:22px;background:#1b211b;color:#f2efe8;border-top:1px solid rgba(242,239,232,.12);border-bottom:1px solid rgba(242,239,232,.12)}
-.cafe-facts>div{display:flex;align-items:center;gap:13px}
-.cafe-facts strong{font-family:var(--display);font-size:32px;line-height:1;color:var(--lime)}
-.cafe-facts span{font-size:8px;font-weight:800;line-height:1.55;letter-spacing:1px}
-.cafe-facts>a,.game-showcase-foot>a{display:flex;align-items:center;gap:9px;font-size:8px;font-weight:900;letter-spacing:1px;border-bottom:1px solid currentColor;padding-bottom:8px}
-.game-showcase{padding-top:90px;padding-bottom:90px;background:var(--art-paper);color:var(--art-ink)}
-.game-showcase-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:38px}
-.game-showcase-heading h2{margin:16px 0 0;font-family:var(--art-display);font-size:clamp(42px,6vw,78px);line-height:.92;letter-spacing:-.07em}
-.game-showcase-heading h2 em{font-family:var(--serif);font-weight:500;color:var(--art-orange)}
-.game-showcase-heading>p{max-width:330px;margin:0 0 5px;color:#5c5a52;font-size:12px;line-height:1.8}
-.game-category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.game-category{min-height:185px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;background:#e6e1d7;border:1px solid rgba(23,23,23,.1);transition:transform .25s,background .25s}
-.game-category:hover{transform:translateY(-4px);background:#fff}
-.game-category>span{font-size:7px;font-weight:900;letter-spacing:1.2px;color:#777064}
-.game-category h3{margin:auto 0 8px;font-family:var(--art-display);font-size:clamp(17px,1.7vw,23px);line-height:1.1;letter-spacing:-.8px}
-.game-category p{margin:0;color:#625e54;font-size:10px;line-height:1.65}
-.game-category>b{margin-top:10px;font-size:7px;letter-spacing:1px;color:#a94e2d}
-.game-category-feature{background:var(--art-ink);color:var(--art-paper)}
-.game-category-feature>span,.game-category-feature p{color:#d1c9b9}
-.game-category-feature>b{color:var(--art-yellow)}
-.game-showcase-foot{margin-top:22px;padding-top:18px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--art-line)}
-.game-showcase-foot p{max-width:510px;margin:0;color:#625e54;font-size:10px;line-height:1.7}
-.space-facilities{padding-top:55px;padding-bottom:55px;background:var(--art-paper);color:var(--art-ink)}
-.space-facility-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
-.space-facility-grid>div{min-height:125px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;background:#e6e1d7}
-.space-facility-grid strong{font-family:var(--art-display);font-size:42px;line-height:1;color:var(--art-orange)}
-.space-facility-grid b{font-size:8px;letter-spacing:1px}
-.space-facilities>p{margin:16px 0 0;color:#625e54;font-size:11px;line-height:1.7}
-@media(max-width:760px){.cafe-facts{padding:20px 6%;flex-wrap:wrap;justify-content:flex-start}.cafe-facts>div{width:calc(50% - 12px)}.cafe-facts>a{margin-top:8px}.game-showcase{padding-top:65px;padding-bottom:65px}.game-showcase-heading{align-items:flex-start;flex-direction:column;gap:14px}.game-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.game-category{min-height:165px;padding:15px}.game-showcase-foot{align-items:flex-start;flex-direction:column}.space-facility-grid{grid-template-columns:1fr 1fr}.space-facility-grid>div:last-child{grid-column:1/-1}}
-@media(max-width:420px){.game-category-grid{gap:8px}.game-category{min-height:172px;padding:12px}.game-category h3{font-size:17px}.game-category p{font-size:9px}.space-facility-grid>div{min-height:110px;padding:15px}}

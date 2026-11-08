@@ -84,28 +84,30 @@ const FACE_BUTTON_SYMBOLS = {
 function addFaceButtonDetails(group, id, renderer) {
   if (!FACE_BUTTON_SYMBOLS[id]) return null
 
-  // The licensed model already contains the physical white button caps and
-  // their decal meshes. Measure the complete button assembly in its own local
-  // space, then place only the symbol artwork just above the cap surface. This
-  // avoids stacking a second cap over the original model's authored geometry.
+  // Anchor the legend to the actual GLB cap mesh, not the bounding box of the
+  // whole button assembly. Decal and mounting geometry can otherwise push a
+  // group-wide plane away from the visible cap.
+  const cap = group.children.find((child) => child.isMesh && child.userData?.part === 'cap')
+  if (!cap) return null
+
   group.updateMatrixWorld(true)
-  const worldBounds = new THREE.Box3().setFromObject(group)
-  const worldCenter = worldBounds.getCenter(new THREE.Vector3())
-  const worldCorners = [
-    new THREE.Vector3(worldBounds.min.x, worldBounds.min.y, worldBounds.min.z),
-    new THREE.Vector3(worldBounds.min.x, worldBounds.min.y, worldBounds.max.z),
-    new THREE.Vector3(worldBounds.min.x, worldBounds.max.y, worldBounds.min.z),
-    new THREE.Vector3(worldBounds.min.x, worldBounds.max.y, worldBounds.max.z),
-    new THREE.Vector3(worldBounds.max.x, worldBounds.min.y, worldBounds.min.z),
-    new THREE.Vector3(worldBounds.max.x, worldBounds.min.y, worldBounds.max.z),
-    new THREE.Vector3(worldBounds.max.x, worldBounds.max.y, worldBounds.min.z),
-    new THREE.Vector3(worldBounds.max.x, worldBounds.max.y, worldBounds.max.z),
+  const capBounds = new THREE.Box3().setFromObject(cap)
+  const corners = [
+    new THREE.Vector3(capBounds.min.x, capBounds.min.y, capBounds.min.z),
+    new THREE.Vector3(capBounds.min.x, capBounds.min.y, capBounds.max.z),
+    new THREE.Vector3(capBounds.min.x, capBounds.max.y, capBounds.min.z),
+    new THREE.Vector3(capBounds.min.x, capBounds.max.y, capBounds.max.z),
+    new THREE.Vector3(capBounds.max.x, capBounds.min.y, capBounds.min.z),
+    new THREE.Vector3(capBounds.max.x, capBounds.min.y, capBounds.max.z),
+    new THREE.Vector3(capBounds.max.x, capBounds.max.y, capBounds.min.z),
+    new THREE.Vector3(capBounds.max.x, capBounds.max.y, capBounds.max.z),
   ]
   const localBounds = new THREE.Box3()
-  for (const corner of worldCorners) localBounds.expandByPoint(group.worldToLocal(corner))
+  for (const corner of corners) localBounds.expandByPoint(group.worldToLocal(corner))
+
   const size = localBounds.getSize(new THREE.Vector3())
   const center = localBounds.getCenter(new THREE.Vector3())
-  const radius = Math.min(size.x, size.y) * 0.465
+  const radius = Math.min(size.x, size.y) * 0.42
   if (!Number.isFinite(radius) || radius <= 0.001) return null
 
   const artwork = document.createElement('canvas')
@@ -114,28 +116,25 @@ function addFaceButtonDetails(group, id, renderer) {
   const ctx = artwork.getContext('2d')
   if (!ctx) return null
 
-  // A compact, high-contrast grey mark sized like the legends on a real
-  // DualSense cap. The transparent canvas leaves the model's cap material
-  // and highlights untouched.
-  ctx.strokeStyle = '#4b5563'
-  ctx.lineWidth = 22
+  ctx.strokeStyle = '#46515f'
+  ctx.lineWidth = 20
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.beginPath()
   if (id === 'triangle') {
-    ctx.moveTo(128, 39)
-    ctx.lineTo(49, 190)
-    ctx.lineTo(207, 190)
+    ctx.moveTo(128, 42)
+    ctx.lineTo(52, 188)
+    ctx.lineTo(204, 188)
     ctx.closePath()
   } else if (id === 'circle') {
-    ctx.arc(128, 128, 83, 0, Math.PI * 2)
+    ctx.arc(128, 128, 79, 0, Math.PI * 2)
   } else if (id === 'square') {
-    ctx.rect(49, 49, 158, 158)
+    ctx.rect(52, 52, 152, 152)
   } else {
-    ctx.moveTo(66, 66)
-    ctx.lineTo(190, 190)
-    ctx.moveTo(190, 66)
-    ctx.lineTo(66, 190)
+    ctx.moveTo(68, 68)
+    ctx.lineTo(188, 188)
+    ctx.moveTo(188, 68)
+    ctx.lineTo(68, 188)
   }
   ctx.stroke()
 
@@ -145,22 +144,23 @@ function addFaceButtonDetails(group, id, renderer) {
   texture.generateMipmaps = true
   texture.minFilter = THREE.LinearMipmapLinearFilter
   texture.magFilter = THREE.LinearFilter
+
   const symbol = new THREE.Mesh(
-    new THREE.PlaneGeometry(radius * 1.52, radius * 1.52),
+    new THREE.PlaneGeometry(radius * 1.72, radius * 1.72),
     new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
-      alphaTest: 0.015,
+      alphaTest: 0.02,
       depthTest: true,
       depthWrite: false,
-      side: THREE.FrontSide,
+      side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: -1,
       polygonOffsetUnits: -2,
       toneMapped: false,
     }),
   )
-  symbol.position.set(center.x, center.y, localBounds.max.z + Math.max(0.00035, radius * 0.008))
+  symbol.position.set(center.x, center.y, localBounds.max.z + Math.max(0.00025, radius * 0.004))
   symbol.name = `face-button-symbol-${id}`
   symbol.renderOrder = 2
   symbol.frustumCulled = false

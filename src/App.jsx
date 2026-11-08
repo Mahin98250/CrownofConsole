@@ -287,7 +287,7 @@ function Footer() {
 function AnalyticsConsent() {
   const [choice, setChoice] = useState(() => localStorage.getItem('coc-analytics-consent') || 'unset')
   useEffect(() => { if (choice === 'yes') loadAnalytics() }, [choice])
-  if (choice !== 'unset') return null
+  if (!ANALYTICS_ID || choice !== 'unset') return null
   return <aside className="analytics-consent" aria-label="Analytics preferences">
     <div><b>HELP US MAKE THE SITE BETTER.</b><p>Optional website analytics help us understand which pages are useful. No analytics runs unless you agree.</p></div>
     <div className="analytics-consent-actions">

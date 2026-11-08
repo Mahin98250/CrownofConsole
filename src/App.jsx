@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import controllerPhoto from './assets/crown-controller-studio.webp'
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
@@ -298,111 +299,6 @@ function AnalyticsConsent() {
 }
 
 
-function ControllerIntro() {
-  const [visible, setVisible] = useState(() => {
-    try {
-      return !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-        window.sessionStorage.getItem('coc-intro-seen') !== 'yes'
-    } catch {
-      return false
-    }
-  })
-  const [leaving, setLeaving] = useState(false)
-
-  const dismiss = () => {
-    if (leaving) return
-    try { window.sessionStorage.setItem('coc-intro-seen', 'yes') } catch {}
-    setLeaving(true)
-    window.setTimeout(() => {
-      setVisible(false)
-      document.getElementById('main-content')?.focus({ preventScroll: true })
-    }, 520)
-  }
-
-  useEffect(() => {
-    if (!visible) return
-    document.body.classList.add('controller-intro-active')
-    const onKeyDown = (event) => {
-      if (event.key === 'Tab') {
-        const controls = Array.from(document.querySelectorAll('.controller-intro button'))
-        const first = controls[0]
-        const last = controls[controls.length - 1]
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault()
-          last?.focus()
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault()
-          first?.focus()
-        }
-        return
-      }
-      if (['x', 'X', 'Enter', 'Escape'].includes(event.key)) {
-        event.preventDefault()
-        dismiss()
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.body.classList.remove('controller-intro-active')
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [visible, leaving])
-
-  if (!visible) return null
-
-  return <div className={leaving ? 'controller-intro controller-intro-leaving' : 'controller-intro'} role="dialog" aria-modal="true" aria-label="The Crown Of Console welcome screen">
-    <div className="intro-grain" aria-hidden="true" />
-    <div className="intro-topline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD · PLAYER 01</span></div>
-    <div className="intro-main">
-      <span className="intro-kicker"><i /> SYSTEM READY · WELCOME PLAYER</span>
-      <h1>YOUR NEXT<br /><em>GAME NIGHT.</em></h1>
-      <div className="controller-stage" aria-hidden="true">
-        <span className="controller-orbit controller-orbit-one" />
-        <span className="controller-orbit controller-orbit-two" />
-        <svg className="intro-controller" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <filter id="controller-shadow" x="-30%" y="-30%" width="160%" height="180%">
-              <feDropShadow dx="0" dy="22" stdDeviation="18" floodColor="#000000" floodOpacity=".38" />
-            </filter>
-            <linearGradient id="controller-shell" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#fffef9" />
-              <stop offset="1" stopColor="#c9c8c1" />
-            </linearGradient>
-          </defs>
-          <g filter="url(#controller-shadow)">
-            <path d="M171 92 C137 91 113 111 98 145 L53 249 C39 282 62 307 94 296 L184 264 C210 254 236 252 263 260 L377 260 C404 252 430 254 456 264 L546 296 C578 307 601 282 587 249 L542 145 C527 111 503 91 469 92 C428 94 391 109 360 125 L280 125 C249 109 212 94 171 92Z" fill="url(#controller-shell)" stroke="#a9aaa4" strokeWidth="3"/>
-            <path d="M247 115 Q320 91 393 115 L379 155 Q320 144 261 155Z" fill="#c8c9c4" opacity=".75"/>
-            <rect x="279" y="104" width="82" height="48" rx="16" fill="#b9bab5" stroke="#a2a39e" strokeWidth="2"/>
-            <rect x="292" y="114" width="56" height="28" rx="8" fill="#242724" opacity=".82"/>
-            <path d="M155 154 H211 V172 H155Z M174 135 H192 V191 H174Z" fill="#3c403c" />
-            <circle cx="225" cy="215" r="34" fill="#989b95" stroke="#777a74" strokeWidth="5"/>
-            <circle cx="225" cy="215" r="24" fill="#d8d9d3" />
-            <circle cx="415" cy="215" r="34" fill="#989b95" stroke="#777a74" strokeWidth="5"/>
-            <circle cx="415" cy="215" r="24" fill="#d8d9d3" />
-            <g fontFamily="Arial, sans-serif" fontWeight="700" fontSize="19" textAnchor="middle">
-              <circle cx="484" cy="154" r="16" fill="#d8d9d3" stroke="#9b9d96" strokeWidth="2"/><text x="484" y="161" fill="#525650">△</text>
-              <circle cx="516" cy="190" r="16" fill="#d8d9d3" stroke="#9b9d96" strokeWidth="2"/><text x="516" y="197" fill="#525650">○</text>
-              <circle cx="452" cy="190" r="16" fill="#D8FF3E" stroke="#9ebd31" strokeWidth="2"/><text x="452" y="197" fill="#171717">×</text>
-              <circle cx="484" cy="226" r="16" fill="#d8d9d3" stroke="#9b9d96" strokeWidth="2"/><text x="484" y="233" fill="#525650">□</text>
-            </g>
-            <circle cx="284" cy="181" r="6" fill="#747871"/>
-            <circle cx="356" cy="181" r="6" fill="#747871"/>
-            <path d="M284 181 H356" stroke="#969992" strokeWidth="2" strokeLinecap="round"/>
-            <rect x="302" y="73" width="36" height="6" rx="3" fill="#D8FF3E" className="controller-lightbar"/>
-            <path d="M119 139 Q141 104 177 105 M463 105 Q499 104 521 139" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" opacity=".75"/>
-          </g>
-        </svg>
-      </div>
-      <p className="intro-subline">A DIFFERENT KIND OF GAME NIGHT STARTS HERE.</p>
-      <button className="intro-enter" type="button" onClick={dismiss} autoFocus>
-        <span className="intro-x-key">×</span> PRESS X TO ENTER <ArrowUpRight size={17} />
-      </button>
-      <span className="intro-key-hint">OR PRESS ENTER</span>
-    </div>
-    <div className="intro-bottomline"><span>POWER · PLAY · REPEAT</span><button type="button" onClick={dismiss}>SKIP INTRO <ArrowUpRight size={13} /></button></div>
-  </div>
-}
-
 function ScrollProgress() {
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -447,67 +343,15 @@ function StartupIntro() {
     setVisible(false)
   }
   if (!visible) return null
-  return <div className="startup-intro" role="dialog" aria-label="The Crown Of Console introduction">
+  return <div className="startup-intro" role="dialog" aria-modal="true" aria-label="The Crown Of Console introduction">
     <div className="startup-grain" aria-hidden="true" />
     <div className="startup-topline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD · INDIA</span></div>
     <div className="startup-center">
       <span className="startup-kicker">POWERING UP YOUR PLAY SPACE</span>
-      <svg className="startup-controller" viewBox="0 0 900 520" role="img" aria-label="Detailed photorealistic-style white wireless console controller">
-        <defs>
-          <linearGradient id="dsShell" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".28" stopColor="#f5f5f3"/><stop offset=".66" stopColor="#d9d9d6"/><stop offset="1" stopColor="#a9aaa8"/></linearGradient>
-          <linearGradient id="dsTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".5" stopColor="#f0f0ed"/><stop offset="1" stopColor="#c7c8c5"/></linearGradient>
-          <linearGradient id="dsGrip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e9e9e6"/><stop offset="1" stopColor="#aeb0ad"/></linearGradient>
-          <linearGradient id="dsBlack" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#383a3b"/><stop offset="1" stopColor="#090a0b"/></linearGradient>
-          <radialGradient id="dsStick"><stop offset="0" stopColor="#55585a"/><stop offset=".65" stopColor="#242628"/><stop offset="1" stopColor="#08090a"/></radialGradient>
-          <filter id="dsShadow" x="-30%" y="-40%" width="160%" height="190%"><feGaussianBlur stdDeviation="15"/></filter>
-          <filter id="dsGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5"/></filter>
-        </defs>
-        <ellipse cx="450" cy="420" rx="310" ry="34" fill="#000" opacity=".42" filter="url(#dsShadow)"/>
-        <path d="M260 116c-76-6-124 35-151 113L49 363c-18 48 14 83 57 66l151-67h386l151 67c43 17 75-18 57-66l-60-134c-27-78-75-119-151-113-61 5-117 30-190 30s-129-25-190-30Z" fill="url(#dsShell)" stroke="#858987" strokeWidth="3"/>
-        <path d="M258 124c-60-3-101 33-126 98l-58 146c-8 22 2 39 22 31l157-69h394l157 69c20 8 30-9 22-31l-58-146c-25-65-66-101-126-98-60 3-108 27-192 27s-132-24-192-27Z" fill="url(#dsTop)" stroke="#fff" strokeWidth="2"/>
-        <path d="M266 132c-51 1-83 30-106 84M634 132c51 1 83 30 106 84" fill="none" stroke="#fff" strokeWidth="5" opacity=".8"/>
-        <path d="M190 168c-24 34-39 77-53 112M710 168c24 34 39 77 53 112" fill="none" stroke="#bfc1be" strokeWidth="2" opacity=".8"/>
-        <path d="M347 111c23 18 57 29 103 29s80-11 103-29" fill="none" stroke="#b7b9b6" strokeWidth="3"/>
-        <rect x="375" y="145" width="150" height="91" rx="32" fill="url(#dsBlack)" stroke="#737675" strokeWidth="2"/>
-        <rect x="384" y="151" width="132" height="76" rx="27" fill="#141617"/>
-        <path d="M414 157h72" stroke="#55595a" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
-        <path d="M427 192c8-10 18-15 23-15s15 5 23 15" fill="none" stroke="#343839" strokeWidth="2"/>
-        <path d="M428 192h44" stroke="#D8FF3E" strokeWidth="3" strokeLinecap="round" filter="url(#dsGlow)"/>
-        <path d="M428 192h44" stroke="#D8FF3E" strokeWidth="2" strokeLinecap="round"/>
-        <rect x="419" y="239" width="62" height="7" rx="3.5" fill="#9da09d"/>
-        <path d="M140 220h112M196 164v112" stroke="#777b79" strokeWidth="30" strokeLinecap="round" opacity=".25"/>
-        <path d="M140 220h112M196 164v112" stroke="url(#dsBlack)" strokeWidth="25" strokeLinecap="round"/>
-        <path d="M145 220h102M196 169v102" stroke="#484c4d" strokeWidth="2" strokeLinecap="round"/>
-        <g fill="url(#dsBlack)" stroke="#666a69" strokeWidth="2">
-          <circle cx="690" cy="177" r="22"/><circle cx="738" cy="220" r="22"/><circle cx="642" cy="220" r="22"/><circle cx="690" cy="263" r="22"/>
-        </g>
-        <g fill="#c9cbc8" fontSize="19" fontWeight="700" textAnchor="middle" dominantBaseline="central">
-          <text x="690" y="177">△</text><text x="738" y="220">○</text><text x="642" y="220">×</text><text x="690" y="263">□</text>
-        </g>
-        <g>
-          <circle cx="287" cy="310" r="53" fill="#969a98" opacity=".45"/><circle cx="287" cy="304" r="48" fill="#b8bbb8" stroke="#777c79" strokeWidth="3"/>
-          <circle cx="287" cy="299" r="39" fill="url(#dsStick)" stroke="#555a58" strokeWidth="3"/>
-          <circle cx="287" cy="299" r="30" fill="none" stroke="#666b69" strokeWidth="2" strokeDasharray="2 3"/>
-          <circle cx="613" cy="310" r="53" fill="#969a98" opacity=".45"/><circle cx="613" cy="304" r="48" fill="#b8bbb8" stroke="#777c79" strokeWidth="3"/>
-          <circle cx="613" cy="299" r="39" fill="url(#dsStick)" stroke="#555a58" strokeWidth="3"/>
-          <circle cx="613" cy="299" r="30" fill="none" stroke="#666b69" strokeWidth="2" strokeDasharray="2 3"/>
-        </g>
-        <g fill="#d0d2cf" stroke="#9b9f9c" strokeWidth="2">
-          <rect x="300" y="170" width="43" height="12" rx="6" transform="rotate(-12 321 176)"/>
-          <rect x="557" y="170" width="43" height="12" rx="6" transform="rotate(12 578 176)"/>
-        </g>
-        <g fill="#b8bbb8" opacity=".9"><circle cx="366" cy="268" r="3"/><circle cx="534" cy="268" r="3"/></g>
-        <path d="M108 360c-4 16 5 28 20 22l103-45M792 360c4 16-5 28-20 22l-103-45" fill="none" stroke="#fff" strokeWidth="4" opacity=".6"/>
-        <path d="M180 384c30 12 65 9 96-4M720 384c-30 12-65 9-96-4" fill="none" stroke="#8e9390" strokeWidth="2" opacity=".5"/>
-        <path d="M107 327c-9 22-18 43-25 62-4 12 3 22 14 17l112-50M793 327c9 22 18 43 25 62 4 12-3 22-14 17l-112-50" fill="none" stroke="#777c79" strokeWidth="1.5" opacity=".38"/>
-        <path d="M118 351l-7 17m20-24-7 18m20-25-7 18m20-25-7 18m20-25-7 18m20-25-7 18M782 351l7 17m-20-24 7 18m-20-25 7 18m-20-25 7 18m-20-25 7 18m-20-25 7 18" stroke="#8d928f" strokeWidth="1" opacity=".32"/>
-        <path d="M260 112c38 17 70 25 190 25s152-8 190-25" fill="none" stroke="#fff" strokeWidth="2" opacity=".72"/>
-        <path d="M350 244c26 9 65 13 100 13s74-4 100-13" fill="none" stroke="#070809" strokeWidth="2" opacity=".5"/>
-        <g fill="#737875" opacity=".8"><circle cx="423" cy="255" r="2"/><circle cx="438" cy="255" r="2"/><circle cx="453" cy="255" r="2"/><circle cx="468" cy="255" r="2"/><circle cx="483" cy="255" r="2"/></g>
-        <path d="M376 147c-7 16-9 37-7 57M524 147c7 16 9 37 7 57" fill="none" stroke="#5d6260" strokeWidth="1.5" opacity=".5"/>
-        <path d="M258 316c-4 23-1 43 10 57M642 316c4 23 1 43-10 57" fill="none" stroke="#cfd1ce" strokeWidth="2" opacity=".32"/>
-        <path d="M165 118c-18 7-32 20-44 39M735 118c18 7 32 20 44 39" fill="none" stroke="#fff" strokeWidth="3" opacity=".7"/>
-      </svg>
+      <div className="startup-controller-wrap" aria-hidden="true">
+        <span className="startup-light-pool" />
+        <img className="startup-controller-photo" src={controllerPhoto} alt="" fetchPriority="high" decoding="async" />
+      </div>
       <div className="startup-wordmark"><b>READY</b><em> PLAYER ONE.</em></div>
       <div className="startup-loading"><span /></div>
       <span className="startup-status">PRESS START TO ENTER</span>
@@ -562,9 +406,9 @@ function App() {
   }, [route])
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
-    <ControllerIntro />
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <StartupIntro />\n    <ScrollProgress />
+    <StartupIntro />
+    <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}
     <ScrollTools />

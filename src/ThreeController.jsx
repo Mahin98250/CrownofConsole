@@ -26,6 +26,8 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     let disposed = false
     let frame = 0
     let previousTime = 0
+    let readyAfterFirstRender = false
+    let lastReportedLayout = null
     let renderer
     let environmentTarget
     let resizeObserver
@@ -54,7 +56,14 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
           top: ((1 - point.y) / 2) * 100,
         }
       }
-      callbacksRef.current.onLayout?.(layout)
+      const changed = !lastReportedLayout || Object.keys(layout).some((key) => {
+        const previous = lastReportedLayout[key]
+        return !previous || Math.abs(previous.left - layout[key].left) > 0.12 || Math.abs(previous.top - layout[key].top) > 0.12
+      })
+      if (changed) {
+        lastReportedLayout = layout
+        callbacksRef.current.onLayout?.(layout)
+      }
     }
     const setSize = () => {
       if (!renderer || disposed) return
@@ -78,8 +87,9 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       renderer.outputColorSpace = THREE.SRGBColorSpace
       renderer.toneMapping = THREE.ACESFilmicToneMapping
       renderer.toneMappingExposure = 1.12
-      renderer.shadowMap.enabled = true
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap
+      // The product stage uses a soft contact shadow; disabling a large live shadow map
+      // avoids GPU spikes and shadow-map shimmer on integrated/mobile graphics.
+      renderer.shadowMap.enabled = false
       renderer.info.autoReset = true
     } catch (error) {
       callbacksRef.current.onError?.(error)
@@ -89,17 +99,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     scene.add(new THREE.HemisphereLight(0xf4f6ff, 0x343946, 1.05))
     const key = new THREE.DirectionalLight(0xfff7ec, 3.1)
     key.position.set(-3.5, 5.5, 6)
-    key.castShadow = true
-    key.shadow.mapSize.set(2048, 2048)
-    key.shadow.camera.left = -4
-    key.shadow.camera.right = 4
-    key.shadow.camera.top = 4
-    key.shadow.camera.bottom = -4
-    key.shadow.normalBias = 0.025
-    key.shadow.bias = -0.00012
-    key.shadow.radius = 7
-    key.shadow.camera.near = 0.5
-    key.shadow.camera.far = 18
+    key.castShadow = false
     scene.add(key)
     const fill = new THREE.DirectionalLight(0xdce7ff, 1.65)
     fill.position.set(4, 1.5, 5)
@@ -193,8 +193,8 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
         const mesh = new THREE.Mesh(geometry, materials)
         mesh.name = object.name
         mesh.userData = { ...object.userData }
-        mesh.castShadow = true
-        mesh.receiveShadow = true
+        mesh.castShadow = false
+        mesh.receiveShadow = false
         const controlId = object.userData.control
 
         if (controlId && controlId !== 'lights') {
@@ -237,18 +237,9 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       camera.position.set(0, 0, Math.max(verticalFit, horizontalFit, 3.5) * 1.035)
       camera.lookAt(0, 0, 0)
 
-      const ground = new THREE.Mesh(
-        new THREE.PlaneGeometry(30, 30),
-        new THREE.ShadowMaterial({ color: 0x090d14, opacity: 0.22 }),
-      )
-      ground.rotation.x = -Math.PI / 2
-      ground.position.y = bounds.min.y - center.y - 0.045
-      ground.receiveShadow = true
-      scene.add(ground)
-
       setSize()
       canvas.dataset.ready = 'true'
-      callbacksRef.current.onReady?.()
+      readyAfterFirstRender = true
     }, undefined, (error) => {
       if (!disposed) callbacksRef.current.onError?.(error)
     })
@@ -311,6 +302,10 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
         }
       }
       renderer.render(scene, camera)
+      if (readyAfterFirstRender) {
+        readyAfterFirstRender = false
+        callbacksRef.current.onReady?.()
+      }
     }
     frame = window.requestAnimationFrame(animate)
 

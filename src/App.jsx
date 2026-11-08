@@ -12,6 +12,25 @@ const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=' + encodeURICo
 const MAP_EMBED_URL = 'https://www.google.com/maps?q=' + encodeURIComponent(ADDRESS) + '&output=embed'
 const WA = (message) => 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(message)
 const TODAY = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)
+
+const ANALYTICS_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || ''
+function loadAnalytics() {
+  if (!ANALYTICS_ID || window.__cocAnalyticsLoaded) return
+  window.__cocAnalyticsLoaded = true
+  window.dataLayer = window.dataLayer || []
+  window.gtag = function(){ window.dataLayer.push(arguments) }
+  window.gtag('js', new Date())
+  window.gtag('config', ANALYTICS_ID, { anonymize_ip: true, send_page_view: false })
+  const script = document.createElement('script')
+  script.async = true
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ANALYTICS_ID)
+  document.head.appendChild(script)
+}
+function trackEvent(name, params = {}) {
+  if (localStorage.getItem('coc-analytics-consent') === 'yes' && typeof window.gtag === 'function') {
+    window.gtag('event', name, params)
+  }
+}
 const PHOTO = {
   hero: 'https://images.unsplash.com/photo-1715279240000-9a50953e327d?auto=format&fit=crop&w=1800&q=88',
   room: 'https://images.unsplash.com/photo-1792635926439-4f19b4d311e0?auto=format&fit=crop&w=1400&q=85',
@@ -156,6 +175,7 @@ function GamesPage() {
   const submit = (event) => {
     event.preventDefault()
     const message = 'Hello! I would like to ask about game availability at The Crown Of Console.\nWhat I am looking for: ' + kind + '\nGame / details: ' + (game.trim() || 'Please share the current games and platforms available.') + '\nCould you also confirm current rates and timings?'
+    trackEvent('game_enquiry', { enquiry_type: kind })
     window.open(WA(message), '_blank', 'noopener,noreferrer')
     setSent(true)
   }
@@ -201,6 +221,7 @@ function VisitPage() {
   const submit = (event) => {
     event.preventDefault()
     const message = ['Hello, The Crown Of Console!', 'I would like to enquire about a gaming visit.', name.trim() ? 'Name: ' + name.trim() : '', date ? 'Preferred date: ' + date : '', 'Preferred time: ' + time, 'Number of players: ' + players, details.trim() ? 'Additional details: ' + details.trim() : '', 'Please share current rates and confirm availability. Thank you.'].filter(Boolean).join('\n')
+    trackEvent('visit_enquiry', { player_count: players, preferred_time: time })
     window.open(WA(message), '_blank', 'noopener,noreferrer')
     setSent(true)
   }
@@ -262,6 +283,20 @@ function Footer() {
   </footer>
 }
 
+
+function AnalyticsConsent() {
+  const [choice, setChoice] = useState(() => localStorage.getItem('coc-analytics-consent') || 'unset')
+  useEffect(() => { if (choice === 'yes') loadAnalytics() }, [choice])
+  if (choice !== 'unset') return null
+  return <aside className="analytics-consent" aria-label="Analytics preferences">
+    <div><b>HELP US MAKE THE SITE BETTER.</b><p>Optional website analytics help us understand which pages are useful. No analytics runs unless you agree.</p></div>
+    <div className="analytics-consent-actions">
+      <button type="button" onClick={() => { localStorage.setItem('coc-analytics-consent','no'); setChoice('no') }}>No thanks</button>
+      <button type="button" onClick={() => { localStorage.setItem('coc-analytics-consent','yes'); setChoice('yes') }}>Allow analytics</button>
+    </div>
+  </aside>
+}
+
 function ScrollProgress() {
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -296,6 +331,7 @@ function App() {
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
   useEffect(() => {
+    trackEvent('page_view', { page_title: route, page_path: '#/' + route })
     const labels = Object.fromEntries(NAV)
     const descriptions = {
       home: 'A different kind of game night. Explore The Crown Of Console on Science City Road, Ahmedabad.',
@@ -338,6 +374,7 @@ function App() {
     {pages[route] || <NotFound />}
     <ScrollTools />
     <Footer />
+    <AnalyticsConsent />
     <a className="mobile-enquiry" href={WA('Hello! I would like to check current rates and availability at The Crown Of Console.')} target="_blank" rel="noreferrer"><MessageCircle size={17} /> Enquire on WhatsApp <ArrowUpRight size={16} /></a>
   </>
 }

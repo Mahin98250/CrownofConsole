@@ -174,6 +174,8 @@ function InteractiveController() {
   const [modelReady, setModelReady] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [stickOffsets, setStickOffsets] = useState({ l3: { x: 0, y: 0 }, r3: { x: 0, y: 0 } })
+  const [triggerPressure, setTriggerPressure] = useState({ l2: 0, r2: 0 })
+  const [triggerStartY, setTriggerStartY] = useState({})
   const moveStick = (event, id) => {
     const bounds = event.currentTarget.getBoundingClientRect()
     const maxTravel = Math.max(4, bounds.width * 0.13)
@@ -228,7 +230,7 @@ function InteractiveController() {
         </div>
       </div>
       <div className={'controller-visual' + (modelReady ? ' controller-3d-ready' : '')}>
-        <ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} />
+        <ThreeController active={active} pressed={pressed} stickOffsets={stickOffsets} triggerPressure={triggerPressure} onReady={() => setModelReady(true)} onError={() => setModelReady(false)} />
         <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1">
@@ -397,22 +399,36 @@ function InteractiveController() {
               if (control.type === 'stick') {
                 event.currentTarget.setPointerCapture(event.pointerId)
                 moveStick(event, control.id)
+              } else if (control.type === 'trigger') {
+                event.currentTarget.setPointerCapture(event.pointerId)
+                setTriggerStartY((current) => ({ ...current, [control.id]: event.clientY }))
+                setTriggerPressure((current) => ({ ...current, [control.id]: 0.16 }))
               }
             }}
-            onPointerMove={control.type === 'stick' ? (event) => {
-              if (event.currentTarget.hasPointerCapture(event.pointerId)) moveStick(event, control.id)
-            } : undefined}
+            onPointerMove={(event) => {
+              if (control.type === 'stick' && event.currentTarget.hasPointerCapture(event.pointerId)) {
+                moveStick(event, control.id)
+              }
+              if (control.type === 'trigger' && event.currentTarget.hasPointerCapture(event.pointerId)) {
+                const startY = triggerStartY[control.id] ?? event.clientY
+                const pressure = Math.max(0, Math.min(1, 0.16 + (startY - event.clientY) / 54))
+                setTriggerPressure((current) => ({ ...current, [control.id]: pressure }))
+              }
+            }}
             onPointerUp={() => {
               setPressed(null)
               if (control.type === 'stick') resetStick(control.id)
+              if (control.type === 'trigger') setTriggerPressure((current) => ({ ...current, [control.id]: 0 }))
             }}
             onPointerCancel={() => {
               setPressed(null)
               if (control.type === 'stick') resetStick(control.id)
+              if (control.type === 'trigger') setTriggerPressure((current) => ({ ...current, [control.id]: 0 }))
             }}
             onLostPointerCapture={() => {
               setPressed(null)
               if (control.type === 'stick') resetStick(control.id)
+              if (control.type === 'trigger') setTriggerPressure((current) => ({ ...current, [control.id]: 0 }))
             }}
             onKeyDown={(event) => {
               if (event.key === ' ' || event.key === 'Enter') setPressed(control.id)

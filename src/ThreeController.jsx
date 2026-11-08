@@ -36,6 +36,11 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     const model = new THREE.Group()
     const controls = new Map()
     const raycastMeshes = []
+    const pose = { x: 0.08, y: -0.12, z: -0.018 }
+    let dragState = null
+    let lastDragTime = 0
+    const container = canvas.parentElement
+    const hitpad = container?.querySelector('.controller-hitpad')
     scene.add(model)
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -105,6 +110,34 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
     room.dispose()
     pmrem.dispose()
 
+    const handlePointerDown = (event) => {
+      if (!hitpad || event.target !== hitpad || !canvas.dataset.ready) return
+      dragState = { id: event.pointerId, x: event.clientX, y: event.clientY }
+      hitpad.setPointerCapture(event.pointerId)
+      container.classList.add('controller-dragging')
+    }
+    const handlePointerMove = (event) => {
+      if (!dragState || dragState.id !== event.pointerId) return
+      const dx = event.clientX - dragState.x
+      const dy = event.clientY - dragState.y
+      dragState.x = event.clientX
+      dragState.y = event.clientY
+      pose.y += dx * 0.008
+      pose.x = THREE.MathUtils.clamp(pose.x + dy * 0.006, -0.5, 0.72)
+      model.rotation.set(pose.x, pose.y, pose.z)
+      lastDragTime = performance.now()
+    }
+    const handlePointerUp = (event) => {
+      if (!dragState || dragState.id !== event.pointerId) return
+      dragState = null
+      container.classList.remove('controller-dragging')
+      lastDragTime = performance.now()
+    }
+    container?.addEventListener('pointerdown', handlePointerDown)
+    container?.addEventListener('pointermove', handlePointerMove)
+    container?.addEventListener('pointerup', handlePointerUp)
+    container?.addEventListener('pointercancel', handlePointerUp)
+
     const loader = new GLTFLoader()
     loader.load(MODEL_URL, (gltf) => {
       if (disposed) return
@@ -171,7 +204,7 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       const center = bounds.getCenter(new THREE.Vector3())
       const size = bounds.getSize(new THREE.Vector3())
       model.position.sub(center)
-      model.rotation.set(0.08, -0.12, -0.018)
+      model.rotation.set(pose.x, pose.y, pose.z)
 
       const verticalFit = size.y / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 0.82)
       const horizontalFit = size.x / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.55 * 0.88)
@@ -206,13 +239,15 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       previousTime = time
       const blend = reduceMotion.matches ? 1 : 1 - Math.exp(-19 * dt)
       const input = interactionRef.current
-      const isIdle = !input.pressed && !input.active
+      const isIdle = !input.pressed && !input.active && !dragState && time - lastDragTime > 1800
       if (!reduceMotion.matches && isIdle) {
         model.position.y = Math.sin(time * 0.00075) * 0.018
-        model.rotation.y = -0.12 + Math.sin(time * 0.00032) * 0.018
-      } else {
+        model.rotation.x = pose.x + Math.sin(time * 0.00055) * 0.012
+        model.rotation.y = pose.y + Math.sin(time * 0.00032) * 0.018
+      } else if (!dragState) {
         model.position.y += (0 - model.position.y) * blend
-        model.rotation.y += (-0.12 - model.rotation.y) * blend
+        model.rotation.x += (pose.x - model.rotation.x) * blend
+        model.rotation.y += (pose.y - model.rotation.y) * blend
       }
 
       for (const [id, group] of controls) {
@@ -264,6 +299,11 @@ export default function ThreeController({ active, pressed, stickOffsets, trigger
       window.cancelAnimationFrame(frame)
       resizeObserver?.disconnect()
       canvas.removeEventListener('webglcontextlost', handleContextLost)
+      container?.removeEventListener('pointerdown', handlePointerDown)
+      container?.removeEventListener('pointermove', handlePointerMove)
+      container?.removeEventListener('pointerup', handlePointerUp)
+      container?.removeEventListener('pointercancel', handlePointerUp)
+      container?.classList.remove('controller-dragging')
       scene.traverse((object) => {
         if (!object.isMesh) return
         object.geometry.dispose()

@@ -8,9 +8,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 const MODEL_URL = 'https://raw.githubusercontent.com/SafaElmali/dualsense-studio/main/controller/dualsense.glb'
 const CONTROL_ALIASES = { l3: 'left-stick', r3: 'right-stick' }
 
-export default function ThreeController({ active, pressed, stickOffsets, onReady, onError }) {
+export default function ThreeController({ active, pressed, stickOffsets, triggerPressure, onReady, onError }) {
   const canvasRef = useRef(null)
-  const interactionRef = useRef({ active, pressed, stickOffsets })
+  const interactionRef = useRef({ active, pressed, stickOffsets, triggerPressure })
   const callbacksRef = useRef({ onReady, onError })
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function ThreeController({ active, pressed, stickOffsets, onReady
   }, [])
 
   useEffect(() => {
-    interactionRef.current = { active, pressed, stickOffsets }
+    interactionRef.current = { active, pressed, stickOffsets, triggerPressure }
   }, [active, pressed, stickOffsets])
 
   useEffect(() => {
@@ -218,7 +218,8 @@ export default function ThreeController({ active, pressed, stickOffsets, onReady
           group.rotation.y += (targetY - group.rotation.y) * blend
           group.position.z += ((rest.z - (held ? 0.035 : 0)) - group.position.z) * blend
         } else if (id === 'l2' || id === 'r2') {
-          const target = held ? -0.22 : 0
+          const pressure = input.triggerPressure?.[id] ?? (held ? 0.16 : 0)
+          const target = -THREE.MathUtils.clamp(pressure, 0, 1) * 0.22
           group.rotation.x += (target - group.rotation.x) * blend
         } else {
           const travel = id === 'touchpad' ? 0.016 : id === 'l1' || id === 'r1' ? 0.026 : 0.034

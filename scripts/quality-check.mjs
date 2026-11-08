@@ -11,7 +11,9 @@ requireCheck(app.includes('const GAME_GALLERY = ['), 'Game gallery data array is
 for (const title of expectedGames) requireCheck(app.includes(`title: '${title}'`) || app.includes(`title: "${title}"`), `Game is missing: ${title}`)
 requireCheck((app.match(/function GameplayCard\(/g) || []).length === 1, 'Reusable GameplayCard component must exist exactly once.')
 requireCheck(app.includes('onError={() => setImageFailed(true)}'), 'Game image error fallback is missing.')
-requireCheck(app.includes('imageFailed ? controllerPhoto : GAME_GALLERY[0].src'), 'Splash image local fallback is missing.')
+requireCheck(!app.includes('StartupIntro') && !app.includes('startup-intro'), 'Blocking startup splash must be removed.')
+requireCheck(app.includes('function DualSenseMotion()'), 'Animated DualSense controller accent is missing.')
+requireCheck(css.includes('.dualsense-motion') && css.includes('@keyframes dualsense-float'), 'Controller motion styles are missing.')
 requireCheck(!app.includes('YOUR LOGO'), 'A public YOUR LOGO placeholder remains.')
 for (const route of ['home','space','games','experiences','visit','contact']) requireCheck(app.includes(`['${route}'`), `Core route is missing: ${route}`)
 requireCheck(app.includes('coc-analytics-consent') && app.includes('catch'), 'Analytics storage guard is missing.')
@@ -20,6 +22,6 @@ requireCheck(css.includes('@media(prefers-reduced-motion:reduce)'), 'Reduced-mot
 requireCheck(html.includes('<title>The Crown Of Console'), 'SEO title is missing.')
 requireCheck(html.includes('application/ld+json'), 'LocalBusiness structured data is missing.')
 requireCheck(vite.includes("base: '/CrownofConsole/'"), 'GitHub Pages base path is incorrect.')
-requireCheck(existsSync(new URL('../src/assets/crown-controller-studio.webp', import.meta.url)), 'Local splash fallback asset is missing.')
+requireCheck(existsSync(new URL('../src/assets/crown-controller-studio.webp', import.meta.url)), 'Expected local controller fallback asset is missing.')
 if (failures.length) { console.error('Crown Of Console quality check failed:'); for (const failure of failures) console.error(` - ${failure}`); process.exitCode = 1 }
 else console.log(`Crown Of Console quality check passed: ${expectedGames.length} games, media fallbacks, core routes, SEO and deployment paths.`)

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import controllerPhoto from './assets/crown-controller-studio.webp'
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
@@ -118,13 +117,42 @@ function PlayerSelector() {
     </div>
   </section>
 }
+function DualSenseMotion() {
+  return <div className="dualsense-motion" aria-hidden="true">
+    <span className="dualsense-orbit dualsense-orbit-one" />
+    <span className="dualsense-orbit dualsense-orbit-two" />
+    <svg className="dualsense-controller" viewBox="0 0 360 220" role="presentation">
+      <defs>
+        <linearGradient id="controller-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".52" stopColor="#dfe3e8"/><stop offset="1" stopColor="#aeb6c2"/></linearGradient>
+        <linearGradient id="controller-grip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f4f6f9"/><stop offset="1" stopColor="#aab3c0"/></linearGradient>
+        <linearGradient id="controller-light" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#39a6ff"/><stop offset=".5" stopColor="#b8dfff"/><stop offset="1" stopColor="#39a6ff"/></linearGradient>
+      </defs>
+      <path d="M104 49c-19 1-32 14-40 37L34 160c-8 22 7 37 26 29l61-30h118l61 30c19 8 34-7 26-29l-30-74c-8-23-21-36-40-37-36-2-51 10-76 10s-40-12-76-10Z" fill="url(#controller-shell)" stroke="#7e8998" strokeWidth="3" strokeLinejoin="round"/>
+      <path d="M67 112 43 165c-5 13 2 22 14 16l47-24-37-45Zm226 0 24 53c5 13-2 22-14 16l-47-24 37-45Z" fill="url(#controller-grip)" opacity=".8"/>
+      <path d="M130 48c7-13 22-20 50-20s43 7 50 20l-10 28h-80Z" fill="#c8ced7" stroke="#929dab" strokeWidth="2"/>
+      <rect x="145" y="43" width="70" height="36" rx="13" fill="#202630" stroke="#8994a3" strokeWidth="2"/>
+      <path d="M157 53h46" stroke="#4d5867" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M93 100v48M69 124h48" stroke="#515c6a" strokeWidth="13" strokeLinecap="round"/>
+      <path d="M93 100v48M69 124h48" stroke="#e9edf2" strokeWidth="8" strokeLinecap="round"/>
+      <circle cx="259" cy="104" r="10" fill="#25303d"/><circle cx="283" cy="126" r="10" fill="#25303d"/><circle cx="235" cy="126" r="10" fill="#25303d"/><circle cx="259" cy="148" r="10" fill="#25303d"/>
+      <circle cx="259" cy="104" r="4" fill="#4ea8ff"/><circle cx="283" cy="126" r="4" fill="#f36b7f"/><circle cx="235" cy="126" r="4" fill="#d8ff3e"/><circle cx="259" cy="148" r="4" fill="#a88aff"/>
+      <circle cx="133" cy="160" r="21" fill="#8994a2"/><circle cx="133" cy="157" r="17" fill="#252d38" stroke="#cbd1da" strokeWidth="2"/>
+      <circle cx="227" cy="160" r="21" fill="#8994a2"/><circle cx="227" cy="157" r="17" fill="#252d38" stroke="#cbd1da" strokeWidth="2"/>
+      <path d="M174 103h12m-6-6v12" stroke="#566170" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M164 88c9-5 23-5 32 0" stroke="url(#controller-light)" strokeWidth="4" strokeLinecap="round" fill="none"/>
+      <path d="M156 190c13 8 35 8 48 0" stroke="#7e8998" strokeWidth="2" fill="none" opacity=".6"/>
+    </svg>
+    <span className="dualsense-label"><i /> DUALSENSE / PLAY READY</span>
+  </div>
+}
+
 function HomePage() {
  return <main id="main-content" tabIndex="-1" className="home-page art-playground">
   <section className="art-hero">
    <div className="art-hero-top"><span>THE CROWN OF CONSOLE <i>✳</i> AHMEDABAD</span><span>INDEPENDENT PLAY CLUB / EST. AHMEDABAD</span></div>
    <div className="art-hero-stage"><div className="hero-shape hero-shape-orange"/><div className="hero-shape hero-shape-blue"/>
     <div className="hero-type-art"><span className="hero-eyebrow-art">PLAYSTATION GAMING CAFÉ · AHMEDABAD</span><h1>PLAY<br/><em>OUTSIDE</em><br/>THE <span>LINES.</span></h1><p>Good games are only the beginning. Make a little noise, find your people and turn an ordinary day into a story worth replaying.</p><a className="art-pill-link" href="#player-lab">FIND YOUR PLAY STYLE <ArrowDownRight size={17}/></a></div>
-    <div className="hero-art-collage"><div className="collage-photo"><img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high"/><span>VISUAL REFERENCE · NOT THE ACTUAL VENUE</span></div><div className="collage-sticker collage-sticker-yellow">NO<br/>PAUSE<br/>BUTTON</div><div className="collage-sticker collage-sticker-blue">LET'S<br/>PLAY!</div><div className="collage-caption"><b>01</b><span>THE GOOD STUFF<br/>HAPPENS TOGETHER</span></div></div>
+    <div className="hero-art-collage"><div className="collage-photo"><img src={PHOTO.hero} alt="Illustrative gaming lounge photograph, not the actual venue" fetchPriority="high"/><span>VISUAL REFERENCE · NOT THE ACTUAL VENUE</span></div><div className="collage-sticker collage-sticker-yellow">NO<br/>PAUSE<br/>BUTTON</div><div className="collage-sticker collage-sticker-blue">LET'S<br/>PLAY!</div><div className="collage-caption"><b>01</b><span>THE GOOD STUFF<br/>HAPPENS TOGETHER</span></div><DualSenseMotion /></div>
     <div className="hero-side-index">SCROLL TO GET IN <span>↓</span></div>
    </div>
    <div className="hero-bottom-art"><span>NOT JUST A PLACE TO PLAY.</span><span>A PLACE TO MAKE A MOMENT.</span><span>SCIENCE CITY ROAD, AHMEDABAD ↗</span></div>
@@ -365,43 +393,6 @@ function ScrollTools() {
   }, [])
   return <button className={visible ? 'back-to-top back-to-top-visible' : 'back-to-top'} type="button" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}><ArrowUp size={17} /></button>
 }
-function StartupIntro() {
-  const [imageFailed, setImageFailed] = useState(false)
-  const [visible, setVisible] = useState(() => {
-    try { return sessionStorage.getItem('coc-intro-seen-v3') !== 'yes' } catch { return true }
-  })
-  useEffect(() => {
-    if (!visible) return
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) { setVisible(false); return }
-    const timer = window.setTimeout(() => {
-      setVisible(false)
-      try { sessionStorage.setItem('coc-intro-seen-v3', 'yes') } catch {}
-    }, 3200)
-    return () => window.clearTimeout(timer)
-  }, [visible])
-  const dismiss = () => {
-    try { sessionStorage.setItem('coc-intro-seen-v3', 'yes') } catch {}
-    setVisible(false)
-  }
-  if (!visible) return null
-  return <div className="startup-intro" role="dialog" aria-modal="true" aria-label="The Crown Of Console introduction">
-    <div className="startup-grain" aria-hidden="true" />
-    <div className="startup-topline"><span>THE CROWN OF CONSOLE</span><span>AHMEDABAD · INDIA</span></div>
-    <div className="startup-center">
-      <span className="startup-kicker">POWERING UP YOUR PLAY SPACE</span>
-      <div className="startup-controller-wrap" aria-hidden="true">
-        <span className="startup-light-pool" />
-        <img className="startup-controller-photo" src={imageFailed ? controllerPhoto : GAME_GALLERY[0].src} onError={() => setImageFailed(true)} alt="" fetchPriority="high" decoding="async" />
-      </div>
-      <div className="startup-wordmark"><b>READY</b><em> PLAYER ONE.</em></div>
-      <div className="startup-loading"><span /></div>
-      <span className="startup-status">PRESS START TO ENTER</span>
-    </div>
-    <div className="startup-bottomline"><span>GOOD GAMES. GREAT COMPANY.</span><button type="button" onClick={dismiss}>SKIP INTRO ↗</button></div>
-  </div>
-}
-
 function App() {
   const [route, setRoute] = useState(() => typeof window === 'undefined' ? 'home' : routeFromHash())
   useEffect(() => {
@@ -449,7 +440,6 @@ function App() {
   const pages = { home: <HomePage />, space: <SpacePage />, games: <GamesPage />, experiences: <ExperiencesPage />, visit: <VisitPage />, contact: <ContactPage /> }
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <StartupIntro />
     <ScrollProgress />
     <Header route={route} />
     {pages[route] || <NotFound />}

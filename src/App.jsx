@@ -169,6 +169,7 @@ function InteractiveController() {
     { id: 'ps', label: 'PLAYSTATION BUTTON', symbol: 'PS', type: 'ps', message: 'The home button. Every great session starts somewhere.' }
   ]
   const [active, setActive] = useState('cross')
+  const [pressed, setPressed] = useState(null)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [stickOffsets, setStickOffsets] = useState({ l3: { x: 0, y: 0 }, r3: { x: 0, y: 0 } })
   const moveStick = (event, id) => {
@@ -364,23 +365,57 @@ function InteractiveController() {
             fill="none" stroke="#b8c3d1" strokeWidth=".8" strokeLinejoin="round"/>
           <path d="M175 177h10" stroke="#8793a3" strokeWidth="1.1" strokeLinecap="round"/>
           <path d="M119 27c13-7 29-9 61-9s48 2 61 9" fill="none" stroke="#fff" strokeWidth="1.2" opacity=".7"/>
+          {/* Fine mould lines, fasteners and acoustic details give the shell a manufactured finish. */}
+          <path d="M72 91c10-9 21-15 34-18m182 18c-10-9-21-15-34-18M57 170c14 2 29-5 47-17m199 17c-14 2-29-5-47-17" fill="none" stroke="#778495" strokeWidth=".7" opacity=".48"/>
+          <path d="M111 84c-10 9-17 19-22 31m160-31c10 9 17 19 22 31" fill="none" stroke="#fff" strokeWidth=".8" opacity=".42"/>
+          <g fill="#697789" opacity=".7">
+            <circle cx="75" cy="77" r="1.05"/><circle cx="285" cy="77" r="1.05"/>
+            <circle cx="55" cy="166" r=".9"/><circle cx="305" cy="166" r=".9"/>
+            <circle cx="115" cy="48" r=".8"/><circle cx="245" cy="48" r=".8"/>
+          </g>
+          <g fill="none" stroke="#697789" strokeWidth=".55" opacity=".62">
+            <circle cx="75" cy="77" r="2.1"/><circle cx="285" cy="77" r="2.1"/>
+            <circle cx="55" cy="166" r="1.8"/><circle cx="305" cy="166" r="1.8"/>
+          </g>
+          <g fill="#7d8998" opacity=".55">
+            {Array.from({length: 9}, (_, index) => <circle key={index} cx={167 + index * 3.25} cy="102" r=".48"/>)}
+          </g>
+          <path d="M164 91h32m-29 3h26" stroke="#fff" strokeWidth=".55" opacity=".34" strokeLinecap="round"/>
+          <path d="M157 184c13 5 33 5 46 0" fill="none" stroke="#fff" strokeWidth=".75" opacity=".28"/>
         </svg>
         <div className="controller-hitpad" role="group" aria-label="Interactive controller buttons">
           {controls.map((control) => <button
             key={control.id}
             type="button"
-            className={'controller-hit controller-hit-' + control.id + ' controller-hit-' + control.type + (active === control.id ? ' controller-hit-active' : '')}
+            className={'controller-hit controller-hit-' + control.id + ' controller-hit-' + control.type + (active === control.id ? ' controller-hit-active' : '') + (pressed === control.id ? ' controller-hit-pressed' : '')}
             onClick={() => selectControl(control.id)}
-            onPointerDown={control.type === 'stick' ? (event) => {
-              event.currentTarget.setPointerCapture(event.pointerId)
-              moveStick(event, control.id)
-            } : undefined}
+            onPointerDown={(event) => {
+              setPressed(control.id)
+              if (control.type === 'stick') {
+                event.currentTarget.setPointerCapture(event.pointerId)
+                moveStick(event, control.id)
+              }
+            }}
             onPointerMove={control.type === 'stick' ? (event) => {
               if (event.currentTarget.hasPointerCapture(event.pointerId)) moveStick(event, control.id)
             } : undefined}
-            onPointerUp={control.type === 'stick' ? () => resetStick(control.id) : undefined}
-            onPointerCancel={control.type === 'stick' ? () => resetStick(control.id) : undefined}
-            onLostPointerCapture={control.type === 'stick' ? () => resetStick(control.id) : undefined}
+            onPointerUp={() => {
+              setPressed(null)
+              if (control.type === 'stick') resetStick(control.id)
+            }}
+            onPointerCancel={() => {
+              setPressed(null)
+              if (control.type === 'stick') resetStick(control.id)
+            }}
+            onLostPointerCapture={() => {
+              setPressed(null)
+              if (control.type === 'stick') resetStick(control.id)
+            }}
+            onKeyDown={(event) => {
+              if (event.key === ' ' || event.key === 'Enter') setPressed(control.id)
+            }}
+            onKeyUp={() => setPressed(null)}
+            onBlur={() => setPressed(null)}
             style={control.type === 'stick' ? {
               '--stick-x': (stickOffsets[control.id]?.x || 0) + 'px',
               '--stick-y': (stickOffsets[control.id]?.y || 0) + 'px'

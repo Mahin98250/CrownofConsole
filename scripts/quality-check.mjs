@@ -14,6 +14,7 @@ requireCheck(app.includes('onError={() => setImageFailed(true)}'), 'Game image e
 requireCheck(!app.includes('StartupIntro') && !app.includes('startup-intro'), 'Blocking startup splash must be removed.')
 requireCheck(app.includes('function DualSenseMotion()'), 'Animated DualSense controller accent is missing.')
 requireCheck(app.includes('function InteractiveController()') && app.includes('controller-hitpad') && app.includes('aria-label={\'Press \' + control.label}') && app.includes("id: 'touchpad'") && app.includes("id: 'l3'") && app.includes("id: 'r3'"), 'Expanded accessible DualSense controller controls are missing.')
+requireCheck(app.includes('interactive-grip-grain') && app.includes('interactive-touchpad') && app.includes('D-pad base: a single joined cross') && app.includes("symbol: 'PS'"), 'Detailed controller shell, touchpad and physical control surfaces are missing.')
 requireCheck(app.includes("const [genre, setGenre] = useState('ALL')") && app.includes('genre-filters') && app.includes('discovery-empty'), 'Game discovery filters, search and empty state are missing.')
 requireCheck(['SPORTS','OPEN WORLD','RACING','ACTION','ADVENTURE','CO-OP','CREATIVE'].every((genre) => app.includes("genre: '" + genre + "'")), 'Curated games are missing genre metadata.')
 requireCheck(app.includes('The Crown Of Console is a PlayStation gaming café in Ahmedabad'), 'Homepage must clearly explain the café in its opening introduction.')

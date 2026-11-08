@@ -1650,3 +1650,95 @@ body{background:var(--art-paper);color:var(--art-ink)}
 .controller-hit-shoulder.controller-hit-active{
   background:linear-gradient(145deg,#586577,#202b39);
 }
+
+
+/* Phase I — physical-material finish for the DualSense face */
+.controller-interactive-svg{
+  filter:drop-shadow(0 17px 14px rgba(0,0,0,.4)) drop-shadow(0 2px 1px rgba(255,255,255,.08));
+}
+.controller-hit-face{
+  border:1px solid rgba(180,195,213,.34);
+  background:radial-gradient(circle at 34% 24%,#445264 0%,#222c38 48%,#111923 78%);
+  box-shadow:inset 0 1.4px 2px rgba(255,255,255,.2),inset 0 -2.5px 3px rgba(0,0,0,.5),0 2px 3px rgba(0,0,0,.4);
+}
+.controller-hit-face.controller-hit-active{
+  background:radial-gradient(circle at 34% 24%,#4b596b 0%,#222d39 50%,#111923 80%);
+  border-color:rgba(216,255,62,.9);
+  color:inherit;
+  box-shadow:0 0 0 2px rgba(216,255,62,.18),inset 0 1.4px 2px rgba(255,255,255,.2),inset 0 -2.5px 3px rgba(0,0,0,.5),0 0 13px rgba(216,255,62,.22);
+}
+.controller-hit-face.controller-hit-triangle{color:#93e4a4}
+.controller-hit-face.controller-hit-circle{color:#ef8ca1}
+.controller-hit-face.controller-hit-cross{color:#75b8ff}
+.controller-hit-face.controller-hit-square{color:#c7a0f3}
+.controller-hit-direction{
+  background:linear-gradient(145deg,#ffffff 0%,#e4e8ed 52%,#b3bdc9 100%);
+  border:1px solid rgba(100,114,132,.55);
+  box-shadow:inset 0 1.5px 2px rgba(255,255,255,.95),inset 0 -2px 3px rgba(76,88,105,.26),0 2px 3px rgba(0,0,0,.27);
+}
+.controller-hit-direction.controller-hit-active{
+  background:linear-gradient(145deg,#f8fafb 0%,#dce2e9 55%,#aab6c4 100%);
+  border-color:#d8ff3e;
+  color:#202832;
+  box-shadow:0 0 0 2px rgba(216,255,62,.17),inset 0 1.5px 2px rgba(255,255,255,.95),inset 0 -2px 3px rgba(76,88,105,.26),0 0 11px rgba(216,255,62,.18);
+}
+.controller-hit-shoulder,
+.controller-hit-trigger{
+  border:1px solid rgba(181,194,210,.38);
+  background:linear-gradient(180deg,#69788c 0%,#354253 42%,#1a222d 100%);
+  box-shadow:inset 0 1.5px 2px rgba(255,255,255,.22),inset 0 -2px 3px rgba(0,0,0,.52),0 3px 4px rgba(0,0,0,.38);
+  text-shadow:0 1px 1px #0a0f15;
+}
+.controller-hit-shoulder.controller-hit-active,
+.controller-hit-trigger.controller-hit-active{
+  border-color:rgba(216,255,62,.85);
+  background:linear-gradient(180deg,#738297 0%,#394657 42%,#1a222d 100%);
+  color:#f4f6f8;
+  box-shadow:0 0 0 2px rgba(216,255,62,.12),inset 0 1.5px 2px rgba(255,255,255,.24),inset 0 -2px 3px rgba(0,0,0,.52),0 0 10px rgba(216,255,62,.16);
+}
+.controller-hit-stick{
+  border:2px solid #8190a3;
+  background:
+    repeating-conic-gradient(from 0deg,#394656 0 7deg,#1b2531 7deg 14deg);
+  box-shadow:inset 0 0 0 3px #18212b,inset 0 2px 5px rgba(255,255,255,.18),0 2px 4px rgba(0,0,0,.48);
+}
+.controller-hit-stick::after{
+  background:radial-gradient(circle at 32% 25%,#738296 0%,#445365 28%,#202b38 72%,#101720 100%);
+  box-shadow:inset 0 1.5px 2px rgba(255,255,255,.22),inset 0 -2px 2px rgba(0,0,0,.38),0 1px 2px rgba(0,0,0,.55);
+}
+.controller-hit-stick.controller-hit-active{
+  border-color:#d8ff3e;
+  box-shadow:0 0 0 2px rgba(216,255,62,.17),inset 0 0 0 3px #18212b,inset 0 2px 5px rgba(255,255,255,.18),0 0 12px rgba(216,255,62,.2);
+}
+.controller-hit-system{
+  background:linear-gradient(145deg,#475365,#1a222d 80%);
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.22),inset 0 -2px 3px rgba(0,0,0,.5),0 2px 3px rgba(0,0,0,.4);
+}
+.controller-hit-system.controller-hit-active,
+.controller-hit-ps.controller-hit-active{
+  color:#d8ff3e;
+  border-color:#d8ff3e;
+  box-shadow:0 0 0 2px rgba(216,255,62,.15),inset 0 1px 2px rgba(255,255,255,.22),inset 0 -2px 3px rgba(0,0,0,.5),0 0 10px rgba(216,255,62,.18);
+}
+.controller-hit-ps{
+  width:5.5%;
+  min-width:20px;
+  font-size:clamp(7px,.9vw,10px);
+  font-weight:900;
+  letter-spacing:-.4px;
+  color:#d3dbe5;
+}
+.controller-hit-touchpad{
+  border-radius:6px;
+  background:linear-gradient(145deg,rgba(232,237,244,.06),rgba(82,96,114,.035));
+  border:1px solid rgba(121,137,158,.22);
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.08),inset 0 -2px 4px rgba(0,0,0,.08);
+}
+.controller-hit-touchpad.controller-hit-active{
+  background:rgba(216,255,62,.045);
+  border-color:rgba(216,255,62,.76);
+  box-shadow:inset 0 0 0 1px rgba(216,255,62,.26),0 0 13px rgba(216,255,62,.13);
+}
+@media(max-width:760px){
+  .controller-visual{max-width:700px}
+}

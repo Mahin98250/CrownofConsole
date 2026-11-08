@@ -166,7 +166,7 @@ function InteractiveController() {
     { id: 'create', label: 'CREATE BUTTON', symbol: '≡', type: 'system', message: 'Create. Capture the moments worth keeping.' },
     { id: 'options', label: 'OPTIONS BUTTON', symbol: '☰', type: 'system', message: 'Options. Take a breath, then get back into the action.' },
     { id: 'touchpad', label: 'TOUCHPAD', symbol: '', type: 'touchpad', message: 'Touchpad. A little surface with plenty of possibilities.' },
-    { id: 'ps', label: 'PLAYSTATION BUTTON', symbol: '✧', type: 'ps', message: 'The home button. Every great session starts somewhere.' }
+    { id: 'ps', label: 'PLAYSTATION BUTTON', symbol: 'PS', type: 'ps', message: 'The home button. Every great session starts somewhere.' }
   ]
   const [active, setActive] = useState('cross')
   const [soundEnabled, setSoundEnabled] = useState(false)
@@ -216,59 +216,163 @@ function InteractiveController() {
       <div className="controller-visual">
         <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true" focusable="false">
           <defs>
-            <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffffff"/><stop offset=".24" stopColor="#f1f3f6"/><stop offset=".62" stopColor="#d8dde5"/><stop offset="1" stopColor="#9ca7b5"/></linearGradient>
-            <linearGradient id="interactive-grip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#edf0f4"/><stop offset="1" stopColor="#8e9aaa"/></linearGradient>
-            <linearGradient id="interactive-touchpad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#d6dce5"/><stop offset="1" stopColor="#aeb8c6"/></linearGradient>
-            <linearGradient id="interactive-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3c4654"/><stop offset="1" stopColor="#111923"/></linearGradient>
-            <radialGradient id="interactive-stick"><stop offset="0" stopColor="#536071"/><stop offset=".72" stopColor="#222c38"/><stop offset="1" stopColor="#0c1118"/></radialGradient>
-            <pattern id="interactive-grip-grain" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r=".55" fill="#6c7787" opacity=".38"/></pattern>
+            <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#ffffff"/><stop offset=".2" stopColor="#f7f8fa"/><stop offset=".56" stopColor="#e2e6ec"/><stop offset="1" stopColor="#a4afbd"/>
+            </linearGradient>
+            <linearGradient id="interactive-grip" x1="0" y1="0" x2=".25" y2="1">
+              <stop offset="0" stopColor="#f7f8fa"/><stop offset=".56" stopColor="#d5dbe4"/><stop offset="1" stopColor="#9da8b6"/>
+            </linearGradient>
+            <linearGradient id="interactive-shoulder" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#f5f7fa"/><stop offset=".45" stopColor="#c3ccd7"/><stop offset="1" stopColor="#8995a4"/>
+            </linearGradient>
+            <linearGradient id="interactive-touchpad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#e4e8ee"/><stop offset=".45" stopColor="#cbd2dc"/><stop offset="1" stopColor="#aeb9c7"/>
+            </linearGradient>
+            <linearGradient id="interactive-dark" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#515d6d"/><stop offset=".44" stopColor="#273240"/><stop offset="1" stopColor="#101720"/>
+            </linearGradient>
+            <radialGradient id="interactive-stick">
+              <stop offset="0" stopColor="#526071"/><stop offset=".7" stopColor="#283341"/><stop offset="1" stopColor="#111923"/>
+            </radialGradient>
+            <pattern id="interactive-grip-grain" width="4.5" height="4.5" patternUnits="userSpaceOnUse">
+              <circle cx="1.2" cy="1.2" r=".48" fill="#687587" opacity=".36"/>
+            </pattern>
+            <pattern id="interactive-touch-grain" width="3" height="3" patternUnits="userSpaceOnUse">
+              <path d="M0 1.5h3" stroke="#8591a1" strokeWidth=".35" opacity=".22"/>
+            </pattern>
+            <filter id="interactive-inner-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="blur"/>
+              <feOffset dy="2" result="offset"/>
+              <feComposite in="offset" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="inner"/>
+              <feColorMatrix in="inner" type="matrix" values="0 0 0 0 .12 0 0 0 0 .16 0 0 0 0 .22 0 0 0 .35 0"/>
+              <feComposite in2="SourceGraphic" operator="over"/>
+            </filter>
           </defs>
-          <ellipse cx="180" cy="185" rx="137" ry="20" fill="#000000" opacity=".2"/>
-          <path d="M104 39c-20 1-34 15-42 39L34 158c-8 23 7 38 27 30l60-27h118l60 27c20 8 35-7 27-30l-28-80c-8-24-22-38-42-39-36-2-51 10-76 10s-40-12-76-10Z" fill="url(#interactive-shell)" stroke="#7f8997" strokeWidth="2.5" strokeLinejoin="round"/>
-          <path d="M69 108 43 163c-5 13 2 22 14 16l45-22-33-49Zm222 0 26 55c5 13-2 22-14 16l-45-22 33-49Z" fill="url(#interactive-grip)" opacity=".88"/>
-          <path d="M69 111 45 164l57-8-33-45Zm222 0 24 53-57-8 33-45Z" fill="url(#interactive-grip-grain)" opacity=".8"/>
-          <path d="M58 83c6-20 15-31 29-34l21-3-3 27-27 38-20-28Zm244 0c-6-20-15-31-29-34l-21-3 3 27 27 38 20-28Z" fill="#aeb8c6" stroke="#828d9b" strokeWidth="1.5"/>
-          <path d="M85 45h44l7 24H82c-7 0-10-4-8-10l3-8c1-4 4-6 8-6Zm190 0h-44l-7 24h54c7 0 10-4 8-10l-3-8c-1-4-4-6-8-6Z" fill="url(#interactive-dark)" stroke="#7e8998" strokeWidth="1.5"/>
-          <path d="M85 49h42M233 49h42" stroke="#aeb9c8" strokeWidth="1.5" opacity=".7" strokeLinecap="round"/>
-          <path d="M110 35c8-12 28-17 70-17s62 5 70 17l-7 23H117Z" fill="#c5cdd8" stroke="#919baa" strokeWidth="1.5"/>
-          <path d="M145 37h70l-4 42h-62Z" fill="url(#interactive-touchpad)" stroke="#929eae" strokeWidth="1.6"/>
-          <path d="M151 42h58M151 73h58" stroke="#ffffff" strokeWidth="1" opacity=".45"/>
-          <path d="M157 46v25M203 46v25" stroke="#8f9aaa" strokeWidth=".6" opacity=".35"/>
-          <path d="M158 87h44" stroke="#7b8797" strokeWidth="1.2" strokeLinecap="round" opacity=".55"/>
-          <rect x="166" y="91" width="28" height="5" rx="2.5" fill="#a5afbd"/>
-          <g fill="url(#interactive-dark)" stroke="#667282" strokeWidth="1">
-            <rect x="143" y="101" width="15" height="9" rx="3"/>
-            <rect x="202" y="101" width="15" height="9" rx="3"/>
+
+          <!-- Soft contact shadow beneath the controller -->
+          <ellipse cx="180" cy="187" rx="135" ry="17" fill="#000" opacity=".25"/>
+
+          <!-- Continuous DualSense shell: broad shoulders, soft waist and flared grips -->
+          <path d="M105 39
+            C84 40 69 53 61 76
+            L31 153
+            C23 173 34 190 53 191
+            C65 192 77 187 91 180
+            L126 161
+            C142 153 158 149 180 149
+            C202 149 218 153 234 161
+            L269 180
+            C283 187 295 192 307 191
+            C326 190 337 173 329 153
+            L299 76
+            C291 53 276 40 255 39
+            C225 37 209 51 180 51
+            C151 51 135 37 105 39Z"
+            fill="url(#interactive-shell)" stroke="#8994a3" strokeWidth="2.8" strokeLinejoin="round"/>
+
+          <!-- Grip panels, moulded into the main body -->
+          <path d="M66 103
+            C58 119 49 144 43 160
+            C39 171 45 181 57 179
+            C72 176 91 162 113 153
+            C99 140 84 121 66 103Z"
+            fill="url(#interactive-grip)" stroke="#a1acba" strokeWidth="1.1"/>
+          <path d="M294 103
+            C302 119 311 144 317 160
+            C321 171 315 181 303 179
+            C288 176 269 162 247 153
+            C261 140 276 121 294 103Z"
+            fill="url(#interactive-grip)" stroke="#a1acba" strokeWidth="1.1"/>
+          <path d="M65 111 44 163c-3 8 1 13 9 12 18-3 37-18 59-24M295 111l21 52c3 8-1 13-9 12-18-3-37-18-59-24"
+            fill="none" stroke="#fff" strokeWidth="1.2" opacity=".55" strokeLinecap="round"/>
+          <path d="M62 125c-5 13-10 26-12 34 10-1 23-9 36-17m212-17c5 13 10 26 12 34-10-1-23-9-36-17"
+            fill="url(#interactive-grip-grain)" opacity=".9"/>
+
+          <!-- Upper shoulder moulding and trigger wells -->
+          <path d="M63 83
+            C68 59 80 46 99 45
+            L133 46 143 69 92 87 75 111Z"
+            fill="url(#interactive-shoulder)" stroke="#929eac" strokeWidth="1.3"/>
+          <path d="M297 83
+            C292 59 280 46 261 45
+            L227 46 217 69 268 87 285 111Z"
+            fill="url(#interactive-shoulder)" stroke="#929eac" strokeWidth="1.3"/>
+          <path d="M79 66c10-10 22-13 43-12m159 0c21-1 33 2 43 12"
+            fill="none" stroke="#fff" strokeWidth="1.4" opacity=".8" strokeLinecap="round"/>
+          <path d="M84 88c13 2 28-1 42-8m150 0c14 7 29 10 42 8"
+            fill="none" stroke="#8995a4" strokeWidth="1.2" opacity=".55"/>
+
+          <!-- Touchpad housing and inset surface -->
+          <path d="M112 37
+            C122 25 143 20 180 20
+            C217 20 238 25 248 37
+            L242 77
+            C226 83 207 86 180 86
+            C153 86 134 83 118 77Z"
+            fill="#b6c0cd" stroke="#8995a5" strokeWidth="1.6"/>
+          <path d="M122 39
+            C132 31 150 28 180 28
+            C210 28 228 31 238 39
+            L233 75
+            C218 79 201 81 180 81
+            C159 81 142 79 127 75Z"
+            fill="url(#interactive-touchpad)" stroke="#e9edf2" strokeWidth="1.2"/>
+          <path d="M122 39h116" stroke="#fff" strokeWidth="1.1" opacity=".65"/>
+          <path d="M129 43v29m102-29v29" stroke="#8793a3" strokeWidth=".7" opacity=".35"/>
+          <path d="M137 47h86M137 70h86" stroke="#fff" strokeWidth=".7" opacity=".22"/>
+          <path d="M129 43h102v29H129Z" fill="url(#interactive-touch-grain)" opacity=".48"/>
+          <path d="M116 79c17 7 39 10 64 10s47-3 64-10"
+            fill="none" stroke="#7f8b9b" strokeWidth="1.4" opacity=".55"/>
+
+          <!-- Centre controls and microphone / speaker details -->
+          <rect x="166" y="94" width="28" height="5" rx="2.5" fill="#9aa6b5" stroke="#7d8998" strokeWidth=".7"/>
+          <path d="M171 110h18m-16 5h14m-12 5h10" stroke="#7d8998" strokeWidth="1.1" strokeLinecap="round" opacity=".75"/>
+          <path d="M173 132h14m-11 5h8m-6 5h4" stroke="#7d8998" strokeWidth=".9" strokeLinecap="round" opacity=".55"/>
+
+          <!-- D-pad base: a single joined cross beneath the four press surfaces -->
+          <path d="M83 96
+            Q83 92 87 92h12q4 0 4 4v17h17q4 0 4 4v14q0 4-4 4h-17v17q0 4-4 4H87q-4 0-4-4v-17H66q-4 0-4-4v-14q0-4 4-4h17Z"
+            fill="#7f8b9a" stroke="#697586" strokeWidth="1.2" opacity=".95"/>
+          <path d="M87 98v53m-20-27h53" stroke="#e9edf2" strokeWidth="1" opacity=".45"/>
+          <path d="M93 102v44M71 124h44" stroke="#b6c0cc" strokeWidth="1" opacity=".3"/>
+
+          <!-- Analog stick wells and metallic rims -->
+          <g>
+            <circle cx="133" cy="157" r="24" fill="#778494" stroke="#4f5d6f" strokeWidth="2"/>
+            <circle cx="133" cy="157" r="20" fill="url(#interactive-dark)" stroke="#9ca8b7" strokeWidth="1.2"/>
+            <circle cx="133" cy="157" r="16.5" fill="url(#interactive-stick)" stroke="#111a24" strokeWidth="1"/>
+            <circle cx="133" cy="157" r="13" fill="none" stroke="#667486" strokeWidth=".7" opacity=".8"/>
+            <circle cx="133" cy="157" r="8" fill="none" stroke="#718093" strokeWidth=".55" opacity=".45"/>
           </g>
-          <path d="M174 119h12" stroke="#647080" strokeWidth="1.5" strokeLinecap="round"/>
-          <g fill="url(#interactive-dark)" stroke="#8c98a8" strokeWidth="1.5">
-            <circle cx="133" cy="157" r="23"/>
-            <circle cx="227" cy="157" r="23"/>
+          <g>
+            <circle cx="227" cy="157" r="24" fill="#778494" stroke="#4f5d6f" strokeWidth="2"/>
+            <circle cx="227" cy="157" r="20" fill="url(#interactive-dark)" stroke="#9ca8b7" strokeWidth="1.2"/>
+            <circle cx="227" cy="157" r="16.5" fill="url(#interactive-stick)" stroke="#111a24" strokeWidth="1"/>
+            <circle cx="227" cy="157" r="13" fill="none" stroke="#667486" strokeWidth=".7" opacity=".8"/>
+            <circle cx="227" cy="157" r="8" fill="none" stroke="#718093" strokeWidth=".55" opacity=".45"/>
           </g>
-          <g fill="url(#interactive-stick)" stroke="#0c1118" strokeWidth="1">
-            <circle cx="133" cy="157" r="17"/>
-            <circle cx="227" cy="157" r="17"/>
+
+          <!-- Face-button wells with the familiar four-colour markings -->
+          <g fill="url(#interactive-dark)" stroke="#8290a1" strokeWidth="1.35">
+            <circle cx="259" cy="104" r="12.2"/><circle cx="283" cy="126" r="12.2"/>
+            <circle cx="235" cy="126" r="12.2"/><circle cx="259" cy="148" r="12.2"/>
           </g>
-          <g fill="none" stroke="#657183" strokeWidth=".7" opacity=".8">
-            <circle cx="133" cy="157" r="13"/><circle cx="227" cy="157" r="13"/>
-            <path d="M133 143v4m0 20v4m-14-14h4m20 0h4m66-14v4m0 20v4m-14-14h4m20 0h4"/>
+          <g fill="none" stroke="#c5ced9" strokeWidth=".55" opacity=".45">
+            <circle cx="259" cy="104" r="9.4"/><circle cx="283" cy="126" r="9.4"/>
+            <circle cx="235" cy="126" r="9.4"/><circle cx="259" cy="148" r="9.4"/>
           </g>
-          <path d="M93 100v48M69 124h48" stroke="#5d6878" strokeWidth="17" strokeLinecap="round"/>
-          <path d="M93 100v48M69 124h48" stroke="#dce1e8" strokeWidth="11" strokeLinecap="round"/>
-          <path d="M93 102v44M71 124h44" stroke="#f9fafb" strokeWidth="1.1" opacity=".7" strokeLinecap="round"/>
-          <g fill="url(#interactive-dark)" stroke="#7a8798" strokeWidth="1.4">
-            <circle cx="259" cy="104" r="11.5"/><circle cx="283" cy="126" r="11.5"/>
-            <circle cx="235" cy="126" r="11.5"/><circle cx="259" cy="148" r="11.5"/>
+
+          <!-- Create, options and PS key wells -->
+          <g fill="url(#interactive-dark)" stroke="#7c8999" strokeWidth="1">
+            <circle cx="143" cy="101" r="7.5"/><circle cx="217" cy="101" r="7.5"/>
+            <circle cx="180" cy="159" r="7.2"/>
           </g>
-          <g fill="none" stroke="#96a2b2" strokeWidth=".7" opacity=".7">
-            <circle cx="259" cy="104" r="8.5"/><circle cx="283" cy="126" r="8.5"/>
-            <circle cx="235" cy="126" r="8.5"/><circle cx="259" cy="148" r="8.5"/>
-          </g>
-          <path d="M171 130h18" stroke="#7d8999" strokeWidth="1" opacity=".45"/>
-          <path d="M172 136h16m-12 4h8m-8 4h8" stroke="#697586" strokeWidth="1" strokeLinecap="round" opacity=".7"/>
-          <circle cx="180" cy="159" r="5.5" fill="url(#interactive-dark)" stroke="#8793a3" strokeWidth="1"/>
-          <path d="M175 177h10" stroke="#8994a3" strokeWidth="1.1" strokeLinecap="round"/>
-          <path d="M119 27c13-7 29-9 61-9s48 2 61 9" fill="none" stroke="#ffffff" strokeWidth="1.2" opacity=".7"/>
+          <path d="M140 99h6m-6 3h6m-6 3h6" stroke="#b8c3d1" strokeWidth=".8" strokeLinecap="round"/>
+          <path d="M214 99h6m-6 3h6m-6 3h6" stroke="#b8c3d1" strokeWidth=".8" strokeLinecap="round"/>
+          <path d="M178 155c-1 2-2 3-3 4 2 1 3 2 5 4 1-2 2-3 4-4-2-1-3-2-6-4Z"
+            fill="none" stroke="#b8c3d1" strokeWidth=".8" strokeLinejoin="round"/>
+          <path d="M175 177h10" stroke="#8793a3" strokeWidth="1.1" strokeLinecap="round"/>
+          <path d="M119 27c13-7 29-9 61-9s48 2 61 9" fill="none" stroke="#fff" strokeWidth="1.2" opacity=".7"/>
         </svg>
         <div className="controller-hitpad" role="group" aria-label="Interactive controller buttons">
           {controls.map((control) => <button

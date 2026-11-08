@@ -1296,3 +1296,21 @@ body.controller-intro-active{overflow:hidden}
   .controller-intro,.intro-kicker,.intro-main h1,.intro-controller,.intro-subline,.intro-enter,.intro-key-hint,
   .controller-orbit-one,.controller-orbit-two,.controller-lightbar{animation:none!important;transition:none!important}
 }
+
+/* First-visit controller-inspired startup */
+.startup-intro{position:fixed;inset:0;z-index:9999;display:grid;grid-template-rows:auto 1fr auto;padding:clamp(22px,5vw,58px);overflow:hidden;background:#171717;color:#F2EFE8;animation:intro-enter .35s ease-out both}
+.startup-grain{position:absolute;inset:0;pointer-events:none;opacity:.09;background-image:radial-gradient(rgba(255,255,255,.7) .5px,transparent .7px);background-size:5px 5px}
+.startup-topline,.startup-bottomline{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:18px;font-size:8px;font-weight:900;letter-spacing:1.6px;color:#aaa99f}
+.startup-center{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.startup-kicker,.startup-status{font-size:8px;font-weight:900;letter-spacing:2.2px;color:#b7b5aa}
+.startup-controller{width:min(62vw,490px);height:auto;margin:18px 0 0;filter:drop-shadow(0 24px 28px rgba(0,0,0,.35));animation:controller-arrive .9s cubic-bezier(.2,.8,.2,1) both,controller-float 3s ease-in-out .9s infinite}
+.startup-wordmark{display:flex;flex-direction:column;margin-top:-5px;font-family:var(--display);font-size:clamp(42px,8vw,88px);font-weight:900;line-height:.82;letter-spacing:-.09em}
+.startup-wordmark b{color:#F2EFE8}
+.startup-wordmark em{font-family:var(--serif);font-weight:500;font-size:.72em;letter-spacing:-.07em;color:#D8FF3E}
+.startup-loading{width:min(190px,42vw);height:2px;margin:29px 0 13px;background:rgba(242,239,232,.2);overflow:hidden}
+.startup-loading span{display:block;width:100%;height:100%;background:#D8FF3E;transform:scaleX(0);transform-origin:left;animation:intro-progress 2.1s .15s cubic-bezier(.65,0,.35,1) forwards}
+.startup-status{font-size:7px;letter-spacing:1.8px}
+.startup-bottomline button{padding:10px 0;border:0;border-bottom:1px solid rgba(242,239,232,.45);background:transparent;color:#D8FF3E;font-size:8px;font-weight:900;letter-spacing:1.4px}
+@keyframes intro-progress{to{transform:scaleX(1)}}
+@media(max-width:520px){.startup-intro{padding:22px 20px}.startup-topline,.startup-bottomline{font-size:6px;letter-spacing:1px}.startup-controller{width:min(86vw,420px)}.startup-wordmark{font-size:clamp(43px,12vw,66px)}}
+@media(prefers-reduced-motion:reduce){.startup-intro,.startup-controller,.startup-loading span{animation:none}.startup-loading span{transform:scaleX(1)}}

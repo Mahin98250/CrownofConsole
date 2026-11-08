@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, CalendarDays,
   Check, ChevronDown, Crown, Gamepad2, MapPin, Menu, MessageCircle, Monitor,
-  Phone, Users, X, Zap, Clock3, Instagram
+  Phone, Search, Users, X, Zap, Clock3, Instagram
 } from 'lucide-react'
 
 const PHONE = '918799508567'
@@ -42,15 +42,15 @@ const PHOTO = {
 }
 
 const GAME_GALLERY = [
-  { title: 'EA SPORTS FC 27', category: '01 / FOOTBALL', short: 'FC 27', src: 'https://d.techtimes.com/en/full/469882/sports-fc.png', alt: 'EA SPORTS FC 27 football match gameplay', wide: true },
-  { title: 'GRAND THEFT AUTO V', category: '02 / OPEN WORLD', short: 'GTA V', src: 'https://cdn.mos.cms.futurecdn.net/AQw34cg4TbtrUEA6MJ9a3d.jpg', alt: 'Grand Theft Auto V open-world gameplay' },
-  { title: 'EA SPORTS FC 26', category: '03 / FOOTBALL', short: 'FC 26', src: 'https://www.maniac.de/wp-content/uploads/2025/10/ea-sports-fc-26-TEST.jpg', alt: 'EA SPORTS FC 26 football gameplay' },
-  { title: 'GRAN TURISMO 7', category: '04 / RACING', short: 'GT 7', src: 'https://www.xtgamer.net/wp-content/uploads/granturismo7-08-scaled.jpg', alt: 'Gran Turismo 7 racing gameplay' },
-  { title: 'NBA 2K26', category: '05 / BASKETBALL', short: '2K26', src: 'https://image.api.playstation.com/vulcan/ap/rnd/202507/0209/830e75bc7c63c3f7dd329643ddaf97ce386b9fe0cda8ba5d.jpg?format=jpg&h=810&w=1440', alt: 'NBA 2K26 basketball gameplay' },
-  { title: 'CALL OF DUTY: BLACK OPS 7', category: '06 / ACTION', short: 'BLACK OPS 7', src: 'https://cdn.mos.cms.futurecdn.net/ERWHrJnW3xSK8Zwiw7o3jX.jpg', alt: 'Call of Duty Black Ops 7 action gameplay', wide: true },
-  { title: "MARVEL'S SPIDER-MAN 2", category: '07 / ADVENTURE', short: 'SPIDER-MAN 2', src: 'https://assetsio.gnwcdn.com/spider-man-2-hunters.jpg?auto=webp&fit=bounds&format=jpg&height=2048&quality=85&width=2048', alt: "Marvel's Spider-Man 2 gameplay" },
-  { title: 'IT TAKES TWO', category: '08 / CO-OP', short: 'IT TAKES TWO', src: 'https://cdn.staticneo.com/ew/2/20/IT2_CH1-BitingDust-Boss2.jpg', alt: 'It Takes Two cooperative gameplay' },
-  { title: 'MINECRAFT', category: '09 / CREATIVE', short: 'MINECRAFT', src: 'https://gamebeatz.com/cdn/shop/files/video_games-playstation_5-Minecraft-_4.jpg?v=1746444551&width=1200', alt: 'Minecraft gameplay', wide: true }
+  { title: 'EA SPORTS FC 27', category: '01 / FOOTBALL', genre: 'SPORTS', short: 'FC 27', src: 'https://d.techtimes.com/en/full/469882/sports-fc.png', alt: 'EA SPORTS FC 27 football match gameplay', wide: true },
+  { title: 'GRAND THEFT AUTO V', category: '02 / OPEN WORLD', genre: 'OPEN WORLD', short: 'GTA V', src: 'https://cdn.mos.cms.futurecdn.net/AQw34cg4TbtrUEA6MJ9a3d.jpg', alt: 'Grand Theft Auto V open-world gameplay' },
+  { title: 'EA SPORTS FC 26', category: '03 / FOOTBALL', genre: 'SPORTS', short: 'FC 26', src: 'https://www.maniac.de/wp-content/uploads/2025/10/ea-sports-fc-26-TEST.jpg', alt: 'EA SPORTS FC 26 football gameplay' },
+  { title: 'GRAN TURISMO 7', category: '04 / RACING', genre: 'RACING', short: 'GT 7', src: 'https://www.xtgamer.net/wp-content/uploads/granturismo7-08-scaled.jpg', alt: 'Gran Turismo 7 racing gameplay' },
+  { title: 'NBA 2K26', category: '05 / BASKETBALL', genre: 'SPORTS', short: '2K26', src: 'https://image.api.playstation.com/vulcan/ap/rnd/202507/0209/830e75bc7c63c3f7dd329643ddaf97ce386b9fe0cda8ba5d.jpg?format=jpg&h=810&w=1440', alt: 'NBA 2K26 basketball gameplay' },
+  { title: 'CALL OF DUTY: BLACK OPS 7', category: '06 / ACTION', genre: 'ACTION', short: 'BLACK OPS 7', src: 'https://cdn.mos.cms.futurecdn.net/ERWHrJnW3xSK8Zwiw7o3jX.jpg', alt: 'Call of Duty Black Ops 7 action gameplay', wide: true },
+  { title: "MARVEL'S SPIDER-MAN 2", category: '07 / ADVENTURE', genre: 'ADVENTURE', short: 'SPIDER-MAN 2', src: 'https://assetsio.gnwcdn.com/spider-man-2-hunters.jpg?auto=webp&fit=bounds&format=jpg&height=2048&quality=85&width=2048', alt: "Marvel's Spider-Man 2 gameplay" },
+  { title: 'IT TAKES TWO', category: '08 / CO-OP', genre: 'CO-OP', short: 'IT TAKES TWO', src: 'https://cdn.staticneo.com/ew/2/20/IT2_CH1-BitingDust-Boss2.jpg', alt: 'It Takes Two cooperative gameplay' },
+  { title: 'MINECRAFT', category: '09 / CREATIVE', genre: 'CREATIVE', short: 'MINECRAFT', src: 'https://gamebeatz.com/cdn/shop/files/video_games-playstation_5-Minecraft-_4.jpg?v=1746444551&width=1200', alt: 'Minecraft gameplay', wide: true }
 ]
 
 const NAV = [
@@ -146,6 +146,68 @@ function DualSenseMotion() {
   </div>
 }
 
+
+function InteractiveController() {
+  const controls = [
+    { id: 'up', label: 'D-PAD UP', symbol: '↑', message: 'Look up. Spot the next move before the competition does.' },
+    { id: 'left', label: 'D-PAD LEFT', symbol: '←', message: 'Change direction. A new route can change the whole match.' },
+    { id: 'right', label: 'D-PAD RIGHT', symbol: '→', message: 'Switch lanes. There is always another way to play.' },
+    { id: 'down', label: 'D-PAD DOWN', symbol: '↓', message: 'Reset your focus. The next round starts fresh.' },
+    { id: 'triangle', label: 'TRIANGLE', symbol: '△', message: 'Think ahead. Make the clever play.' },
+    { id: 'circle', label: 'CIRCLE', symbol: '○', message: 'Take the shot. Sometimes instinct wins.' },
+    { id: 'cross', label: 'CROSS', symbol: '×', message: 'Press start. Your next gaming story begins here.' },
+    { id: 'square', label: 'SQUARE', symbol: '□', message: 'Try something different. Discover a new favourite.' }
+  ]
+  const [active, setActive] = useState('cross')
+  const selected = controls.find((control) => control.id === active) || controls[6]
+  return <section className="controller-lab section-pad" data-reveal aria-labelledby="controller-lab-title">
+    <div className="controller-lab-copy">
+      <Eyebrow>03 / PRESS START</Eyebrow>
+      <h2 id="controller-lab-title">TAKE<br/><em>CONTROL.</em></h2>
+      <p>Give the buttons a try. Every press changes the controller's light and brings up a little gaming cue. Just for fun — no controller is connected.</p>
+      <span className="controller-demo-note">A SMALL INTERACTIVE DEMO · BUILT INTO THIS PAGE</span>
+    </div>
+    <div className="controller-demo">
+      <div className="controller-status">
+        <span>DUALSENSE / INTERACTIVE DEMO</span>
+        <strong>{selected.label}</strong>
+      </div>
+      <div className="controller-visual">
+        <svg className="controller-interactive-svg" viewBox="0 0 360 220" aria-hidden="true">
+          <defs>
+            <linearGradient id="interactive-shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".54" stopColor="#e1e5eb"/><stop offset="1" stopColor="#aeb7c3"/></linearGradient>
+            <linearGradient id="interactive-grip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f7f8fa"/><stop offset="1" stopColor="#aeb7c3"/></linearGradient>
+          </defs>
+          <path d="M104 49c-19 1-32 14-40 37L34 160c-8 22 7 37 26 29l61-30h118l61 30c19 8 34-7 26-29l-30-74c-8-23-21-36-40-37-36-2-51 10-76 10s-40-12-76-10Z" fill="url(#interactive-shell)" stroke="#7e8998" strokeWidth="3" strokeLinejoin="round"/>
+          <path d="M67 112 43 165c-5 13 2 22 14 16l47-24-37-45Zm226 0 24 53c5 13-2 22-14 16l-47-24 37-45Z" fill="url(#interactive-grip)"/>
+          <rect x="145" y="43" width="70" height="36" rx="13" fill="#202630" stroke="#8994a3" strokeWidth="2"/>
+          <path d="M157 53h46" stroke="#4d5867" strokeWidth="2" strokeLinecap="round"/>
+          <circle cx="133" cy="157" r="19" fill="#252d38" stroke="#aeb7c3" strokeWidth="3"/>
+          <circle cx="227" cy="157" r="19" fill="#252d38" stroke="#aeb7c3" strokeWidth="3"/>
+          <path d="M174 103h12m-6-6v12" stroke="#566170" strokeWidth="2" strokeLinecap="round"/>
+          <path d="M164 88c9-5 23-5 32 0" stroke="#b5c1cf" strokeWidth="4" strokeLinecap="round" fill="none"/>
+        </svg>
+        <div className="controller-hitpad">
+          {controls.map((control) => <button
+            key={control.id}
+            type="button"
+            className={`controller-hit controller-hit-${control.id}${active === control.id ? ' controller-hit-active' : ''}`}
+            onClick={() => setActive(control.id)}
+            aria-label={`Press ${control.label}`}
+            aria-pressed={active === control.id}
+          >{control.symbol}</button>)}
+        </div>
+        <span className={`controller-lightbar controller-lightbar-${active}`} aria-hidden="true"/>
+      </div>
+      <div className="controller-feedback" aria-live="polite">
+        <span>YOUR MOVE</span>
+        <p>{selected.message}</p>
+        <small>NO HARDWARE CONNECTED · JUST A WEB INTERACTION</small>
+      </div>
+    </div>
+  </section>
+}
+
 function HomePage() {
  return <main id="main-content" tabIndex="-1" className="home-page art-playground">
   <section className="art-hero">
@@ -159,6 +221,7 @@ function HomePage() {
   </section>
   <section className="manifesto-art" data-reveal><div className="art-section-meta"><span>01 / THE HOUSE RULES</span><span>GOOD ENERGY ONLY (THE REST IS UP TO YOU)</span></div><div className="manifesto-art-grid"><h2>LESS<br/>SCROLL.<br/><em>MORE</em><br/>SCORE.</h2><div className="manifesto-art-note"><span className="asterisk-doodle">✳</span><p>Some nights are made for getting out, catching up and finding out who really has the better game. That's the feeling behind The Crown Of Console.</p><span className="handwritten-note">bring your people ↗</span></div></div><div className="manifesto-art-bottom"><span>GOOD GAMES</span><b>+</b><span>GREAT COMPANY</span><b>=</b><span>ONE MORE ROUND</span></div></section>
   <section className="visual-interlude" data-reveal><div className="interlude-image"><img src={PHOTO.room} alt="Illustrative gaming lounge photograph, not the actual venue" loading="lazy"/><span>REFERENCE IMAGE · NOT THE ACTUAL VENUE</span><b>MAKE<br/>A SCENE.</b></div><div className="interlude-copy"><span className="section-kicker">02 / THE ATMOSPHERE</span><h2>GOOD TIMES.<br/><em>NO SCRIPT.</em></h2><p>Come with a plan or make one when you get here. Explore the space and ask the team about the current setup, games and rates.</p><a href="#/space" className="art-text-link">TAKE A LOOK AROUND <ArrowUpRight size={18}/></a><span className="interlude-doodle" aria-hidden="true">✳</span></div></section>
+  <InteractiveController />
   <PlayerSelector/>
   <section className="art-directory" data-reveal><div className="art-section-meta"><span>05 / OPEN THE DOORS</span><span>TAKE YOUR PICK</span></div><div className="directory-heading"><h2>WHERE TO<br/><em>FROM HERE?</em></h2><span>THERE'S MORE THAN ONE WAY TO PLAY.</span></div><div className="directory-grid">
    <a href="#/games" className="directory-tile directory-games"><span>01 — THE LINEUP</span><b>GOT A<br/><em>GAME?</em></b><i>↗</i><small>ASK WHAT'S AVAILABLE</small></a>
@@ -229,6 +292,14 @@ function GamesPage() {
   const [game, setGame] = useState('')
   const [kind, setKind] = useState('A specific game')
   const [sent, setSent] = useState(false)
+  const [genre, setGenre] = useState('ALL')
+  const [searchTerm, setSearchTerm] = useState('')
+  const filteredGames = GAME_GALLERY.filter((item) => {
+    const matchesGenre = genre === 'ALL' || item.genre === genre
+    const query = searchTerm.trim().toLowerCase()
+    const matchesSearch = !query || [item.title, item.short, item.category, item.genre].join(' ').toLowerCase().includes(query)
+    return matchesGenre && matchesSearch
+  })
   const submit = (event) => {
     event.preventDefault()
     const message = 'Hello! I would like to ask about game availability at The Crown Of Console.\nWhat I am looking for: ' + kind + '\nGame / details: ' + (game.trim() || 'Please share the current games and platforms available.') + '\nCould you also confirm current rates and timings?'
@@ -240,9 +311,16 @@ function GamesPage() {
     <PageTop number="02" kicker="GAME DISCOVERY" title="What's on" italic="your list?" intro="Have a title in mind? Tell us what you're looking for and the café team can confirm whether it's currently available. We don't publish an unverified game catalogue." dark />
     <section className="game-showcase section-pad" aria-labelledby="popular-games-title">
       <div className="game-showcase-heading"><div><Eyebrow>POPULAR ON PLAYSTATION 5</Eyebrow><h2 id="popular-games-title">WHAT DO YOU<br/><em>WANT TO PLAY?</em></h2></div><p>Football, racing, open-world adventures and multiplayer favourites. These are popular PS5 titles you can ask our team about.</p></div>
-      <div className="gameplay-gallery">
-        {GAME_GALLERY.map((game, index) => <GameplayCard key={game.title} game={game} index={index} />)}
+      <div className="discovery-tools">
+        <label className="game-search"><Search size={17}/><input type="search" aria-label="Search games" placeholder="Search a title or genre" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} /><span>⌕</span></label>
+        <div className="genre-filters" role="group" aria-label="Filter games by genre">
+          {['ALL','SPORTS','OPEN WORLD','RACING','ACTION','ADVENTURE','CO-OP','CREATIVE'].map((item) => <button key={item} type="button" className={genre === item ? 'genre-filter genre-filter-active' : 'genre-filter'} aria-pressed={genre === item} onClick={() => setGenre(item)}>{item === 'ALL' ? 'ALL GAMES' : item}</button>)}
+        </div>
+        <div className="discovery-result-line"><span>CURATED GAME DISCOVERY</span><strong>{filteredGames.length} {filteredGames.length === 1 ? 'TITLE' : 'TITLES'}</strong></div>
       </div>
+      {filteredGames.length
+        ? <div className="gameplay-gallery">{filteredGames.map((item, index) => <GameplayCard key={item.title} game={item} index={index} />)}</div>
+        : <div className="discovery-empty"><b>NO MATCH THIS ROUND.</b><p>Try another title or choose a different genre.</p><button type="button" onClick={() => { setSearchTerm(''); setGenre('ALL') }}>RESET DISCOVERY ↗</button></div>}
       <div className="game-showcase-foot"><p>Game availability at the café may vary. Ask us which titles are currently installed before visiting.</p><a href={WA('Hello! I would like to check which PS5 games are currently available at The Crown Of Console, including EA SPORTS FC 27, FC 26 and GTA V.')} target="_blank" rel="noreferrer">ASK ABOUT GAME AVAILABILITY <ArrowUpRight size={16}/></a></div>
     </section>
     <section className="games-intro section-pad">
